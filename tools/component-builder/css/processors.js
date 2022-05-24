@@ -292,7 +292,7 @@ function getProcessors(keepVars = false, notNested = true, secondNotNested = tru
     require('postcss-nested'),
     require('postcss-inherit'),
     diff ? require('./plugins/postcss-varsonly')() : null,
-    require('postcss-logical')(),
+    // require('postcss-logical')(),
     require('./plugins/postcss-transform-logical')(),
     require('postcss-dir-pseudo-class')(),
     require('./plugins/postcss-custom-properties-passthrough')(),
