@@ -1,0 +1,34 @@
+.spectrum--express {
+    --system-actionbutton-background-color-default: var(--spectrum-gray-200);
+    --system-actionbutton-background-color-hover: var(--spectrum-gray-300);
+    --system-actionbutton-background-color-down: var(--spectrum-gray-400);
+    --system-actionbutton-background-color-focus: var(--spectrum-gray-300);
+  
+    --system-actionbutton-border-color-default: transparent;
+    --system-actionbutton-border-color-hover: transparent;
+    --system-actionbutton-border-color-down: transparent;
+    --system-actionbutton-border-color-focus: transparent;
+  
+    --system-actionbutton-background-color-disabled: var(--spectrum-disabled-background-color);
+    --system-actionbutton-border-color-disabled: transparent;
+  
+    --system-actionbutton-selected-background-color-default: var(--spectrum-neutral-background-color-default);
+    --system-actionbutton-selected-background-color-hover: var(--spectrum-neutral-background-color-hover);
+    --system-actionbutton-selected-background-color-down: var(--spectrum-neutral-background-color-down);
+    --system-actionbutton-selected-background-color-focus: var(--spectrum-neutral-background-color-key-focus);
+  
+    --system-actionbutton-static-border-color-default: transparent;
+    --system-actionbutton-static-border-color-hover: transparent;
+    --system-actionbutton-static-border-color-down: transparent;
+    --system-actionbutton-static-border-color-focus: transparent;
+  
+    --system-actionbutton-static-black-background-color-default: var(--spectrum-transparent-black-200);
+    --system-actionbutton-static-black-background-color-hover: var(--spectrum-transparent-black-300);
+    --system-actionbutton-static-black-background-color-down: var(--spectrum-transparent-black-400);
+    --system-actionbutton-static-black-background-color-focus: var(--spectrum-transparent-black-300);
+  
+    --system-actionbutton-static-white-background-color-default: var(--spectrum-transparent-white-200);
+    --system-actionbutton-static-white-background-color-hover: var(--spectrum-transparent-white-300);
+    --system-actionbutton-static-white-background-color-down: var(--spectrum-transparent-white-400);
+    --system-actionbutton-static-white-background-color-focus: var(--spectrum-transparent-white-300);
+  }
