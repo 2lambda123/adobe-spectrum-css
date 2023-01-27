@@ -46,13 +46,52 @@ export default async (plop) => {
 		const result = yaml.load(r);
 
 		const examples = result.examples || [];
-		if (examples.length === 0 || !examples[0].markup) return;
+		// If none of the examples have markup, return nothing
+		if (examples.filter((set) => !!set.markup).length === 0) return;
 
-		const $ = cheerio.load(examples[0].markup);
-		const $example = $(`.${className}`);
-		if (!$example) return;
+		let results;
+		const sizing = [];
+		const states = [];
+		const variants = [];
+		for(const { id, name, description, markup } in examples.filter(set => !!set.markup)) {
+			const $ = cheerio.load(markup);
+			const $example = $(`.${className}`);
+			if (!$example) continue;
 
-		return $example.first().toString();
+			if (id) $example.id = id;
+			if (name || description) {
+				$example.prepend(`<!-- ${name}${description && name ? ` | ` : ``}${description} -->`);
+			}
+
+			for (const className in $example.attr('class').split(' ')) {
+				const match = className.match(/size([A-Z]+)$/);
+				if (match && match.length > 1 && !sizing.includes(match[1])) {
+					sizing += match[1].toLowerCase();
+					continue;
+				}
+
+				const stateMatch = className.match(/^is-(\w+)$/);
+				if (stateMatch && stateMatch.length > 1 && !states.includes(stateMatch[1])) {
+					states += stateMatch[1];
+					continue;
+				}
+
+				const variantMatch = className.match(/^spectrum-\w+--(\w+)$/);
+				if (variantMatch && variantMatch.length > 1 && !variants.includes(variantMatch[1])) {
+					variants += variantMatch[1];
+					continue;
+				}
+			}
+
+			results += $.toString();
+		}
+
+		return {
+			examples: results,
+			sizing,
+			states,
+			variants,
+		};
 	}
 
 	plop.setActionType('install', (_, config) => new Promise((resolve, reject) => {
@@ -139,7 +178,11 @@ export default async (plop) => {
 			data.description = `The ${data.name} component is...`;
 
 			const metadataPath = plop.renderString(`${srcPath}/{{ folderName }}/metadata`, data);
-			data.example = getExistingMarkupExample(metadataPath, data.name, plop);
+			const parsedInfo = getExistingMarkupExample(metadataPath, data.name, plop);
+			data.example = parsedInfo.examples;
+			data.sizing = parsedInfo.sizing;
+			data.states = parsedInfo.states;
+			data.variants = parsedInfo.variants;
 
 			return [
 				{
