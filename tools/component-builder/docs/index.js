@@ -20,7 +20,6 @@ const yaml = require('js-yaml');
 const merge = require('merge-stream');
 const through = require('through2');
 const ext = require('replace-ext');
-
 const nunjucks = require('nunjucks');
 
 const sitePath = path.dirname(require.resolve('@spectrum-css/documentation'));
