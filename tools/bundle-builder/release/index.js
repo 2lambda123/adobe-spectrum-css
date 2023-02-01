@@ -25,8 +25,7 @@ function releaseBackwardsCompatCleanup() {
   ]);
 };
 
-let releaseBackwardsCompat = gulp.parallel(
-  gulp.series(
+let releaseBackwardsCompat = gulp.series(
     releaseBackwardsCompatCleanup,
 
     gulp.parallel(
@@ -55,9 +54,9 @@ let releaseBackwardsCompat = gulp.parallel(
           .pipe(gulp.dest('dist/vars/'));
       }
     )
-  )
 );
 
+/* @todo this would be an great script or github action */
 let stashRequired = false;
 let releaseVersion = null;
 let ghPages = gulp.series(

@@ -806,7 +806,6 @@ function openDialog(dialog, withOverlay) {
 function closeDialog(dialog) {
   document.getElementById('spectrum-underlay').classList.remove('is-open');
   dialog.classList.remove('is-open');
-  console.log(dialog);
 
   // Support wrapped dialogs
   var innerDialog = dialog.querySelector('.spectrum-Modal');

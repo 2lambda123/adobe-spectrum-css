@@ -10,36 +10,33 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const path = require('path');
+
 const gulp = require('gulp');
 const logger = require('gulplog');
-const path = require('path');
 const dirs = require('../lib/dirs');
 
-const docs = require('../docs');
+const docs = require('../../../site/scripts/generateIndex');
 const subrunner = require('../subrunner');
 const bundleBuilder = require('../index.js');
-
-function getPackageFromPath(filePath) {
-  return filePath.match(`${dirs.components}\/(.*?)\/`)[1];
-}
 
 /*
   Watch for changes to globs matching files within packages, execute task for that package, and copy/inject specified files
 */
 function watchWithinPackages(glob, task, files) {
+  let changedFile = null;
+
   logger.debug(`Watching ${glob}, will run ${task} and stream ${files}`);
 
-  let watcher = gulp.watch(glob, {
-    // Otherwise we get infinite loops because chokidar gets all crazy with symlinked deps
-    followSymlinks: false
-  }, function handleChanged(done) {
+  // Otherwise we get infinite loops because chokidar gets all crazy with symlinked deps
+  const watcher = gulp.watch(glob, { followSymlinks: false }, (done) => {
     if (!changedFile) {
       done();
       return;
     }
 
-    let packageName = getPackageFromPath(changedFile);
-    let packageDir = path.join(dirs.components, packageName);
+    const packageName = changedFile.match(`${dirs.components}\/(.*?)\/`)[1];
+    const packageDir = path.dirname(require.resolve(`@spectrum-css/${packageName}/package.json`));
 
     if (typeof task === 'function') {
       task(changedFile, packageName, (err) => {
@@ -55,7 +52,7 @@ function watchWithinPackages(glob, task, files) {
         }
 
         // Copy files
-        gulp.src(`${dirs.components}/${packageName}/dist/${files}`)
+        gulp.src(`${packageDir}/dist/${files}`)
           .pipe(gulp.dest(`dist/components/${packageName}/`))
           .on('end', () => {
             logger.debug(`Injecting files from ${packageName}/:\n  ${files}`);
@@ -64,14 +61,11 @@ function watchWithinPackages(glob, task, files) {
           })
           .on('error', (err) => {
             changedFile = null;
-
             done(err);
           });
       });
     }
   });
-
-  let changedFile = null;
   watcher.on('change', (filePath) => {
     logger.debug(`Got change for ${filePath}`);
 
@@ -79,37 +73,6 @@ function watchWithinPackages(glob, task, files) {
       changedFile = filePath;
     }
   });
-}
-
-function watchSite() {
-  gulp.watch(
-    `${dirs.site}/*.njk`,
-    gulp.series(
-      docs.buildSite_pages,
-    )
-  );
-
-  gulp.watch(
-    `${dirs.site}/includes/*.njk`,
-    gulp.series(
-      gulp.parallel(
-        docs.buildSite_html,
-        docs.buildDocs
-      ),
-    )
-  );
-
-  gulp.watch(
-    [
-      `${dirs.site}/content/_includes/siteComponent.njk`,
-      `${dirs.site}/util.js`
-    ],
-    gulp.series(
-      gulp.parallel(
-        docs.buildDocs
-      ),
-    )
-  );
 }
 
 function watchCommons() {
@@ -123,10 +86,8 @@ function watch() {
   watchCommons();
 
   watchWithinPackages(`${dirs.components}/tokens/custom-*/*.css`, 'rebuildCustoms', '*.css');
-
   watchWithinPackages(`${dirs.components}/*/{index,skin}.css`, 'buildMedium', '*.css');
   watchWithinPackages(`${dirs.components}/*/themes/{spectrum,express}.css`, 'buildMedium', '*.css');
-
 
   watchWithinPackages(
     [
@@ -136,12 +97,12 @@ function watch() {
     (changedFile, package, done) => {
       // Do this as gulp tasks to avoid premature stream termination
       try {
-        let result = gulp.series(
+        gulp.series(
           // Get data first so nav builds
-          function buildSite_getData() {
-            logger.debug(`Building nav data for ${package}`);
-            return docs.buildSite_getData()
-          },
+          // function buildSite_getData() {
+          //   logger.debug(`Building nav data for ${package}`);
+          //   return docs.buildSite_getData()
+          // },
           function buildDocs_forDep() {
             logger.debug(`Building docs for ${package}`);
             return docs.buildDocs_forDep(package)
@@ -158,9 +119,6 @@ function watch() {
         }
     }
   );
-
-  watchSite();
-
 }
 
 exports.watch = watch;

@@ -9,97 +9,19 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const semver = require('semver');
 const path = require('path');
 const fsp = require('fs').promises;
+
 const gulp = require('gulp');
 const logger = require('gulplog');
 const conventionalChangelog = require('gulp-conventional-changelog');
+const semver = require('semver');
+
 const exec = require('../lib/exec');
-
-async function readPackage(dir) {
-  return JSON.parse(await fsp.readFile(path.join(dir || '' , 'package.json')));
-}
-
-async function writePackage(pkg, dir) {
-  return (await fsp.writeFile(path.join(dir || '' , 'package.json'), JSON.stringify(pkg, null, 2)));
-}
-
-let releaseTypeToCommitType = {
-  'major': 'BREAKING CHANGE',
-  'premajor': 'feat', // hope these don't happen?
-  'minor': 'feat',
-  'preminor': 'feat',
-  'patch': 'fix',
-  'prepatch': 'fix',
-  'prerelease': 'fix' // hope these don't happen?
-};
-
-async function analyzeComponents(bundlePackage) {
-  let updates = [];
-
-  // This package is always kept up to date with breaking changes
-  let allowBreakingChanges = bundlePackage.name === '@spectrum-css/spectrum-css';
-
-  for (let [depName, requiredDepVersion] of Object.entries(bundlePackage.devDependencies)) {
-    if (depName.startsWith('@spectrum-css/')) {
-      // Don't require.resolve here, we want to check what's actually in the repo
-      let depPath = path.join('..', '..', 'components', depName.replace('@spectrum-css/', ''));
-
-      let depPackage = await readPackage(depPath);
-
-      // Check if the dep matches the package entry
-      if (semver.satisfies(depPackage.version, requiredDepVersion) || allowBreakingChanges) {
-        let exactRequiredDepVersion = requiredDepVersion.replace('^', '');
-        let releaseType = semver.diff(exactRequiredDepVersion, depPackage.version);
-
-        if (releaseType) {
-          let commitType = releaseTypeToCommitType[releaseType];
-          if (semver.inc(exactRequiredDepVersion, 'major') === depPackage.version) {
-            // We've gone from prerelease to major
-            // diff does not catch this https://github.com/npm/node-semver/issues/288
-            // in the case of 2.0.0 components, this is a non-breaking feature
-            // in the future, it won't be. this code should be changed to consider this a breaking change
-            commitType = 'feat';
-          }
-
-          logger.info(`Updating ${depPackage.name} to ${depPackage.version} due to ${commitType} commit (release type ${releaseType})!`);
-
-          updates.push({
-            name: depPackage.name,
-            oldVersion: exactRequiredDepVersion,
-            version: depPackage.version,
-            type: commitType,
-            releaseType: releaseType
-          });
-        }
-      }
-      else {
-        logger.warn(`Skipping ${depName}: found ${depPackage.version} in monorepo, but bundle requires ${requiredDepVersion}`);
-      }
-    }
-  }
-
-  return updates;
-}
-
-function updateDep(pkg, update) {
-  pkg.devDependencies[update.name] = `^${update.version}`;
-}
-
-function isPrerelease(version) {
-  return version.match(/-(alpha)|(beta)/);
-}
-
-let typePriority = {
-  'patch': 0,
-  'minor': 1,
-  'major': 2
-};
 
 function generateChangelog() {
   return new Promise(async (resolve, reject) => {
-    let pkg = await readPackage();
+    let pkg = await fsp.readFile('package.json').then(JSON.parse);
     logger.info(`Generating changelog for ${pkg.name}@${pkg.version}...`);
 
     await exec.promise(`touch CHANGELOG.md`);
@@ -154,15 +76,80 @@ function generateChangelog() {
 }
 
 async function updateAndTagRelease() {
-  let pkg = await readPackage();
-  let updates = (await analyzeComponents(pkg)).filter(Boolean);
+  const isPrerelease = /-(alpha|beta)/;
+  let typePriority = {
+    'patch': 0,
+    'minor': 1,
+    'major': 2
+  };
+
+  async function analyzeComponents(bundlePackage) {
+    let updates = [];
+
+    // This package is always kept up to date with breaking changes
+    let allowBreakingChanges = bundlePackage.name === '@spectrum-css/spectrum-css';
+
+    for (let [depName, requiredDepVersion] of Object.entries(bundlePackage.devDependencies)) {
+      if (depName.startsWith('@spectrum-css/')) {
+        // Don't require.resolve here, we want to check what's actually in the repo
+        let depPath = path.join('..', '..', 'components', depName.replace('@spectrum-css/', ''));
+
+        let depPackage = await fsp.readFile(path.join(depPath, 'package.json')).then(JSON.parse);
+
+        // Check if the dep matches the package entry
+        if (semver.satisfies(depPackage.version, requiredDepVersion) || allowBreakingChanges) {
+          let exactRequiredDepVersion = requiredDepVersion.replace('^', '');
+          let releaseType = semver.diff(exactRequiredDepVersion, depPackage.version);
+
+          const releaseTypeToCommitType = {
+            'major': 'BREAKING CHANGE',
+            'premajor': 'feat', // hope these don't happen?
+            'minor': 'feat',
+            'preminor': 'feat',
+            'patch': 'fix',
+            'prepatch': 'fix',
+            'prerelease': 'fix' // hope these don't happen?
+          };
+
+          if (releaseType) {
+            let commitType = releaseTypeToCommitType[releaseType];
+            if (semver.inc(exactRequiredDepVersion, 'major') === depPackage.version) {
+              // We've gone from prerelease to major
+              // diff does not catch this https://github.com/npm/node-semver/issues/288
+              // in the case of 2.0.0 components, this is a non-breaking feature
+              // in the future, it won't be. this code should be changed to consider this a breaking change
+              commitType = 'feat';
+            }
+
+            logger.info(`Updating ${depPackage.name} to ${depPackage.version} due to ${commitType} commit (release type ${releaseType})!`);
+
+            updates.push({
+              name: depPackage.name,
+              oldVersion: exactRequiredDepVersion,
+              version: depPackage.version,
+              type: commitType,
+              releaseType: releaseType
+            });
+          }
+        }
+        else {
+          logger.warn(`Skipping ${depName}: found ${depPackage.version} in monorepo, but bundle requires ${requiredDepVersion}`);
+        }
+      }
+    }
+
+    return updates;
+  }
+
+  const pkg = await fsp.readFile('package.json').then(JSON.parse);
+  const updates = (await analyzeComponents(pkg)).filter(Boolean);
 
   if (!updates.length) {
     logger.warn(`Not updating dependencies for ${pkg.name}, no changes since last release`);
     return;
   }
 
-  let count = {
+  const count = {
     'major': 0,
     'minor': 0,
     'patch': 1
@@ -172,7 +159,7 @@ async function updateAndTagRelease() {
   let breaking = '';
   let hasPreDeps = false;
   for (let update of updates) {
-    if (isPrerelease(update.version)) {
+    if (update.version.match(isPrerelease)) {
       hasPreDeps = true;
     }
 
@@ -180,7 +167,9 @@ async function updateAndTagRelease() {
     if (typePriority[update.releaseType] > typePriority[type]) {
       type = update.releaseType;
     }
-    updateDep(pkg, update);
+
+    pkg.devDependencies[update.name] = `^${update.version}`;
+
     let messageString = `${update.releaseType === 'major' ? 'BREAKING CHANGE' : update.type}: update ${update.name} from ${update.oldVersion} to ${update.version}\n`;
 
     count[update.releaseType]++;
@@ -195,7 +184,7 @@ async function updateAndTagRelease() {
 
   logger.info(`Found ${count.patch} fixes, ${count.minor} features, and ${count.major} breaking changes`);
 
-  if (isPrerelease(pkg.version) && !hasPreDeps) {
+  if (pkg.version.match(isPrerelease) && !hasPreDeps) {
     let newVersion = `${semver.major(pkg.version)}.${semver.minor(pkg.version)}.${semver.patch(pkg.version)}`;
     logger.info(`Current release ${pkg.version} is a pre-release, but all components are proper! Bumping to ${newVersion}...`);
     pkg.version = newVersion;
@@ -205,7 +194,7 @@ async function updateAndTagRelease() {
     let increment = type;
 
     // Do a pre-release if the existing release is a pre-release
-    if (isPrerelease(pkg.version) && hasPreDeps) {
+    if (pkg.version.match(isPrerelease) && hasPreDeps) {
       increment = 'prerelease';
     }
 
@@ -215,7 +204,7 @@ async function updateAndTagRelease() {
 
   message = `chore(release): release ${pkg.name}@${pkg.version}\n\n${breaking}${message}`;
 
-  await writePackage(pkg);
+  await fsp.writeFile('package.json', JSON.stringify(pkg, null, 2));
 
   await exec.promise(`git commit package.json -m "${message}"`);
 

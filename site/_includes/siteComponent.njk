@@ -1,10 +1,10 @@
 {% extends './layout.njk' %}
 {% block content %}
     <div class="spectrum-Site">
-        {% include './header.njk' %}
+        {% include 'header.njk' %}
         <div class="spectrum-Site-content">
             <div class="spectrum-Site-sideBar" id="site-sidebar">
-                {% include "./partials/logo.njk" %}
+                {% include "logo.njk" %}
                 <div id="site-search"></div>
                 <div class="u-scrollable spectrum-Site-nav">
                     <nav>
@@ -213,6 +213,13 @@
                                     <bdo dir="ltr">{{ pkg.name }}@{{ pkg.version }}</bdo>
                                 </td>
                             </tr>
+                            <tr>
+                                <th class="spectrum-Body--secondary">Component status</th>
+                                <td>
+                                    <div class="spectrum-StatusLight spectrum-StatusLight--sizeM spectrum-CSSComponent-status spectrum-StatusLight--{{
+                                        util.getStatusLightVariant(status) }}">{{ status }}</div>
+                                </td>
+                            </tr>
                         </table>
                         <div class="spectrum-CSSComponent-resources">
                             {% if component.SpectrumSiteSlug %}
@@ -220,7 +227,7 @@
                                     class="spectrum-Card spectrum-Card--sizeS spectrum-Card--horizontal"
                                     href="component.SpectrumSiteSlug"
                                     target="_blank">
-                                    <div class="spectrum-Card-preview spectrum-CSSComponent-resource--adobe">
+                                    <span class="spectrum-Card-preview spectrum-CSSComponent-resource--adobe">
                                         <svg
                                             class="spectrum-Icon spectrum-Icon--sizeXXL"
                                             viewBox="0 0 36 36"
@@ -229,15 +236,15 @@
                                             aria-label="AdobeLogo">
                                             <path d="M22.175 4H34v28L22.175 4zm-8.336 0H2v28L13.839 4zm4.165 10.317l7.538 17.682h-4.939l-2.258-5.632h-5.517l5.176-12.05z"></path>
                                         </svg>
-                                    </div>
-                                    <div class="spectrum-Card-body">
-                                        <div class="spectrum-Card-header">
-                                            <div class="spectrum-Card-title spectrum-Heading spectrum-Heading--sizeXS">View guidelines</div>
-                                        </div>
-                                        <div class="spectrum-Card-content">
-                                            <div class="spectrum-Card-subtitle spectrum-Detail spectrum-Detail--sizeS">Spectrum website</div>
-                                        </div>
-                                    </div>
+                                    </span>
+                                    <span class="spectrum-Card-body">
+                                        <span class="spectrum-Card-header">
+                                            <span class="spectrum-Card-title spectrum-Heading spectrum-Heading--sizeXS">View guidelines</span>
+                                        </span>
+                                        <span class="spectrum-Card-content">
+                                            <span class="spectrum-Card-subtitle spectrum-Detail spectrum-Detail--sizeS">Spectrum website</span>
+                                        </span>
+                                    </span>
                                 </a>
                             {% endif %}
                             <a
@@ -321,17 +328,18 @@
                                 <hr class="spectrum-Divider spectrum-Divider--large"/>
                                 {% asyncEach example in component.examples %}
                             </header>
-                            {% include "./example.njk" %}
+                            {% include "example.njk" %}
                             {% endeach %}
                         {% endif %}
                         {% if component.sections %}
                             {% asyncEach section in component.sections %}
-                            {% include "./section.njk" %}
+                            {% include "section.njk" %}
                             {% endeach %}
                         {% endif %}
                     </article>
                 </div>
-                {% include './footer.njk' %}
+                {% include 'footer.njk' %}
             </div>
         </div>
-    {% endblock %}
+    </div>
+{% endblock %}

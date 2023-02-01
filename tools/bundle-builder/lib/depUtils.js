@@ -12,7 +12,8 @@ governing permissions and limitations under the License.
 
 const fsp = require('fs').promises;
 const path = require('path');
-const depSolver = require('dependency-solver');
+
+const exec = require('./exec');
 
 /*
   Given a package path, get its dependencies
@@ -22,61 +23,16 @@ const depSolver = require('dependency-solver');
   @return {Object} An object mapping the package name to its dependencies, or null if no dependencies
 */
 async function getDependencies(package) {
-  let pkg = JSON.parse(await fsp.readFile(path.join(package, 'package.json')));
+  const { name, devDependencies } = await fsp.readFile(path.join(package, 'package.json')).then(JSON.parse);
   let dependencies = [];
 
-  if (pkg.devDependencies) {
-    dependencies = Object.keys(pkg.devDependencies).filter((dep) => {
-      return dep.indexOf('@spectrum-css') === 0 &&
-        dep !== '@spectrum-css/bundle-builder' &&
-        dep !== '@spectrum-css/component-builder' &&
-        dep !== '@spectrum-css/component-builder-simple';
-    });
+  if (devDependencies) {
+    dependencies = Object.keys(devDependencies).filter((dep) =>
+      dep.indexOf('@spectrum-css') === 0 && !dep.includes('-builder')
+    );
   }
 
-  return { name: pkg.name, dependencies: dependencies };
-}
-
-/*
-  Given a list of package paths, solve the dependency order
-
-  @param {string[]} packages - package directories
-
-  @return {string[]} The solved dependency order
-*/
-async function solveDependencies(packages) {
-  async function getDependenciesForSolver(package) {
-    let { name, dependencies } = await getDependencies(package);
-
-    if (dependencies.length === 0) {
-      return null;
-    }
-
-    return { [name]: dependencies };
-  }
-
-  let depArray = (await Promise.all(packages.map(getDependenciesForSolver)))
-    .filter(Boolean);
-
-  let dependencies = {};
-  depArray.forEach((dep) => {
-    Object.assign(dependencies, dep);
-  });
-
-  return depSolver.solve(dependencies);
-}
-
-/*
-  Get the list of all packages in given directory
-
-  @param {string} packageDir - package directory
-
-  @return {Object} An array of package names in dependency order
-*/
-async function getPackageDependencyOrder(packageDir) {
-  let { name, dependencies } = await getDependencies(packageDir);
-
-  return solveDependencies(dependencies.map((dep) => path.join(path.dirname(require.resolve(dep)), '..')));
+  return { name, dependencies };
 }
 
 /*
@@ -88,24 +44,14 @@ async function getPackageDependencyOrder(packageDir) {
 */
 async function getFolderDependencyOrder(packagesDir) {
   // Get list of all packages
-  let packages = (await fsp.readdir(packagesDir, { withFileTypes: true }))
-     .filter((dirent) => dirent.isDirectory() || dirent.isSymbolicLink())
-     .map((dirent) => path.join(packagesDir, dirent.name));
-
-   let solution = await solveDependencies(packages);
-
-   // Nobody relies on it, so it gets clipped, weird
-   solution.push('@spectrum-css/expressvars');
-
-   // Build tokens first
-   // This is because not every package relies on tokens, but the builder needs tokens to bake vars
-   solution = solution.filter(p => p !== '@spectrum-css/tokens');
-   solution.unshift('@spectrum-css/tokens');
-
-   return solution;
- }
+  const result = await exec.promise('lerna list --json --toposort --loglevel silent', { pipe: false }).then(JSON.parse);
+  const packages = result.filter((meta) => ![
+    /^@adobe\/*$/,
+    /^@spectrum-css\/\w+-builder.*$/,
+    /^@spectrum-css\/(generator|preview|documentation|spectrum-css)$/
+  ].some((rgx) => meta.name.match(rgx)) && meta.location.includes(packagesDir));
+  return packages.map((meta) => meta.name);
+}
 
 exports.getDependencies = getDependencies;
-exports.solveDependencies = solveDependencies;
 exports.getFolderDependencyOrder = getFolderDependencyOrder;
-exports.getPackageDependencyOrder = getPackageDependencyOrder;

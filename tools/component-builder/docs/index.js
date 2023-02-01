@@ -22,8 +22,8 @@ const through = require('through2');
 const ext = require('replace-ext');
 const nunjucks = require('nunjucks');
 
-const sitePath = path.dirname(require.resolve('@spectrum-css/documentation'));
-const util = require(`${sitePath}/util.js`);
+// const sitePath = path.dirname(require.resolve('@spectrum-css/documentation'));
+// const util = require(`${sitePath}/util.js`);
 
 async function readJSONFile(filepath) {
   return fsp.readFile(filepath).then(JSON.parse);

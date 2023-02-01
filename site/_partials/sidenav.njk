@@ -1,6 +1,9 @@
+| {{ collections.components | eleventyNavigation | dump | safe }} |
+
+
 {% if not process.env.VRT %}
     <div class="spectrum-Site-sideBar" id="site-sidebar">
-        {% include "./logo.njk" %}
+        {# include "logo.njk" #}
         <div id="site-search"></div>
         <div class="u-scrollable spectrum-Site-nav">
             <nav>
@@ -14,13 +17,16 @@
                     <li class="spectrum-SideNav-item">
                         <a class="spectrum-SideNav-itemLink" href="#">Components</a>
                         <ul class="spectrum-SideNav spectrum-SideNav--multiLevel">
-                            {% for component in template() | await if not hide %}
+
+                            {# asyncEach component in template() %}
+                            {% if not component.hide %}
                                 <li class="spectrum-SideNav-item {{ 'is-selected' if (pageURL === component.href) }}">
-                                    <a href="/docs/{{ component.href }}" class="spectrum-SideNav-itemLink {{ 'js-fastLoad' if component.fastLoad === true }}">
+                                    <a href="/docs/{{component.href}}" class="spectrum-SideNav-itemLink {{ 'js-fastLoad' if component.fastLoad === true }}">
                                         {{ component.name }}
                                     </a>
                                 </li>
-                            {% endfor %}
+                            {% endif %}
+                            {% endeach #}
                         </ul>
                     </li>
                 </ul>

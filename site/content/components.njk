@@ -1,0 +1,36 @@
+---
+layout: home.njk
+pagination:
+    data: components
+    size: 1
+    alias: component
+title: "{{ component.title }}"
+permalink: "components/{{ component.title | slugify }}/"
+slug: "{{ component.title | slugify }}"
+tags: [ "components" ]
+eleventyNavigation:
+    key: "{{ component.title | slugify }}"
+    parent: components
+---
+
+<article class="spectrum-CSSComponent">
+    <header id="{{ slug }}" class="spectrum-CSSComponent-heading">
+        <h1 class="spectrum-CSSComponent-title spectrum-Heading spectrum-Heading--sizeXXXL spectrum-Heading--serif">
+            <a href="#{{ slug }}" class="spectrum-BigSubtleLink">{{ component.title }}</a>
+        </h1>
+        <p class="spectrum-CSSComponent-version spectrum-Body spectrum-Body--sizeS">Version {{ component.version }}</p>
+    </header>
+    {% if component.description %}
+        <section class="spectrum-CSSComponent-description spectrum-Body spectrum-Body--sizeL">{{ component.description | markdownify }}</section>
+    {% endif %}
+    {% for example in component.examples %}
+        <article class="spectrum-CSSExample">
+            {% if example != component %}
+                <header id="{{ example.slug }}">
+                    <h3>{{ example.name }}</h3>
+                </header>
+            {% endif %}
+            {{ example.markup | safe }}
+        </article>
+    {% endfor %}
+</article>

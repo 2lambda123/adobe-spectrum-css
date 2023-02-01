@@ -30,5 +30,5 @@ module.exports = async (root_folder) => {
       });
     }
 
-    return nav;
+    return nav.sort((a, b) => a.name <= b.name ? -1 : 1);
 };

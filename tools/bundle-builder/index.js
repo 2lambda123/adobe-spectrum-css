@@ -19,7 +19,7 @@ const depUtils = require('./lib/depUtils');
 const exec = require('./lib/exec');
 const dirs = require('./lib/dirs');
 
-const docs = require('./docs');
+const docs = require('../../site/scripts/generateIndex');
 const dev = require('./dev');
 const subrunner = require('./subrunner');
 const release = require('./release');
@@ -43,23 +43,27 @@ function clean() {
   return del(globs);
 }
 
+function getDependencyOrder() {
+  return new Promise(async (resolve) => {
+    const order = await depUtils.getFolderDependencyOrder(dirs.components);
+    resolve(order);
+  });
+}
+
+const dependencyOrder = getDependencyOrder() || [];
+
 // Combined
 function concatPackageFiles(taskName, input, output, directory) {
-  let func = function() {
-    let glob;
+  const func = () => {
+    const glob = [];
     if (Array.isArray(input)) {
-      glob = [];
-
-      dependencyOrder.forEach(function(dep) {
-        input.forEach(function(file) {
+      dependencyOrder.forEach((dep) => {
+        input.forEach((file) => {
           glob.push(dirs.resolve(dep) + `/${file}`);
         });
       });
-    }
-    else {
-      glob = dependencyOrder.map(function(dep) {
-        return dirs.resolve(dep) + `/${input}`;
-      });
+    } else {
+      glob.push(...dependencyOrder.map((dep) => dirs.resolve(dep) + `/${input}`));
     }
 
     return gulp.src(glob, { allowEmpty: true })
@@ -70,11 +74,6 @@ function concatPackageFiles(taskName, input, output, directory) {
   Object.defineProperty(func, 'name', { value: taskName, writable: false });
 
   return func;
-}
-
-var dependencyOrder = null;
-async function getDependencyOrder(done) {
-  dependencyOrder = await depUtils.getFolderDependencyOrder(dirs.components);
 }
 
 let buildCombined = gulp.series(
@@ -90,6 +89,7 @@ let buildCombined = gulp.series(
   )
 );
 
+/** @todo Q: Are colorstops still a thing, it seems like we've moved away from them completely */
 let buildStandalone = gulp.series(
   getDependencyOrder,
   gulp.parallel(
@@ -163,9 +163,7 @@ let build = gulp.series(
 
 let buildLite = gulp.series(
   clean,
-  function buildComponentsLite() {
-    return subrunner.runTaskOnAllComponents('buildLite');
-  },
+  () => subrunner.runTaskOnAllComponents('buildLite'),
   gulp.parallel(
     docs.build,
     copyPackages
@@ -174,20 +172,7 @@ let buildLite = gulp.series(
 
 let buildMedium = gulp.series(
   clean,
-  function buildComponentsLite() {
-    return subrunner.runTaskOnAllComponents('buildMedium');
-  },
-  gulp.parallel(
-    docs.build,
-    copyPackages
-  )
-);
-
-let buildHeavy = gulp.series(
-  clean,
-  function buildComponentsLite() {
-    return subrunner.runTaskOnAllComponents('buildHeavy');
-  },
+  () => subrunner.runTaskOnAllComponents('buildMedium'),
   gulp.parallel(
     docs.build,
     copyPackages
@@ -199,7 +184,7 @@ if (process.cwd() === dirs.topLevel) {
   // Build all packages if at the top level
   devTask = gulp.series(
     buildLite,
-    dev.watch
+   dev.watch
   );
 }
 else {
@@ -209,14 +194,9 @@ else {
       docs.build,
       copyPackages
     ),
-    dev.watch
+   dev.watch
   );
 }
-
-exports.devHeavy = gulp.series(
-  buildHeavy,
-  dev.watch
-);
 
 exports.copyVars = vars.copyVars;
 
@@ -225,6 +205,7 @@ exports.prePack = gulp.series(
   release.releaseBackwardsCompat
 );
 
+/** @todo this should likely be a github actions workflow or script */
 exports.release = gulp.series(
   release.updateAndTagRelease,
   exec.task('yarnInstall', 'yarn install --frozen-lockfile'),
