@@ -29,6 +29,8 @@ module.exports = {
     '@whitespace/storybook-addon-html',
     // https://storybook.js.org/addons/@etchteam/storybook-addon-status
     '@etchteam/storybook-addon-status',
+    // https://storybook.js.org/addons/@bissolli/storybook-css-properties
+    '@bissolli/storybook-css-properties',
   ],
   env: {
     MIGRATED_PACKAGES: componentPkgs.filter(dir => {

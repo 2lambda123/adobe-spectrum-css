@@ -211,6 +211,20 @@ export const parameters = {
       },
     },
   },
+  cssCustomProperties: {
+    filterProps: [
+      /^--mod-/,
+    ],
+    hiddenProps: [
+      /^--spectrum-/,
+    ],
+    matchCategory: {
+      // editable: /mod/,
+      color: /color/,
+      typograph: /font/,
+      space: /(space|padding|margin|line-height)/
+    }
+  }
 };
 
 export const decorators = [
