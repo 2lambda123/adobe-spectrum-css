@@ -9,28 +9,21 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-const gulp = require('gulp');
-const fs = require('fs');
-const fsp = fs.promises;
-const path = require('path');
-const pugCompiler = require('pug');
-const pug = require('gulp-pug');
-const data = require('gulp-data');
-const rename = require('gulp-rename');
-const yaml = require('js-yaml');
-const through = require('through2');
-const ext = require('replace-ext');
-const logger = require('gulplog');
-const colors = require('colors');
-const lunr = require('lunr');
 
-const dirs = require('../lib/dirs');
-const exec = require('../lib/exec');
-const depUtils = require('../lib/depUtils');
+const fsp = require("fs").promises;
+const path = require("path");
 
-const npmFetch = require('npm-registry-fetch');
+const fg = require("fast-glob");
+const yaml = require("js-yaml");
+const ext = require("replace-ext");
+const lunr = require("lunr");
+const npmFetch = require("npm-registry-fetch");
+const nunjucks = require("nunjucks");
 
-let minimumDeps = [
+const dirs = require("../lib/dirs");
+const depUtils = require("../lib/depUtils");
+
+const minimumDeps = [
   'icon',
   'statuslight',
   'link',
@@ -56,290 +49,276 @@ let minimumDeps = [
   'table'
 ];
 
-let templateData = {
+const templateData = {
   nav: [],
-  pkg: JSON.parse(fs.readFileSync('package.json', 'utf8'))
+  pkg: await fsp.readFile('package.json', 'utf8').then(JSON.parse).catch(console.warn),
 };
 
-async function buildDocs_forDep(dep) {
+const walk = async (dir, dest) => {
+  const promises = [];
+  for (const file of await fsp.readdir(dir, { withFileTypes: true })) {
+    const filePath = path.join(dir, file.name);
+    const destDir = path.join(dest, file.name);
+    if (file.isDirectory()) {
+      await fsp.mkdir(destDir).catch();
+      promises.push(
+        walk(filePath, destDir)
+      );
+      continue;
+    }
+
+    promises.push(
+      fsp.copyFile(filePath, path.join(dest, path.basename(filePath)))
+    );
+  }
+  return Promise.all(promises);
+};
+
+const buildDocs_forDep = async (dep) => {
   // Drop package org
   dep = dep.split('/').pop();
+  const packagePath = require.resolve(`@spectrum-css/${dep}/package.json`);
+  const metadataPath = require.resolve(`@spectrum-css/vars/dist/spectrum-metadata.json`);
+  if (!packagePath) return;
 
-  let metadata = JSON.parse(await fsp.readFile(path.join(dirs.components, 'vars', 'dist', 'spectrum-metadata.json')));
+  const metadata = await fsp.readFile(metadataPath).then(JSON.parse).catch(console.warn);
+  const dependencyOrder = await depUtils.getPackageDependencyOrder(path.dirname(packagePath));
 
-  let dependencyOrder = await depUtils.getPackageDependencyOrder(path.join(dirs.components, dep));
+  const dirName = `${dirs.components}/${dep}`;
+  const componentDeps = dependencyOrder.map((dep) => dep.split('/').pop());
+  componentDeps.push(dep);
 
-  let dirName = `${dirs.components}/${dep}`;
+  const pkg = await fsp.readFile(path.join(dirs.components, dep, 'package.json')).then(JSON.parse).catch(console.warn);
 
-  logger.debug(`Will build docs for package in ${dirs.components}/${dep}`);
+  let docsDeps = minimumDeps.concat(componentDeps);
+  docsDeps = docsDeps.filter((dep, i) => docsDeps.indexOf(dep) === i);
 
-  return new Promise((resolve, reject) => {
-    gulp.src(
-      [
-        `${dirName}/metadata.yml`,
-        `${dirName}/metadata/*.yml`
-      ], {
-        allowEmpty: true
-      }
-    )
-      .pipe(rename(function(file) {
-        if (file.basename === 'metadata') {
-          file.basename = dep;
-        }
-      }))
-      .pipe(data(async function(file) {
-        let componentDeps = dependencyOrder.map((dep) => dep.split('/').pop());
-        componentDeps.push(dep);
-
-        let pkg = JSON.parse(await fsp.readFile(path.join(dirs.components, dep, 'package.json')));
-
-        let docsDeps = minimumDeps.concat(componentDeps);
-        docsDeps = docsDeps.filter((dep, i) => docsDeps.indexOf(dep) === i);
-
-        let date;
-        try {
-          const data = await npmFetch.json(pkg.name);
-          date = data.time[pkg.version];
-          date = new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        }
-        catch (err) {
-          date = 'Unreleased';
-          logger.error(`Could not determine date of release for ${pkg.name}@${pkg.version}`);
-        }
-
-        return Object.assign({}, {
-          util: require(`${dirs.site}/util`),
-          dnaVars: metadata
-        }, templateData, {
-          pageURL: path.basename(file.basename, '.yml') + '.html',
-          dependencyOrder: docsDeps,
-          releaseDate: date,
-          pkg: pkg
-        });
-      }))
-      .pipe(through.obj(function compilePug(file, enc, cb) {
-        let component;
-        var componentName = file.dirname.replace('/metadata', '').split('/').pop();
-        try {
-          component = yaml.safeLoad(String(file.contents));
-        } catch (safeloadError) {
-          logger.error('Uh, oh... during buildDocs_forDep, yaml loading failed for'.yellow, componentName.red);
-          throw safeloadError;
-        }
-
-        if (!component.id) {
-          if (file.basename === 'metadata.yml') {
-            // Use the component's name
-            component.id = dep;
-          }
-          else {
-            // Use the example file name
-            component.id = path.basename(file.basename, '.yml');
-          }
-        }
-        let templateData = Object.assign({}, { component: component }, file.data || {});
-
-        file.path = ext(file.path, '.html');
-
-        try {
-          const templatePath = `${dirs.site}/templates/siteComponent.pug`;
-          let compiled = pugCompiler.renderFile(templatePath, templateData);
-          file.contents = Buffer.from(compiled);
-        } catch (err) {
-          return cb(err);
-        }
-        cb(null, file);
-      }))
-      .pipe(gulp.dest('dist/docs/'))
-      .on('end', resolve)
-      .on('error', reject);
+  const date = await npmFetch.json(pkg.name).then((data) => {
+    const date = data.time[pkg.version];
+    return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  }).catch(() => {
+    console.warn(`Could not determine date of release for ${pkg.name}@${pkg.version}`);
+    return 'Unreleased';
   });
+
+  const siteData = {
+    util: require(`${dirs.site}/util`),
+    dnaVars: metadata,
+    ...templateData,
+    pageURL: path.basename(dep, '.yml') + '.html',
+    dependencyOrder: docsDeps,
+    releaseDate: date,
+    pkg: pkg
+  };
+
+  let file = {};
+  for (const filePath of await fg([
+    'metadata/*.yml'
+  ], {
+    cwd: dirName,
+    absolute: true
+  })) {
+    // const componentName = filePath.replace('/metadata', '').split('/').pop();
+    file.basename = path.basename(filePath);
+    const component = fsp.readFile(filePath, 'utf-8').then(yaml.safeLoad).catch(console.warn);
+    file.path = path.basename(filePath);
+    file.data = component;
+    component.id = component.id ?? path.basename(filePath, '.yml');
+
+    require(`${dirs.site}/util`).populateDNAInfo(component, metadata);
+
+    // Arrange examples for processing
+    const examples = !component.examples ? [component] : Array.isArray(component.examples) ? component.examples : Object.values(component.examples);
+    for (const example in examples) {
+      if (example.dnaStatus === 'Deprecated' || example.cssStatus === 'Deprecated') {
+        example.status = 'Deprecated';
+      } else if (example.cssStatus === 'Verified' || example.dnaStatus === 'Canon') {
+        example.status = 'Verified';
+      } else example.status = 'Contribution';
+    }
+
+    const dnaStatusTranslation = {
+      'Canon': 'Verified',
+      'Precursor': 'Contribution'
+    };
+
+    file.path = ext(file.path, '.html');
+    const compiled = nunjucks.render(`${dirs.site}/content/_includes/siteComponent.njk`, {
+      ...siteData || {},
+      component,
+      status: dnaStatusTranslation[component.dnaStatus] || component.dnaStatus,
+    });
+
+    if (!compiled) return;
+    return fsp.writeFile(path.join(__dirname, `../../../dist/docs/${path.basename(filePath, '.yml')}.html`), compiled);
+  }
 }
 
-// Combined
-async function buildDocs_individualPackages() {
-  let dependencies = await depUtils.getFolderDependencyOrder(dirs.components);
-
-  return Promise.all(dependencies.map(buildDocs_forDep));
-}
-
-function buildSite_generateIndex() {
-  return gulp.src([
-    `${dirs.components}/*/metadata.yml`,
-    `${dirs.components}/*/metadata/*.yml`
-  ])
-  .pipe(function() {
-    let docs = [];
-    let store = {};
-    let latestFile = null;
-    function readYML(file, enc, cb) {
-      let componentData;
-      try {
-        componentData = yaml.safeLoad(String(file.contents));
-      } catch (err) {
-        return cb(err);
-      }
-
-      var componentName = file.dirname.replace('/metadata', '').split('/').pop();
-
-      if (path.basename(file.basename) === 'metadata.yml') {
-        file.basename = componentName;
-      }
-
-      var fileName = ext(file.basename, '.html');
-
-      docs.push({
-        href: fileName,
-        name: componentData.name,
-        description: componentData.description
-      });
-
-      store[fileName] = {
-        href: fileName,
-        name: componentData.name,
-        component: componentName,
-        description: componentData.description
-      };
-
-      latestFile = file;
-
-      cb();
-    }
-
-    function endStream(cb) {
-      let indexFile = latestFile.clone({contents: false});
-      indexFile.path = path.join(latestFile.base, 'index.json');
-
-      let index = lunr(function() {
-        this.ref('href');
-        this.field('name', { boost: 10 });
-        this.field('description');
-
-        docs.forEach(function(doc) {
-          this.add(doc);
-        }, this);
-      });
-
-      // Note: could merge main index here using technique from https://www.garysieling.com/blog/building-a-full-text-index-in-javascript
-
-      indexFile.contents = Buffer.from(JSON.stringify(index));
-      this.push(indexFile);
-
-      let storeFile = latestFile.clone({contents: false});
-      storeFile.path = path.join(latestFile.base, 'store.json');
-      storeFile.contents = Buffer.from(JSON.stringify(store));
-      this.push(storeFile);
-
-      cb();
-    }
-
-    return through.obj(readYML, endStream);
-  }())
-  .pipe(gulp.dest('dist/docs/'));
-};
-
-function buildSite_getData() {
-  let nav = [];
-  return gulp.src([
-    `${dirs.components}/*/metadata.yml`,
-    `${dirs.components}/*/metadata/*.yml`
-  ])
-  .pipe(through.obj(function readYML(file, enc, cb) {
-    let componentData;
-    var componentName = file.dirname.replace('/metadata', '').split('/').pop();
-    try {
-      componentData = yaml.safeLoad(String(file.contents));
-    } catch (safeloadError) {
-      logger.error('Uh, oh... during buildDocs_getData, yaml loading failed for'.yellow, componentName.red);
-      throw safeloadError;
-    } 
-
-    if (path.basename(file.basename) === 'metadata.yml') {
-      file.basename = componentName;
-    }
-
-    var fileName = ext(file.basename, '.html');
+/**
+ * @description This will loop through each file in the metadataFiles array,
+ * read the contents of the file
+ * using the fs module's readFileSync method, perform any necessary t
+ * ransformations on the contents, and then add an entry to the nav array for each file.
+ * Finally, the nav array is sorted and assigned to the templateData.nav property.
+ */
+const buildSite_getData = async () => {
+  const nav = [];
+  for (const file of await fg([
+    `*/metadata/*.yml`,
+  ], {
+    cwd: dirs.components,
+    absolute: true
+  })) {
+    const componentData = fsp.readFile(file, "utf8").then(yaml.safeLoad).catch(console.warn);
     nav.push({
-      name: componentData.name,
-      component: componentName,
-      hide: componentData.hide,
-      fastLoad: componentData.fastLoad,
-      href: fileName,
-      description: componentData.description
+      ...componentData || {},
+      component: path.dirname(file).replace("/metadata", "").split("/").pop(),
+      href: ext(path.basename(file), ".html"),
     });
+  }
 
-    cb(null, file);
-  }))
-  .on('end', function() {
-    templateData.nav = nav.sort(function(a, b) {
-      return a.name <= b.name ? -1 : 1;
-    });
-  })
-};
-
-function buildSite_copyResources() {
-  return gulp.src(`${dirs.site}/dist/**`)
-    .pipe(gulp.dest('dist/docs/'));
+  templateData.nav = nav.sort((a, b) => a.name <= b.name ? -1 : 1);
 }
 
-function buildSite_copyFreshResources() {
-  return gulp.src(`${dirs.site}/resources/**`)
-    .pipe(gulp.dest('dist/docs/'));
+// copy all the resources from site/dist to dist/docs
+const buildSite_copyResources = async () => {
+  const distPath = path.join(__dirname, "../../dist/docs/");
+  await fsp.mkdir(distPath, { recursive: true }).catch();
+  return walk(`${dirs.site}/dist/`, distPath);
 }
 
-function buildSite_html() {
-  return gulp.src(`${dirs.site}/*.pug`)
-    .pipe(data(function(file) {
-      return {
-        util: require(`${dirs.site}/util`),
-        pageURL: path.basename(file.basename, '.pug') + '.html',
-        dependencyOrder: minimumDeps
-      };
-    }))
-    .pipe(pug({
-      locals: templateData
-    }))
-    .pipe(gulp.dest('dist/docs/'));
+/**
+ * @returns {Promise<void>}
+ * @description This will loop through each file in the siteFiles array,
+ * read the contents of the file
+ * using the fs module's readFileSync method, perform any necessary transformations
+ * on the contents using the nunjucksRender function, and then write
+ * the transformed contents to a new file in the dist/docs/
+ * directory using the fs module's writeFileSync method.
+ */
+const buildSite_html = async () => {
+  const promises = [];
+  for (const file of await fg(`content/**/*.njk`, {
+    extend: ["njk"],
+    absolute: true,
+    cwd: dirs.site,
+  }) ) {
+    const fileContents = await fsp.readFile(file, "utf8");
+    const transformedContents = nunjucks.renderString(
+      "site/templates",
+      fileContents
+    );
+
+    await fsp.mkdir("dist/docs/", { recursive: true }).catch();
+    promises.push(
+      fsp.writeFile(
+        `dist/docs/${path.basename(file, ".njk")}.html`,
+        transformedContents
+      )
+    );
+  }
+  return Promise.all(promises);
 }
 
-function copySiteWorkflowIcons() {
-  return gulp.src(path.join(path.dirname(require.resolve('@adobe/spectrum-css-workflow-icons')), 'spectrum-icons.svg'))
-    .pipe(gulp.dest('dist/docs/img/'));
+// build all the site pages
+const buildSite_pages = async () =>
+  Promise.all([
+    buildSite_getData(),
+    buildSite_html(),
+]);
+
+exports.buildSite = async () =>
+  Promise.all([
+    buildSite_copyResources(),
+    buildSite_pages()
+]);
+
+/**
+ * @description This will first run the buildSite_getData function,
+ * and then run the buildSite_generateIndex,
+ * buildDocs_individualPackages, buildSite_copyResources, and copySiteWorkflowIcons
+ * functions in parallel. The callback function will be invoked
+ * when all of the tasks in the series have completed.
+ */
+const buildDocs = async () => {
+  await buildSite_getData().catch(console.warn);
+  return Promise.all([
+    // was: buildSite_generateIndex
+    async () => {
+      const docs = [];
+      const store = {};
+
+      for (const component of await fg([
+        `*/metadata/*.yml`
+      ], {
+        cwd: dirs.components,
+        absolute: true,
+      })) {
+        const componentData = await fsp.readFile(component).then(yaml.safeLoad).catch(console.warn);
+        const componentName = path.dirname(component).replace('/metadata', '').split('/').pop();
+        const fileName = ext(path.basename(component), '.html');
+
+        docs.push({
+          href: fileName,
+          name: componentData.name,
+          description: componentData.description
+        });
+
+        store[fileName] = {
+          href: fileName,
+          name: componentData.name,
+          component: componentName,
+          description: componentData.description
+        };
+      }
+
+      const indexContent = lunr(() => {
+          this.ref('href');
+          this.field('name', { boost: 10 });
+          this.field('description');
+
+          docs.forEach(function(doc) {
+            this.add(doc);
+          }, this);
+      }).then(JSON.stringify).catch(console.warn);
+
+      await fsp.mkdir('dist/docs/', { recursive: true }).catch();
+      return Promise.all([
+        fsp.writeFile('dist/docs/index.json', Buffer.from(indexContent)),
+        fsp.writeFile('dist/docs/store.json', JSON.stringify(store)),
+      ]);
+    },
+    // was: buildDocs_individualPackages
+    async () => {
+      const dependencies = await depUtils.getFolderDependencyOrder(
+        dirs.components
+      );
+      if (!dependencies) return Promise.resolve();
+      return Promise.all(dependencies.map(buildDocs_forDep));
+    },
+    buildSite_copyResources(),
+    async () => {
+      const sourcePath = require.resolve("@adobe/spectrum-css-workflow-icons/dist/spectrum-icons.svg");
+      return fsp.copyFile(sourcePath, 'dist/docs/img/spectrum-icons.svg');
+    },
+  ]);
 }
-
-let buildSite_pages = gulp.series(
-  buildSite_getData,
-  buildSite_html
-);
-
-exports.buildSite = gulp.parallel(
-  buildSite_copyResources,
-  buildSite_pages
-);
-
-let buildDocs = gulp.series(
-  buildSite_getData,
-  gulp.parallel(
-    buildSite_generateIndex,
-    buildDocs_individualPackages,
-    buildSite_copyResources,
-    copySiteWorkflowIcons
-  )
-);
-
-let build = gulp.series(
-  buildSite_getData,
-  gulp.parallel(
-    buildDocs,
-    buildSite_html
-  )
-);
 
 exports.buildSite_getData = buildSite_getData;
 exports.buildSite_copyResources = buildSite_copyResources;
-exports.buildSite_copyFreshResources = buildSite_copyFreshResources;
+
+exports.buildSite_copyFreshResources = async () => {
+  const distPath = path.join(__dirname, "../../dist/docs/");
+  await fsp.mkdir(distPath, { recursive: true }).catch();
+  return walk(`${dirs.site}/resources/`, distPath);
+};
+
 exports.buildSite_pages = buildSite_pages;
 exports.buildSite_html = buildSite_html;
 exports.buildDocs_forDep = buildDocs_forDep;
 exports.buildDocs = buildDocs;
-exports.build = build;
+
+exports.build = async () => {
+  await buildSite_getData().catch(console.warn);
+  return buildDocs().catch(console.warn);
+};

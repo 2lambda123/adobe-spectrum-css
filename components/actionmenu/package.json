@@ -3,8 +3,7 @@
   "version": "4.0.11",
   "description": "The Spectrum CSS actionmenu component",
   "license": "Apache-2.0",
-  "author": "Adobe",
-  "homepage": "https://opensource.adobe.com/spectrum-css/actionmenu",
+  "homepage": "https://opensource.adobe.com/spectrum-css/",
   "repository": {
     "type": "git",
     "url": "https://github.com/adobe/spectrum-css.git",
@@ -15,7 +14,7 @@
   },
   "main": "dist/index-vars.css",
   "scripts": {
-    "build": "gulp"
+    "build": "node index.js"
   },
   "peerDependencies": {
     "@spectrum-css/actionbutton": "^1.0.0 || ^2.0.0 || ^3.0.0",
@@ -30,8 +29,7 @@
     "@spectrum-css/icon": "^3.0.33",
     "@spectrum-css/menu": "^4.0.14",
     "@spectrum-css/popover": "^5.0.18",
-    "@spectrum-css/vars": "^8.0.4",
-    "gulp": "^4.0.0"
+    "@spectrum-css/vars": "^8.0.4"
   },
   "publishConfig": {
     "access": "public"

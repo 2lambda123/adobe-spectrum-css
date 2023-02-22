@@ -3,8 +3,7 @@
   "version": "2.0.1",
   "description": "The Spectrum CSS picker component",
   "license": "Apache-2.0",
-  "author": "Adobe",
-  "homepage": "https://opensource.adobe.com/spectrum-css/picker",
+  "homepage": "https://opensource.adobe.com/spectrum-css/",
   "repository": {
     "type": "git",
     "url": "https://github.com/adobe/spectrum-css.git",
@@ -15,7 +14,7 @@
   },
   "main": "dist/index-vars.css",
   "scripts": {
-    "build": "gulp"
+    "build": "node index.js"
   },
   "peerDependencies": {
     "@spectrum-css/icon": "^3.0.0",
@@ -30,8 +29,7 @@
     "@spectrum-css/menu": "^4.0.14",
     "@spectrum-css/popover": "^6.0.17",
     "@spectrum-css/progresscircle": "^2.0.13",
-    "@spectrum-css/tokens": "^7.1.0",
-    "gulp": "^4.0.0"
+    "@spectrum-css/tokens": "^7.1.0"
   },
   "publishConfig": {
     "access": "public"

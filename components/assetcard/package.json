@@ -3,19 +3,18 @@
   "version": "1.1.14",
   "description": "The Spectrum CSS asset card component",
   "license": "Apache-2.0",
-  "author": "Adobe",
-  "homepage": "https://opensource.adobe.com/spectrum-css/assetcard",
+  "homepage": "https://opensource.adobe.com/spectrum-css/",
   "repository": {
     "type": "git",
     "url": "https://github.com/adobe/spectrum-css.git",
-    "directory": "components/assetcard"
+    "directory": "components/card"
   },
   "bugs": {
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
   "main": "dist/index-vars.css",
   "scripts": {
-    "build": "gulp"
+    "build": "node index.js"
   },
   "peerDependencies": {
     "@spectrum-css/checkbox": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0",
@@ -28,8 +27,7 @@
     "@spectrum-css/component-builder": "^4.0.2",
     "@spectrum-css/icon": "^3.0.33",
     "@spectrum-css/typography": "^4.0.28",
-    "@spectrum-css/vars": "^8.0.4",
-    "gulp": "^4.0.0"
+    "@spectrum-css/vars": "^8.0.4"
   },
   "publishConfig": {
     "access": "public"

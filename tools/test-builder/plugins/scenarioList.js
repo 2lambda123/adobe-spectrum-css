@@ -15,12 +15,9 @@ const File = require('vinyl');
 const path = require('path');
 
 const sortByLabel = (a, b) => {
-  if (a.label > b.label)
-    return 1;
-  else if (a.label < b.label)
-    return -1;
-  else
-    return 0;
+  if (a.label > b.label) return 1;
+  if (a.label < b.label) return -1;
+  return 0;
 };
 
 module.exports = () => {

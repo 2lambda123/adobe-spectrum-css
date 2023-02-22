@@ -15,7 +15,7 @@
     },
     "scripts": {
         "kill-zombies": "pkill -f \"(chrome)?(--headless)\"",
-        "init": "gulp test:init",
+        "init": "node index",
         "approve": "backstop approve --config=backstop_test.js",
         "docker:clean": "backstop clean --docker --config=backstop_test.js",
         "wait:docs": "wait-on http://127.0.0.1:3000/docs/index.html",
@@ -35,7 +35,6 @@
         "@spectrum-css/spectrum-css-vr-test-assets-essential": "^1.0.46",
         "@spectrum-css/test-builder": "^1.0.4",
         "backstopjs-spectrum": "6.16.0",
-        "gulp": "^4.0.0",
         "rimraf": "^4.1.1",
         "wait-on": "^6.0.1"
     }

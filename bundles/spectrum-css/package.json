@@ -13,7 +13,7 @@
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
   "scripts": {
-    "build": "gulp build",
+    "build": "node index",
     "prepack": "gulp prePack",
     "postpublish": "gulp postPublish",
     "publishpages": "gulp ghPages",
@@ -80,7 +80,6 @@
     "@spectrum-css/typography": "^2.0.0",
     "@spectrum-css/underlay": "^2.0.0",
     "@spectrum-css/vars": "^3.0.0-beta.0",
-    "@spectrum-css/well": "^2.0.0",
-    "gulp": "^4.0.0"
+    "@spectrum-css/well": "^2.0.0"
   }
 }

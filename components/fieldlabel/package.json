@@ -3,8 +3,7 @@
   "version": "6.0.2",
   "description": "The Spectrum CSS fieldlabel component",
   "license": "Apache-2.0",
-  "author": "Adobe",
-  "homepage": "https://opensource.adobe.com/spectrum-css/fieldlabel",
+  "homepage": "https://opensource.adobe.com/spectrum-css/",
   "repository": {
     "type": "git",
     "url": "https://github.com/adobe/spectrum-css.git",
@@ -15,7 +14,7 @@
   },
   "main": "dist/index.css",
   "scripts": {
-    "build": "gulp"
+    "build": "node index.js"
   },
   "peerDependencies": {
     "@spectrum-css/icon": "^3.0.0",
@@ -30,8 +29,7 @@
     "@spectrum-css/radio": "^7.0.2",
     "@spectrum-css/stepper": "^3.0.37",
     "@spectrum-css/textfield": "^3.2.14",
-    "@spectrum-css/tokens": "^7.1.0",
-    "gulp": "^4.0.0"
+    "@spectrum-css/tokens": "^7.1.0"
   },
   "publishConfig": {
     "access": "public"

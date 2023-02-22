@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Adobe. All rights reserved.
+Copyright 2022 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License. You may obtain a copy
 of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -9,57 +9,41 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+const fsp = require("fs").promises;
+const path = require('path');
 
-const gulp = require('gulp');
-const postcss = require('gulp-postcss');
-const concat = require('gulp-concat');
-const processors = require('./processors').processors;
-const rename = require('gulp-rename');
+const postcss = require("postcss");
+const fg = require("fast-glob");
 
-const legacyBuild = require('./legacyBuild');
-const vars = require('./vars');
+const processors = require("./processors").processors;
+// const legacyBuild = require('./legacyBuild');
+const { bakeVars } = require("./vars");
 
 // Read in all variables used
 // Read in all vars from recent DNA
 // Include definitions if they refer to a variable, static if not
+async function buildIndexVars() {
+  const writePath = path.join("dist", "index-vars.css");
+  const writeStream = fsp.createWriteStream(writePath, { flags: "w" });
+  // Allow missing skin.css
+  for (const file of await fg(["index.css", "skin.css"])) {
+    writeStream.write(await fsp.readFile(file, "utf-8"));
+  }
 
-function buildIndexVars() {
-  return gulp.src([
-    'index.css',
-    'skin.css'
-  ], {
-    allowEmpty: true // Allow missing skin.css
-  })
-    .pipe(concat('index-vars.css'))
-    .pipe(postcss(processors))
-    .pipe(gulp.dest('dist/'));
+  writeStream.close();
+  const contents = await fsp.readFile(writePath, "utf-8");
+  const result = await postcss(processors).process(contents, { from: 'index.css' }).then((result) => result.css).catch(console.error);
+  return fsp.writeFile(writePath, result);
 }
 
-let buildVars = gulp.series(
-  buildIndexVars,
-  vars.bakeVars
-);
-
 exports.buildIndexVars = buildIndexVars;
-exports.buildVars = buildVars;
+exports.buildVars = async function () {
+  await buildIndexVars().catch(console.warn);
+  return bakeVars().catch(console.warn);
+};
 
-exports.buildCSS = gulp.series(
-  buildVars,
-  function copyIndex() {
-    // Just copy index.vars as index.css to maintain backwards compat
-    return gulp.src('dist/index-vars.css')
-      .pipe(rename((file) => {
-        file.basename = 'index';
-      }))
-      .pipe(gulp.dest('dist/'))
-  }
-  /*
-  ,gulp.parallel(
-    legacyBuild.buildDiff,
-    legacyBuild.buildMedium,
-    legacyBuild.buildLarge,
-    legacyBuild.buildSingleStops,
-    legacyBuild.buildMultiStops
-  )
-  */
-);
+exports.buildCSS = async function () {
+  await buildIndexVars().catch(console.warn);
+  await bakeVars().catch(console.warn);
+  return fsp.copyFile("dist/index-vars.css", "dist/index.css").catch(console.warn);
+}

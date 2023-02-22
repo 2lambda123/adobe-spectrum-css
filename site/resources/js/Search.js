@@ -104,15 +104,7 @@ Search.CategoryNames = {
 
 function loadJSON(url, callback) {
   function handleLoad() {
-    var object = null;
-    try {
-      object = JSON.parse(req.responseText);
-    }
-    catch (err) {
-      console.error(`Failed to load JSON from ${url}: ${err}`);
-      callback(err);
-    }
-
+    const object = req.responseText.then(JSON.parse).catch(console.warn);
     callback(null, object);
   }
 
@@ -326,4 +318,3 @@ Search.prototype.search = function(val) {
 
   this.showResults();
 };
-

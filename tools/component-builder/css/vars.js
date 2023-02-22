@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Adobe. All rights reserved.
+Copyright 2023 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License. You may obtain a copy
 of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -10,83 +10,57 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const gulp = require('gulp');
-const through = require('through2');
-const postcss = require('postcss');
-const logger = require('gulplog');
-const fsp = require('fs').promises;
-const path = require('path');
+const fsp = require("fs").promises;
+const path = require("path");
 
-const varUtils = require('./lib/varUtils');
+const {
+  getClassNames,
+  getAllComponentVars,
+  getAllVars,
+  getVarsFromCSS,
+  getVariableDeclarations
+} = require("./lib/varUtils");
 
-// Todo: get these values from a common place?
-let colorStops = [
-  'darkest',
-  'dark',
-  'light',
-  'lightest'
-];
+let verbose = process.argv.includes("--verbose") || process.argv.includes("-v") || false;
 
-let scales = [
-  'medium',
-  'large'
-];
+exports.bakeVars = async () => {
+  const pkg = await fsp.readFile(path.join("package.json")).then(JSON.parse).catch(Promise.reject);
+  const pkgName = pkg.name.split("/").pop();
 
-function bakeVars() {
-  return gulp.src([
-    'dist/index-vars.css'
-  ], {
-    allowEmpty: true,
-  })
-  .pipe(through.obj(async function doBake(file, enc, cb) {
-    let pkg = JSON.parse(await fsp.readFile(path.join('package.json')));
-    let pkgName = pkg.name.split('/').pop();
-    let classNames = varUtils.getClassNames(file.contents, pkgName);
+  const fileContent = fsp.readFile("dist/index-vars.css", "utf-8").catch(Promise.reject);
+  if(!fileContent) return;
 
-    // Find all custom properties used in the component
-    let variableList = varUtils.getVarsFromCSS(file.contents);
+  const classNames = getClassNames(fileContent, pkgName);
 
-    // Get vars defined inside of the component
-    let componentVars = varUtils.getVarsDefinedInCSS(file.contents);
+  // Get vars defined inside of the component
+  // const componentVars = getVarsDefinedInCSS(fileContent);
 
-    // Get vars in ALL components
-    let vars = await varUtils.getAllComponentVars();
+  // Get vars in ALL components
+  const vars = await getAllComponentVars();
 
-    // Get literally all of the possible vars (even overridden vars that are different between themes/scales)
-    let allVars = await varUtils.getAllVars();
+  // Get literally all of the possible vars (even overridden vars that are different between themes/scales)
+  const allVars = await getAllVars();
 
-    // For each color stop and scale, filter the variables for those matching the component
-    let errors = [];
-    let usedVars = {};
-    variableList.forEach(varName => {
-      if (varName.indexOf('spectrum-global') !== -1) {
-        logger.warn(`⚠️  ${pkg.name} directly uses global variable ${varName}`);
-      }
-      else if (!allVars[varName] && !varName.startsWith('--mod') && !varName.startsWith('--highcontrast')) {
-        if (componentVars.indexOf(varName) === -1) {
-          errors.push(`${pkg.name} uses undefined variable ${varName}`);
-        }
-        else {
-          logger.warn(`🔶 ${pkg.name} uses locally defined variable ${varName}`);
-        }
-      }
-      else {
-        usedVars[varName] = vars[varName];
-      }
-    });
-
-    if (errors.length) {
-      return cb(new Error(errors.join('\n')), file);
+  const usedVars = {};
+  // Find all custom properties used in the component
+  for (const varName of getVarsFromCSS(fileContent)) {
+    if (varName.indexOf("spectrum-global") !== -1 && verbose) {
+      console.warn(`⚠️  ${pkg.name} directly uses global variable ${varName}`);
+      continue;
     }
 
-    let contents = varUtils.getVariableDeclarations(classNames, usedVars);
-    let newFile = file.clone({contents: false});
-    newFile.path = path.join(file.base, `vars.css`);
-    newFile.contents = Buffer.from(contents);
+    if (
+      !allVars[varName] &&
+      !varName.startsWith("--mod") &&
+      !varName.startsWith("--highcontrast") &&
+      verbose
+    ) {
+      console.warn(`🔶 ${pkg.name} uses locally defined variable ${varName}`);
+      continue;
+    }
 
-    cb(null, newFile);
-  }))
-  .pipe(gulp.dest('dist/'));
-}
+    usedVars[varName] = vars[varName];
+  }
 
-exports.bakeVars = bakeVars;
+  return fsp.writeFile('dist/vars.css', getVariableDeclarations(classNames, usedVars));
+};
