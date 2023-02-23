@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Adobe. All rights reserved.
+Copyright 2022 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License. You may obtain a copy
 of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -10,215 +10,199 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const gulp = require('gulp');
-const path = require('path');
-const through = require('through2');
-const postcss = require('gulp-postcss');
-const rename = require('gulp-rename');
-const concat = require('gulp-concat');
-const postcssReal = require('postcss');
-const fsp = require('fs').promises;
-const { parse } = require('postcss-values-parser');
-const processorsFunction = require('./processors').getProcessors;
-const processors = processorsFunction();
+const path = require("path");
+const fs = require("fs");
+const fsp = fs.promises;
 
-function getTokensUsedInValueNode(node, usedTokens) {
-  usedTokens = usedTokens ?? [];
-  if (node.nodes) {
-    node.nodes.forEach(subNode => {
-      if (subNode.type === 'word' && subNode.value.startsWith('--')) {
-        usedTokens.push(subNode.value);
-      }
-      else if (subNode.type === 'func') {
-        getTokensUsedInValueNode(subNode, usedTokens);
-      }
-    });
-  }
-  return usedTokens;
-}
+const postcssrc = require('postcss-load-config');
+const postcss = require("postcss");
 
-function getTokensUsedInCSS(root, coreTokens, componentTokens) {
-  let usedTokens = [];
-  let coreTokensUsed = {};
-  let componentTokensUsed = {};
+const fg = require("fast-glob");
+const chalk = require('chalk');
 
-  root.walkRules((rule, ruleIndex) => {
-    rule.walkDecls((decl) => {
-      let matches = decl.value.match(/var\(.*?\)/g);
-      if (matches) {
-        let parsed = parse(decl.value);
-        parsed.nodes.forEach(node => {
-          const usedTokensInValue = getTokensUsedInValueNode(node);
-          usedTokensInValue.forEach(tokenName => {
-            if (coreTokens[tokenName]) {
-              coreTokensUsed[tokenName] = (coreTokensUsed[tokenName] ?? 0) + 1;
-            }
-            else if (componentTokens[tokenName]) {
-              componentTokensUsed[tokenName] = (componentTokensUsed[tokenName] ?? 0) + 1;
-            }
-            if (usedTokens.indexOf(tokenName) === -1) {
-              usedTokens.push(tokenName);
-            }
-          });
-        });
-      }
-    });
-  });
-
-  return { usedTokens, coreTokensUsed, componentTokensUsed };
-}
-
-function getTokensDefinedInCSS(root) {
-  let variables = {};
-
-  root.walkRules((rule, ruleIndex) => {
-    rule.walkDecls((decl) => {
-      if (decl.prop.startsWith('--')) {
-        variables[decl.prop] = decl.value;
-      }
-    });
-  });
-
-  return variables;
-}
-
-async function getCoreTokens() {
-  const fetchOptions = {
-    paths: [
-      process.cwd(),
-      path.join(process.cwd(), '../../')
-    ]
-  };
-  /* Resolve core tokens first from the current working directory, or if not found, from the root of the monorepo */
-  const coreTokensFile = require.resolve('@spectrum-css/tokens', fetchOptions);
-  const coreTokensPkg = require.resolve('@spectrum-css/tokens/package.json', fetchOptions);
-  if (coreTokensPkg) console.log('Core tokens version:', await fsp.readFile(coreTokensPkg, 'utf8').then(JSON.parse).then(pkg => pkg.version));
-  let contents = await fsp.readFile(coreTokensFile, 'utf8');
-  let root = postcssReal.parse(contents);
-  return getTokensDefinedInCSS(root);
-}
-
-function buildCSS() {
-  return gulp.src([
-      'index.css',
-      'themes/spectrum.css', // spectrum comes first
-      'themes/*.css'
-    ])
-    .pipe(concat('index.css'))
-    .pipe(postcss(processors, {
-      from: './index.css' // gulp-concat sets the file.path wrong, so override here
-    }))
-    .pipe(gulp.dest('dist/'));
-}
-
-function buildCSSWithoutThemes() {
-  return gulp.src([
-      'index.css',
-      'themes/spectrum.css', // spectrum comes first
-      'themes/*.css'
-    ])
-    .pipe(concat('index-base.css'))
-    .pipe(postcss(processorsFunction(false, { noFlatVariables: true }), {
-      from: './index.css' // gulp-concat sets the file.path wrong, so override here
-    }))
-    .pipe(gulp.dest('dist/'));
-}
-
-function buildCSSThemeIndex() {
-  return gulp.src([
-      'themes/spectrum.css', // spectrum comes first
-      'themes/*.css'
-    ])
-    .pipe(concat('index-theme.css'))
-    .pipe(postcss(processorsFunction(true, { noSelectors: true })))
-    .pipe(gulp.dest('dist/'));
-}
-
-function buildCSSThemes() {
-  return gulp.src([
-      'themes/*.css'
-    ])
-    .pipe(postcss(processorsFunction(true, { noSelectors: true })))
-    .pipe(gulp.dest('dist/themes/'));
-}
+const validateTokenUse = require("./validate.js");
 
 /**
-  Special case for express: it needs Spectrum base vars and needs to override them
-*/
-function buildExpressTheme() {
-  return gulp.src([
-      'dist/index-theme.css'
-    ])
-    .pipe(concat('express.css'))
-    .pipe(postcss(processorsFunction(true).concat(require('postcss-combininator'))))
-    .pipe(gulp.dest('dist/themes/'));
-}
+ * @description Process raw CSS with PostCSS and write the result to a file
+ * @param {Promise<string>} inputCSS
+ * @param {Object} config The PostCSS config to pass to postcss-load-config
+ * @param {boolean} verbose
+ * @returns {Promise<string>}
+ */
+const process = async (inputCSS, config, verbose = true) => {
+  const { plugins, options } = await postcssrc(config, path.join(__dirname, "../"));
+  const processedCSS = await postcss(plugins).process((await inputCSS), options).then(result => result.css);
+  // if (verbose) console.log(`  ${chalk.green('✓')} process with postcss`);
 
-let coreTokens = null;
-function checkCSS(glob) {
-  return gulp.src(glob)
-    .pipe(concat('index-combined.css'))
-    .pipe(through.obj(async function doBake(file, enc, cb) {
-      // Fetch core tokes once during the build
-      if (coreTokens === null) {
-        coreTokens = await getCoreTokens();
-      }
+  if (!config.to) return processedCSS;
 
-      let pkg = JSON.parse(await fsp.readFile(path.join('package.json')));
+  // Write the processed CSS to a file
+  return fsp.writeFile(config.to, processedCSS).catch(err => err && Promise.reject(err)).then(() => {
+    if (verbose) console.log(`  ${chalk.green('✓')} write to: ${chalk.magentaBright(config.to)}`);
+    return processedCSS;
+  });
+};
 
-      // Parse only once
-      let root = postcssReal.parse(file.contents);
+/**
+ * @description method to combine css files
+ * @param {{ filePath: { content: Promise<string>, isTheme: boolean }}} promises array of css files to combine
+ * @param {object} options
+ * @param {boolean} options.verbose flag to print the version of the package (default: true)
+ * @returns {Promise<string>}
+ **/
+const combineResults = async (promises, { cwd = process.cwd(), filter = () => true, verbose = true }) => {
+  const assets = Object.entries(promises).filter(filter).map(([filePath]) => filePath) || [];
 
-      // Get tokens defined inside of the component
-      let componentTokens = getTokensDefinedInCSS(root);
+  /* Extract the content promises from the dataset */
+  const content = Object.entries(promises).filter(filter).map(([, { content }]) => content);
 
-      // Find all tokens used in the component
-      let { usedTokens, coreTokensUsed, componentTokensUsed } = getTokensUsedInCSS(root, coreTokens, componentTokens);
+  /* Wait for all the promises to resolve and then combine the results */
+  return Promise.all(content).then((results) => {
+    if (verbose && assets) console.log(`  ${chalk.green('✓')} combine: ${chalk.magentaBright(`${assets.map(f => path.relative(cwd, f)).join(', ')}`)}`);
+    return results.join("\n");
+  }).catch(err => err && Promise.reject(err));
+};
 
-      // Make sure the component doesn't use any undefined tokens
-      let errors = [];
-      usedTokens.forEach(tokenName => {
-        if (!coreTokens[tokenName] && !componentTokens[tokenName] && !tokenName.startsWith('--mod') && !tokenName.startsWith('--highcontrast')) {
-          errors.push(`${pkg.name} uses undefined token ${tokenName}`);
-        }
-      });
+/**
+ * @description method to build css files
+ * @param {string[]} inputs array of css files to build
+ * @param {object} options
+ * @param {boolean} options.verbose flag to print the version of the package (default: true)
+ * @param {string} options.cwd current working directory (default: process.cwd())
+ * @param {string} options.tokenPkg name of the package to get the tokens from (default: @spectrum-css/tokens)
+ * @returns {Promise<void>}
+ */
+const buildCSS = async (inputs, coreTokenPackage, {
+  verbose = true,
+  cwd = process.cwd(),
+  validate = true,
+  // tokenPkg = '@spectrum-css/tokens',
+} = {}) => {
+  if (!inputs || inputs.length === 0) return Promise.reject("Must define which assets to build.");
 
-      // Make sure all tokens defined in the component are used
-      Object.keys(componentTokens).forEach(tokenName => {
-        if (!usedTokens.includes(tokenName)) {
-          errors.push(`${pkg.name} defines ${tokenName}, but never uses it`);
-        }
-      });
+  const isMigrated = coreTokenPackage.endsWith('-tokens');
 
-      if (errors.length) {
-        return cb(new Error(errors.join('\n')), file);
-      }
+  /* Read files in once, combine & process below */
+  const contentPromises = await fg(inputs, { cwd, absolute: true, onlyFiles: true })
+    .then(async (filePaths) => {
+      return filePaths.reduce((acc, filePath) => {
+        acc[filePath] = {
+          content: fsp.readFile(filePath, "utf8"),
+          isTheme: isMigrated ? filePath.includes("/themes/") : false,
+        };
+        return acc;
+      }, {});
+    }).catch(err => err && Promise.reject(err));
 
-      cb(null);
-    }));
-}
+  /* Combine all inputs into one content object */
+  const allCombined = combineResults(contentPromises, { cwd, verbose });
 
-function checkSourceCSS() {
-  return checkCSS([
-    'themes/*.css',
-    'index.css'
+  /* Validate token usage */
+  const reportResults = verbose && validate && isMigrated ? validateTokenUse(await allCombined, coreTokenPackage, {
+    componentName: `@spectrum-css/${path.basename(cwd)}`,
+    ignorePrefixes: ["--highcontrast", "--mod"],
+    verbose,
+  }) : Promise.resolve();
+
+  /* index file keeps all variables */
+  const indexWritten = process(allCombined, {
+    from: inputs[0],
+    to: isMigrated ? "dist/index.css" : "dist/index-vars.css",
+  }, verbose);
+
+  /* base file strips unused variables */
+  const baseWritten = process(allCombined, {
+    from: inputs[0],
+    to: "dist/index-base.css",
+    keepUnusedVars: false,
+    splinatorOptions: {
+      noFlatVariables: true,
+    },
+  }, verbose);
+
+
+  const themesWritten = Object.entries(contentPromises).map(([filePath, { isTheme, content}]) => {
+    /* Special case for express: it needs Spectrum base vars and needs to override them */
+    if (!isTheme || path.basename(filePath, '.css') === 'express') return;
+
+    return process(content, {
+      from: filePath,
+      to: `dist/themes/${path.basename(filePath)}`,
+      keepUnusedVars: true,
+      splinatorOptions: {
+        noSelectors: true,
+      },
+    }, verbose);
+  });
+
+  const coreKey = Object.entries(contentPromises).find(([filePath, { isTheme }]) => isTheme && path.basename(filePath, '.css') === 'spectrum')?.[0];
+  if (!coreKey) return Promise.reject("Could not find core theme file.");
+
+  /* Remove the core theme from the contentPromises so it doesn't get processed twice */
+  const coreTheme = contentPromises[coreKey];
+  delete contentPromises[coreKey];
+
+  const combinedThemeContent = combineResults({
+    [coreKey]: coreTheme,
+    ...contentPromises
+  }, {
+    filter: ([, { isTheme }]) => !!isTheme,
+    cwd,
+    verbose
+  });
+
+  /* Special case for express: it needs Spectrum base vars and needs to override them */
+  const expressWritten = async () => {
+    const themeIndexContent = await process(combinedThemeContent, {
+      keepUnusedVars: true,
+      splinatorOptions: {
+        noSelectors: true,
+      },
+      from: coreKey,
+      to: "dist/index-theme.css",
+    }, verbose);
+
+    return process(themeIndexContent, {
+      keepUnusedVars: true,
+      from: "dist/index-theme.css",
+      to: "dist/themes/express.css",
+      additionalPlugins: [ require("postcss-combininator") ],
+    }, verbose);
+  };
+
+  return Promise.all([
+    reportResults,
+    indexWritten,
+    baseWritten,
+    ...themesWritten,
+    expressWritten(),
   ]);
 }
 
-function checkBuiltCSS() {
-  return checkCSS('dist/index.css');
-}
+module.exports = async (config) => {
+  const verbose = config.verbose ?? true;
+  const cwd = config.cwd ?? process.cwd();
 
-exports.buildCSS = gulp.series(
-  checkSourceCSS,
-  gulp.parallel(
-    buildCSS,
-    buildCSSWithoutThemes,
-    gulp.series(
-      buildCSSThemes,
-      buildCSSThemeIndex,
-      buildExpressTheme
-    )
-  ),
-  checkBuiltCSS
-);
+  const packagePath = path.join(cwd, "package.json");
+  if (await fsp.access(packagePath).catch(() => true)) return;
+  const pkg = await fsp.readFile(packagePath, "utf-8").then(JSON.parse).catch(console.error);
+
+  let coreTokenPackage;
+  const assets = [];
+  const peerPkgNames = Object.keys(pkg.peerDependencies);
+  if (peerPkgNames.includes('@spectrum-css/tokens')) {
+    coreTokenPackage = '@spectrum-css/tokens';
+    assets.push("index.css", "themes/*.css");
+  } else if (peerPkgNames.includes('@spectrum-css/vars')) {
+    coreTokenPackage = '@spectrum-css/vars';
+    assets.push("index.css", "skin.css");
+  }
+
+  if (!coreTokenPackage) return console.log(`No core tokens found for ${pkg.name}`);
+
+  if (verbose) console.log(chalk.yellow(pkg.name), `| building CSS assets`);
+
+  await fsp.mkdir(path.join("dist/themes"), { recursive: true }).catch();
+  // ["index.css", "skin.css"
+  return buildCSS(assets, coreTokenPackage, { cwd, verbose, validate: true });
+}
