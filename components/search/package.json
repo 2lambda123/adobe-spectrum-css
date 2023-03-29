@@ -15,21 +15,24 @@
   },
   "main": "dist/index-vars.css",
   "scripts": {
-    "build": "gulp"
+    "build": "spectrum-css build",
+    "dev": "spectrum-css dev",
+    "test": "spectrum-css test",
+    "watch": "spectrum-css watch"
   },
   "peerDependencies": {
-    "@spectrum-css/clearbutton": "^1.0.0",
-    "@spectrum-css/icon": "^3.0.0",
-    "@spectrum-css/textfield": "^3.0.0",
     "@spectrum-css/vars": "^8.0.0"
   },
+  "optionalDependencies": {
+    "@spectrum-css/clearbutton": "^1.0.0",
+    "@spectrum-css/icon": "^3.0.0",
+    "@spectrum-css/textfield": "^3.0.0"
+  },
   "devDependencies": {
-    "@spectrum-css/clearbutton": "^1.2.22",
-    "@spectrum-css/component-builder": "^4.0.3",
-    "@spectrum-css/icon": "^3.0.35",
-    "@spectrum-css/textfield": "^3.2.16",
-    "@spectrum-css/vars": "^8.0.5",
-    "gulp": "^4.0.0"
+    "@spectrum-css/clearbutton": "*",
+    "@spectrum-css/component-builder": "*",
+    "@spectrum-css/icon": "*",
+    "@spectrum-css/textfield": "*"
   },
   "publishConfig": {
     "access": "public"

@@ -1,0 +1,8 @@
+CHANGELOG.md
+dist/
+.turbo/
+*.hbs
+node_modules/
+*.pug
+
+tools/documentation/includes/**

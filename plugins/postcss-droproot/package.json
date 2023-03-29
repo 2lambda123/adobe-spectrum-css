@@ -1,0 +1,29 @@
+{
+  "name": "postcss-droproot",
+  "version": "1.0.3",
+  "description": "Remove :root rules",
+  "license": "Apache-2.0",
+  "author": "Adobe",
+  "homepage": "https://github.com/adobe/spectrum-css/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/spectrum-css.git",
+    "directory": "plugins/postcss-droproot"
+  },
+  "bugs": {
+    "url": "https://github.com/adobe/spectrum-css/issues"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "optionalDependencies": {
+    "postcss": "^7.0.0 || ^8.0.0"
+  },
+  "devDependencies": {
+    "postcss": "^8.4.21"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

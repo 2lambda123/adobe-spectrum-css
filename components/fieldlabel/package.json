@@ -15,23 +15,26 @@
   },
   "main": "dist/index.css",
   "scripts": {
-    "build": "gulp"
+    "build": "spectrum-css build",
+    "dev": "spectrum-css dev",
+    "test": "spectrum-css test",
+    "watch": "spectrum-css watch"
   },
   "peerDependencies": {
-    "@spectrum-css/icon": "^3.0.0",
     "@spectrum-css/tokens": "^7.0.0"
   },
+  "optionalDependencies": {
+    "@spectrum-css/icon": "^3.0.0"
+  },
   "devDependencies": {
-    "@spectrum-css/checkbox": "^6.0.10",
-    "@spectrum-css/component-builder-simple": "^2.0.7",
-    "@spectrum-css/fieldgroup": "^4.0.24",
-    "@spectrum-css/icon": "^3.0.35",
-    "@spectrum-css/picker": "^2.0.10",
-    "@spectrum-css/radio": "^7.0.10",
-    "@spectrum-css/stepper": "^3.0.39",
-    "@spectrum-css/textfield": "^3.2.16",
-    "@spectrum-css/tokens": "^7.6.1",
-    "gulp": "^4.0.0"
+    "@spectrum-css/checkbox": "*",
+    "@spectrum-css/component-builder": "*",
+    "@spectrum-css/fieldgroup": "*",
+    "@spectrum-css/icon": "*",
+    "@spectrum-css/picker": "*",
+    "@spectrum-css/radio": "*",
+    "@spectrum-css/stepper": "*",
+    "@spectrum-css/textfield": "*"
   },
   "publishConfig": {
     "access": "public"

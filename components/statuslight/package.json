@@ -15,15 +15,16 @@
   },
   "main": "dist/index-vars.css",
   "scripts": {
-    "build": "gulp"
+    "build": "spectrum-css build",
+    "dev": "spectrum-css dev",
+    "test": "spectrum-css test",
+    "watch": "spectrum-css watch"
   },
   "peerDependencies": {
     "@spectrum-css/tokens": "^7.0.0"
   },
   "devDependencies": {
-    "@spectrum-css/component-builder": "^4.0.3",
-    "@spectrum-css/tokens": "^7.6.1",
-    "gulp": "^4.0.0"
+    "@spectrum-css/component-builder": "*"
   },
   "publishConfig": {
     "access": "public"

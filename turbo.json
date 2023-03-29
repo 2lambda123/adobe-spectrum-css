@@ -1,0 +1,42 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "pipeline": {
+      "clean": {},
+      "build": {
+        "inputs": ["*.css"],
+        "outputs": ["dist/**"],
+        "dependsOn": ["^build"],
+        "env": [ "NODE_ENV=production" ]
+      },
+      "build:preview": {
+        "inputs": ["tools/preview/assets/**", "components/*/stories/**", "components/*/*.css", "tools/preview/*.{js,html}", "tools/preview/decorators/*.js"],
+        "outputs": ["dist/preview/**"],
+        "dependsOn": ["^build"],
+        "env": [ "NODE_ENV=production" ]
+      },
+      "build:clean": {
+        "dependsOn": ["clean", "build", "^build"]
+      },
+      "test": {
+        "inputs": ["*.css", "stories/*.js"],
+        "dependsOn": ["^build:clean"],
+        "outputs": ["tools/preview/chromatic-build-*.xml", "tools/preview/chromatic-build-*.json", "tools/preview/chromatic-diagnostics*.json"]
+      },
+      "lint": {
+        "dependsOn": ["@spectrum-css/tokens#build", "@spectrum-css/vars#build", "@spectrum-css/expressvars#build"]
+      },
+      "dev": {
+        "cache": false,
+        "persistent": true,
+        "env": [ "NODE_ENV=development" ]
+      },
+      "watch": {
+        "cache": false,
+        "persistent": true,
+        "env": [ "NODE_ENV=development" ]
+      }
+    },
+    "globalDependencies": [
+      "postcss.config.js"
+    ]
+  }

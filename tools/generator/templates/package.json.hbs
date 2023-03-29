@@ -1,10 +1,9 @@
 {
   "name": "@spectrum-css/{{ folderName }}",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0",
   "description": "The Spectrum CSS {{ folderName }} component",
   "license": "Apache-2.0",
   "author": "Adobe",
-  "contributors": [],
   "homepage": "https://opensource.adobe.com/spectrum-css/",
   "repository": {
     "type": "git",
@@ -16,17 +15,19 @@
   },
   "main": "dist/index-vars.css",
   "scripts": {
-    "build": "gulp",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "gulp watch"
+    "build": "spectrum-css build",
+    "dev": "spectrum-css dev",
+    "test": "spectrum-css test",
+    "watch": "spectrum-css watch"
   },
   "peerDependencies": {
     "{{ tokens.name }}": ">= {{ parse tokens.version '.' 0 1 }}"
   },
   "devDependencies": {
-    "{{ builder.name }}": "^{{ builder.version }}",
-    "{{ tokens.name }}": "^{{ tokens.version }}",
-    "gulp": "{{ pkg.devDependencies.gulp }}"
+    "{{ builder.name }}": "*",
+    "{{ tokens.name }}": "*"{{#if dependencies}},
+    {{#each dependencies}}"{{ this.name }}": "*",
+    {{/each}}{{/if}}
   },
   "publishConfig": {
     "access": "public"

@@ -1,0 +1,30 @@
+{
+  "name": "postcss-transformselectors",
+  "version": "2.0.1",
+  "description": "Re-map and transform selectors",
+  "license": "Apache-2.0",
+  "author": "Adobe",
+  "homepage": "https://github.com/adobe/spectrum-css/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/spectrum-css.git",
+    "directory": "plugins/postcss-transformselectors"
+  },
+  "bugs": {
+    "url": "https://github.com/adobe/spectrum-css/issues"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "optionalDependencies": {
+    "postcss": "^7.0.0 || ^8.0.0"
+  },
+  "devDependencies": {
+    "ava": "^3.9.0",
+    "postcss": "^8.4.21"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

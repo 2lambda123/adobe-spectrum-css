@@ -20,65 +20,72 @@
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
   "scripts": {
-    "build": "run-s build:site build:preview # preview cannot be built until the component assets are finished",
+    "build": "run-s build:components build:site build:preview",
     "build:clean": "run-s clean build",
-    "build:components": "lerna run --stream --scope \"@spectrum-css/*\" --ignore \"@spectrum-css/{*-builder*,preview,generator,site}\" build",
-    "build:preview": "yarn workspace @spectrum-css/preview build",
+    "build:components": "turbo run build --filter \"./components/*\"",
+    "build:preview": "turbo run @spectrum-css/preview#build",
     "postbuild:preview": "rimraf dist/preview && mv tools/preview/storybook-static dist/preview",
-    "build:site": "gulp -LL",
+    "build:site": "turbo run @spectrum-css/documentation#build",
     "check:peerDeps": "node ./tasks/checkPeerDependencies.js ./components",
-    "ci-all": "yarn build",
-    "clean": "gulp clean",
-    "dev": "NODE_ENV=development BROWSERSYNC_OPEN=true gulp dev",
-    "docs:mod": "node tasks/mod-extractor.js",
-    "lint:components": "node ./tasks/packageLint.js",
-    "new": "yarn workspace @spectrum-css/generator new",
+    "ci-all": "yarn build --no-cache",
+    "clean": "turbo run clean",
+    "dev": "turbo run dev",
+    "new": "turbo run @spectrum-css/generator#new",
     "precommit": "lint-staged",
-    "prepare": "husky install && gulp prepare",
-    "prerelease": "yarn version:build",
-    "release": "lerna publish",
-    "release:beta-from-package": "yarn release from-package --conventional-prerelease --preid beta --pre-dist-tag beta --no-private",
-    "release:site": "gulp prepareSite && gh-pages -d dist-site/ -f -e .",
-    "start": "NODE_ENV=development yarn workspace @spectrum-css/preview start",
-    "test": "yarn workspace @spectrum-css/preview test",
-    "test:scope": "yarn workspace @spectrum-css/preview test:scope",
-    "version:build": "SCOPES=($(lerna changed)) && IFS=, SCOPE=\"${SCOPES[*]}\" && [[ \"${#SCOPES[@]}\" -gt 1 ]] && SCOPE=\"{${SCOPE}}\"; lerna run --stream --scope \"${SCOPE}\" --ignore \"@spectrum-css/{*-builder*,preview,generator,site}\" build",
-    "watch": "gulp watch"
+    "prepare": "husky install",
+    "prerelease": "yarn build:components",
+    "release:site": "turbo run @spectrum-css/documentation#publish --no-cache",
+    "start": "NODE_ENV=development turbo run @spectrum-css/preview#start",
+    "test": "turbo run @spectrum-css/preview#test",
+    "test:scope": "turbo run @spectrum-css/preview#test:scope",
+    "watch": "turbo run watch"
   },
   "workspaces": [
     "components/*",
+    "plugins/*",
     "tools/*"
   ],
   "devDependencies": {
-    "@adobe/focus-ring-polyfill": "^0.1.5",
-    "@commitlint/cli": "^8.3.3",
-    "@commitlint/config-conventional": "^8.3.3",
-    "del": "^5.1.0",
-    "gh-pages": "^3.0.0",
-    "gulp": "^4.0.0",
-    "gulp-replace": "^1.0.0",
-    "gulplog": "^1.0.0",
+    "@commitlint/cli": "^17.5.1",
+    "@commitlint/config-conventional": "^17.4.4",
+    "fast-glob": "^3.2.12",
+    "gh-pages": "^5.0.0",
     "husky": "^8.0.3",
-    "lerna": "^4.0.0",
-    "lint-staged": "^13.1.0",
-    "loadicons": "^1.0.0",
-    "lunr": "^2.3.6",
-    "markdown-it": "^12.3.2",
+    "lint-staged": "^13.2.0",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.7",
     "prettier-package-json": "^2.8.0",
-    "prismjs": "^1.23.0",
-    "rimraf": "^4.1.1",
+    "rimraf": "^4.4.1",
     "semver": "^7.3.8",
-    "through2": "^3.0.1",
-    "yargs": "^17.6.2"
+    "turbo": "^1.8.7",
+    "yargs": "^17.7.1"
   },
   "lint-staged": {
+    "components/*/*.css": [
+      "prettier --write"
+    ],
+    "components/*/metadata/*.yml": [
+      "prettier --write"
+    ],
+    "components/*/stories/*.js": [
+      "prettier --write"
+    ],
+    "components/*/README.md": [
+      "prettier --write"
+    ],
     "components/*/package.json": [
-      "yarn lint:components",
+      "node ./tasks/packageLint.js",
       "prettier-package-json --write"
     ],
     "package.json": [
       "prettier-package-json --write"
+    ],
+    "tools/**/*.js": [
+      "prettier --write"
+    ],
+    "tasks/*.js": [
+      "prettier --write"
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.17"
 }

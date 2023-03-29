@@ -1,0 +1,29 @@
+{
+  "name": "postcss-combininator",
+  "version": "1.0.0",
+  "description": "Combines multiple blocks of custom properties",
+  "license": "Apache-2.0",
+  "author": "Adobe",
+  "homepage": "https://github.com/adobe/spectrum-css/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/spectrum-css.git",
+    "directory": "plugins/postcss-combininator"
+  },
+  "bugs": {
+    "url": "https://github.com/adobe/spectrum-css/issues"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "optionalDependencies": {
+    "postcss": "^7.0.0 || ^8.0.0"
+  },
+  "devDependencies": {
+    "postcss": "^8.4.21"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
