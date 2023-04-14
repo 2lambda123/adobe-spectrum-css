@@ -76,8 +76,7 @@
       }
     },
     "implicitDependencies": [
-      "@spectrum-css/*",
-      "!@spectrum-css/generator"
+      "scope:components"
     ],
     "includedScripts": [
       "test",

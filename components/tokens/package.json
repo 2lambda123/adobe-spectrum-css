@@ -48,6 +48,7 @@
     "access": "public"
   },
   "nx": {
+    "tags": [ "scope:tokens"],
     "targets": {
       "build": {
         "inputs": [
