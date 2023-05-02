@@ -13,199 +13,232 @@ governing permissions and limitations under the License.
 /* global document, window, Element, loadIcons, URLSearchParams */
 
 function setPickerValue(picker, value, label) {
-  const menu = picker.nextElementSibling.querySelector(".spectrum-Menu");
-  const menuItem = menu.querySelector(`.spectrum-Menu-item[value="${value}"]`);
+  const menu = picker.nextElementSibling.querySelector(".spectrum-Menu")
+  const menuItem = menu.querySelector(`.spectrum-Menu-item[value="${value}"]`)
 
   if (menuItem) {
-    const selectedMenuItem = menu.querySelector(".spectrum-Menu-item.is-selected");
+    const selectedMenuItem = menu.querySelector(
+      ".spectrum-Menu-item.is-selected"
+    )
     if (selectedMenuItem) {
-      selectedMenuItem.classList.remove("is-selected");
-      selectedMenuItem.removeAttribute("aria-selected");
+      selectedMenuItem.classList.remove("is-selected")
+      selectedMenuItem.removeAttribute("aria-selected")
     }
 
-    menuItem.classList.add("is-selected");
-    menuItem.setAttribute("aria-selected", "true");
+    menuItem.classList.add("is-selected")
+    menuItem.setAttribute("aria-selected", "true")
 
     if (!label) {
-      const menuLabel = menuItem.querySelector(".spectrum-Menu-itemLabel");
-      if (menuLabel) label = menuLabel.innerHTML;
+      const menuLabel = menuItem.querySelector(".spectrum-Menu-itemLabel")
+      if (menuLabel) label = menuLabel.innerHTML
     }
   }
 
-  picker.setAttribute("value", value);
+  picker.setAttribute("value", value)
 
-  const fieldButton = picker;
+  const fieldButton = picker
   if (fieldButton && label) {
-    const pickerLabel = fieldButton.querySelector(".spectrum-Picker-label");
-    if (pickerLabel) pickerLabel.innerHTML = label;
+    const pickerLabel = fieldButton.querySelector(".spectrum-Picker-label")
+    if (pickerLabel) pickerLabel.innerHTML = label
   }
 
-  picker.dispatchEvent(new CustomEvent("change", {
-    bubbles: true,
-    detail: {
-      label: label,
-      value: value,
-    },
-  }))
+  picker.dispatchEvent(
+    new CustomEvent("change", {
+      bubbles: true,
+      detail: {
+        label: label,
+        value: value,
+      },
+    })
+  )
 }
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener("DOMContentLoaded", function () {
   // Switcher
-  const scalePicker = document.querySelector('#switcher-scale');
-  const themePicker = document.querySelector('#switcher-theme');
-  const directionPicker = document.querySelector('#switcher-direction');
-  const varsPicker = document.querySelector('#switcher-vars-version');
+  const scalePicker = document.querySelector("#switcher-scale")
+  const themePicker = document.querySelector("#switcher-theme")
+  const directionPicker = document.querySelector("#switcher-direction")
+  const varsPicker = document.querySelector("#switcher-vars-version")
 
-  let switcher = window.switcher;
-  if (typeof SpectrumSwitcher === 'undefined') {
-    console.trace('SpectrumSwitcher not defined yet.');
-  } else if (typeof switcher === 'undefined') {
+  let switcher = window.switcher
+  if (typeof SpectrumSwitcher === "undefined") {
+    console.trace("SpectrumSwitcher not defined yet.")
+  } else if (typeof switcher === "undefined") {
     switcher = new SpectrumSwitcher({
-      callback: function(event) {
-        if (!setPickerValue) return;
+      callback: function (event) {
+        if (!setPickerValue) return
         switch (event.property) {
-          case 'scale':
-            setPickerValue(scalePicker, event.value);
-            break;
-          case 'theme':
-            setPickerValue(themePicker, event.value);
-            break;
-          case 'direction':
-            setPickerValue(directionPicker, event.value);
-            break;
-          case 'vars':
-            setPickerValue(varsPicker, event.value);
-            break;
+          case "scale":
+            setPickerValue(scalePicker, event.value)
+            break
+          case "theme":
+            setPickerValue(themePicker, event.value)
+            break
+          case "direction":
+            setPickerValue(directionPicker, event.value)
+            break
+          case "vars":
+            setPickerValue(varsPicker, event.value)
+            break
         }
-      }
-    });
+      },
+    })
   }
 
   // Sidebar + picker
-  const sideBar = document.querySelector('#site-sidebar');
-  const overlay = document.querySelector('#site-overlay');
-  const scaleMQL = window.matchMedia('(max-width: 768px)');
-  scaleMQL.addListener(handleScaleMQLChange);
+  const sideBar = document.querySelector("#site-sidebar")
+  const overlay = document.querySelector("#site-overlay")
+  const scaleMQL = window.matchMedia("(max-width: 768px)")
+  scaleMQL.addListener(handleScaleMQLChange)
 
   function handleScaleMQLChange() {
-    if (typeof switcher === 'undefined') {
-      console.trace('Switcher not defined yet.');
-      return;
-    };
+    if (typeof switcher === "undefined") {
+      console.trace("Switcher not defined yet.")
+      return
+    }
     if (scaleMQL.matches) {
-      switcher.scale = 'large';
+      switcher.scale = "large"
     } else {
-      switcher.scale = 'medium';
+      switcher.scale = "medium"
     }
 
     if (scalePicker) {
-      setPickerValue(scalePicker, switcher.scale);
+      setPickerValue(scalePicker, switcher.scale)
     }
   }
 
-  document.body.addEventListener('change', function(event) {
-    if (typeof switcher === 'undefined') {
-      console.trace('Switcher not defined yet.');
-      return;
-    };
+  document.body.addEventListener("change", function (event) {
+    if (typeof switcher === "undefined") {
+      console.trace("Switcher not defined yet.")
+      return
+    }
 
-    if (event.target.id === 'switcher-scale') {
-      switcher.scale = event.detail.value;
+    if (event.target.id === "switcher-scale") {
+      switcher.scale = event.detail.value
+      loadDynamicScaleCssFiles(event.detail.value)
+    } else if (event.target.id === "switcher-theme") {
+      switcher.theme = event.detail.value
+      loadDynamicThemeCssFiles(event.detail.value)
+    } else if (event.target.id === "switcher-direction") {
+      switcher.direction = event.detail.value
+    } else if (event.target.id === "switcher-vars-version") {
+      switcher.varsVersion = event.detail.value
     }
-    else if (event.target.id === 'switcher-theme') {
-      switcher.theme = event.detail.value;
-    }
-    else if (event.target.id === 'switcher-direction') {
-      switcher.direction = event.detail.value;
-    }
-    else if (event.target.id === 'switcher-vars-version') {
-      switcher.varsVersion = event.detail.value;
-    }
-  });
+  })
 
-  window.addEventListener('PageFastLoaded', function updateScalePickers() {
-    if (typeof switcher === 'undefined') {
-      console.trace('Switcher not defined yet.');
-      return;
-    };
+  window.addEventListener("PageFastLoaded", function updateScalePickers() {
+    if (typeof switcher === "undefined") {
+      console.trace("Switcher not defined yet.")
+      return
+    }
 
-    scalePicker = document.querySelector('#switcher-scale');
-    themePicker = document.querySelector('#switcher-theme');
-    directionPicker = document.querySelector('#switcher-direction');
-    varsPicker = document.querySelector('#switcher-vars-version');
+    scalePicker = document.querySelector("#switcher-scale")
+    themePicker = document.querySelector("#switcher-theme")
+    directionPicker = document.querySelector("#switcher-direction")
+    varsPicker = document.querySelector("#switcher-vars-version")
     if (scalePicker) {
-      setPickerValue(scalePicker, switcher.scale);
+      setPickerValue(scalePicker, switcher.scale)
     }
     if (themePicker) {
-      setPickerValue(themePicker, switcher.theme);
+      setPickerValue(themePicker, switcher.theme)
     }
     if (directionPicker) {
-      setPickerValue(directionPicker, switcher.direction);
+      setPickerValue(directionPicker, switcher.direction)
     }
     if (varsPicker) {
-      setPickerValue(varsPicker, switcher.varsVersion);
+      setPickerValue(varsPicker, switcher.varsVersion)
     }
-  });
+  })
 
-  var sidebarMQL = window.matchMedia('(max-width: 960px)');
+  var sidebarMQL = window.matchMedia("(max-width: 960px)")
   function handleSidebarMQLChange() {
     if (!sidebarMQL.matches) {
       // Get rid of the overlay if we resize while the sidebar is open
-      hideSideBar();
+      hideSideBar()
     }
   }
-  sidebarMQL.addListener(handleSidebarMQLChange);
+  sidebarMQL.addListener(handleSidebarMQLChange)
 
-  handleScaleMQLChange();
-  handleSidebarMQLChange();
+  handleScaleMQLChange()
+  handleSidebarMQLChange()
 
   function showSideBar() {
     if (sidebarMQL.matches) {
-      if (overlay) overlay.addEventListener('click', hideSideBar);
-      if (sideBar) sideBar.classList.add('is-open');
-      if (overlay) overlay.classList.add('is-open');
+      if (overlay) overlay.addEventListener("click", hideSideBar)
+      if (sideBar) sideBar.classList.add("is-open")
+      if (overlay) overlay.classList.add("is-open")
+    }
+  }
+
+  // Function to load dynamic scale CSS files
+  function loadDynamicScaleCssFiles(scale) {
+    const CSS = document.createElement("link")
+    CSS.rel = "stylesheet"
+    CSS.href = `/components/vars/spectrum-${scale}.css`
+
+    if (document.body.classList.contains("spectrum--large")) {
+      document.head.appendChild(CSS)
+    } else {
+      document.head.removeChild(CSS)
+    }
+  }
+
+  // Function to load dynamic theme CSS files
+  function loadDynamicThemeCssFiles(theme) {
+    const CSS = document.createElement("link")
+    CSS.rel = "stylesheet"
+    CSS.href = `/components/vars/spectrum-${theme}.css`
+
+    if (
+      document.body.classList.contains("spectrum--dark") ||
+      document.body.classList.contains("spectrum--darkest")
+    ) {
+      document.head.appendChild(CSS)
+    } else {
+      document.head.removeChild(CSS)
     }
   }
 
   function hideSideBar() {
     if (overlay) {
-      overlay.removeEventListener('click', hideSideBar);
-      overlay.classList.remove('is-open');
+      overlay.removeEventListener("click", hideSideBar)
+      overlay.classList.remove("is-open")
     }
 
     if (sideBar) {
-      sideBar.classList.remove('is-open');
+      sideBar.classList.remove("is-open")
     }
 
     if (window.siteSearch) {
-      window.siteSearch.hideResults();
+      window.siteSearch.hideResults()
     }
   }
 
-  document.querySelector('#site-menu')?.addEventListener('click', function(event) {
-    if (sideBar?.classList.contains('is-open')) {
-      hideSideBar();
-    }
-    else {
-      showSideBar();
-    }
-  });
+  document
+    .querySelector("#site-menu")
+    ?.addEventListener("click", function (event) {
+      if (sideBar?.classList.contains("is-open")) {
+        hideSideBar()
+      } else {
+        showSideBar()
+      }
+    })
 
   // Search isn't supported on IE 11 and sideBar will not be exist in test mode
-  if (typeof Search !== 'undefined' && document.querySelector('#site-search')) {
-    window.siteSearch = new Search(document.querySelector('#site-search'))
+  if (typeof Search !== "undefined" && document.querySelector("#site-search")) {
+    window.siteSearch = new Search(document.querySelector("#site-search"))
   }
 
-  window.addEventListener('SearchFocused', function() {
-    showSideBar();
+  window.addEventListener("SearchFocused", function () {
+    showSideBar()
 
     // Immediately hide results, otherwise they show up in the wrong position since we're in the middle of animation
-    siteSearch.hideResults();
-  });
-});
+    siteSearch.hideResults()
+  })
+})
 
 // Picker
-let openPicker;
+let openPicker
 
 function toggleOpen(picker, force) {
   var isOpen =
@@ -341,166 +374,176 @@ window.addEventListener("click", function (event) {
   } else if (openPicker) {
     toggleOpen(openPicker, false)
   }
-});
+})
 
 class SpectrumSwitcher {
   constructor(options) {
-    options = options || {};
+    options = options || {}
 
-    this._rootEl = document.body;
-    this._theme = options.theme || 'light';
-    this._scale = options.scale || 'medium';
-    this._direction = options.direction || 'ltr';
-    this._varsVersion = options.varsVersion || 'default';
-    this._callback = options.callback || null;
+    this._rootEl = document.body
+    this._theme = options.theme || "light"
+    this._scale = options.scale || "medium"
+    this._direction = options.direction || "ltr"
+    this._varsVersion = options.varsVersion || "default"
+    this._callback = options.callback || null
   }
 
   set theme(theme) {
     // If they match, do nothing
-    if (theme === this._theme) return;
+    if (theme === this._theme) return
 
-    ['light', 'dark', 'darkest'].forEach((otherTheme) => {
-      this._rootEl.classList.remove(`spectrum--${otherTheme}`);
-    });
+    ;["light", "dark", "darkest"].forEach((otherTheme) => {
+      this._rootEl.classList.remove(`spectrum--${otherTheme}`)
+    })
 
-    this._rootEl.classList.add(`spectrum--${theme}`);
+    this._rootEl.classList.add(`spectrum--${theme}`)
 
-    updateCodeBlocks(theme);
+    updateCodeBlocks(theme)
 
-    this._theme = theme;
-  };
+    this._theme = theme
+  }
 
   get theme() {
-    return this._theme;
-  };
+    return this._theme
+  }
 
   set varsVersion(v) {
     // If they match, do nothing
-    if (v === this._varsVersion) return;
+    if (v === this._varsVersion) return
 
     // default and express path names
-    const defaultName = 'vars';
-    const expressName = 'expressvars';
+    const defaultName = "vars"
+    const expressName = "expressvars"
 
     // if the selection is 'default', switch the path to be 'express', and vice-versa
-    const pathNameToUpdate = (v === 'default') ? expressName : defaultName;
+    const pathNameToUpdate = v === "default" ? expressName : defaultName
 
     // get all relevant stylesheets that need to be switched
-    const styleSheets = document.querySelectorAll(`link[href*="/components/${pathNameToUpdate}/"]`);
+    const styleSheets = document.querySelectorAll(
+      `link[href*="/components/${pathNameToUpdate}/"]`
+    )
 
     // update each relevant stylesheet with the selected path
-    [...styleSheets].map(sheet => {
+    ;[...styleSheets].map((sheet) => {
       if (pathNameToUpdate === defaultName) {
-        sheet.setAttribute('href', sheet.href.replaceAll(defaultName, expressName));
+        sheet.setAttribute(
+          "href",
+          sheet.href.replaceAll(defaultName, expressName)
+        )
       } else {
-        sheet.setAttribute('href', sheet.href.replaceAll(expressName, defaultName));
+        sheet.setAttribute(
+          "href",
+          sheet.href.replaceAll(expressName, defaultName)
+        )
       }
-    });
+    })
 
-    if (varsVersion === 'express') {
-      this._rootEl.classList.add('spectrum--express');
-    }
-    else {
-      this._rootEl.classList.remove('spectrum--express');
+    if (varsVersion === "express") {
+      this._rootEl.classList.add("spectrum--express")
+    } else {
+      this._rootEl.classList.remove("spectrum--express")
     }
 
-    this._varsVersion = varsVersion;
-  };
+    this._varsVersion = varsVersion
+  }
 
   get varsVersion() {
-    return this._varsVersion;
-  };
+    return this._varsVersion
+  }
 
   set scale(s) {
     // If they match, do nothing
-    if (s === this._scale) return;
+    if (s === this._scale) return
 
-    ['medium', 'large'].forEach((otherScale) => {
-      this._rootEl.classList.remove(`spectrum--${otherScale}`);
-    });
-    this._rootEl.classList.add(`spectrum--${s}`);
+    ;["medium", "large"].forEach((otherScale) => {
+      this._rootEl.classList.remove(`spectrum--${otherScale}`)
+    })
+    this._rootEl.classList.add(`spectrum--${s}`)
 
-    this._scale = s;
-  };
+    this._scale = s
+  }
 
   get scale() {
-    return this._scale;
-  };
+    return this._scale
+  }
 
   set direction(d) {
-    this._rootEl.setAttribute('dir', d);
-    this._direction = d;
-  };
+    this._rootEl.setAttribute("dir", d)
+    this._direction = d
+  }
 
   get direction() {
-    return this._direction;
-  };
+    return this._direction
+  }
 
   VarsVersionKeys = {
-    'd': 'default',
-    'e': 'express',
-  };
+    d: "default",
+    e: "express",
+  }
 
   ThemeKeys = {
-    '1': 'light',
-    '2': 'dark',
-    '3': 'darkest',
-  };
+    1: "light",
+    2: "dark",
+    3: "darkest",
+  }
 
   ScaleKeys = {
-    'm': 'medium',
-    'l': 'large'
-  };
+    m: "medium",
+    l: "large",
+  }
 
   DirectionKeys = {
-    'r': 'rtl',
-    'n': 'ltr'
-  };
+    r: "rtl",
+    n: "ltr",
+  }
 
   keydown(event) {
-    console.log(event);
-    if (!event || !event.ctrlKey) return;
+    console.log(event)
+    if (!event || !event.ctrlKey) return
 
-    const key = event.key.toLowerCase();
+    const key = event.key.toLowerCase()
 
-    let property;
-    let value;
-    if (value = this.ThemeKeys[key]) {
-      property = 'theme';
-    } else if (value = this.ScaleKeys[key]) {
-      property = 'scale';
-    } else if (value = this.DirectionKeys[key]) {
-      property = 'direction';
-    } else if (value = this.VarsVersionKeys[key]) {
-      property = 'varsVersion';
+    let property
+    let value
+    if ((value = this.ThemeKeys[key])) {
+      property = "theme"
+    } else if ((value = this.ScaleKeys[key])) {
+      property = "scale"
+    } else if ((value = this.DirectionKeys[key])) {
+      property = "direction"
+    } else if ((value = this.VarsVersionKeys[key])) {
+      property = "varsVersion"
     }
 
-    this[property] = value;
+    this[property] = value
 
-    if (this._callback && typeof this._callback === 'function') {
-      this._callback({ property, value });
+    if (this._callback && typeof this._callback === "function") {
+      this._callback({ property, value })
     }
   }
 
   updateCodeBlocks(theme) {
-    const prismLink = this._rootEl.querySelector('[data-prism]');
-    const prismDarkLink = this._rootEl.querySelector('[data-prism-dark]');
+    const prismLink = this._rootEl.querySelector("[data-prism]")
+    const prismDarkLink = this._rootEl.querySelector("[data-prism-dark]")
 
-    if (theme === 'dark' || theme === 'darkest') {
-      if (!prismLink) return;
+    if (theme === "dark" || theme === "darkest") {
+      if (!prismLink) return
       if (!prismDarkLink) {
-        prismDarkLink = document.createElement('link');
-        prismDarkLink.setAttribute('rel', 'stylesheet');
-        prismDarkLink.setAttribute('data-prism-dark', '');
-        prismDarkLink.setAttribute('type', 'text/css');
-        prismDarkLink.setAttribute('href', 'css/prism/prism-dark.min.css');
+        prismDarkLink = document.createElement("link")
+        prismDarkLink.setAttribute("rel", "stylesheet")
+        prismDarkLink.setAttribute("data-prism-dark", "")
+        prismDarkLink.setAttribute("type", "text/css")
+        prismDarkLink.setAttribute("href", "css/prism/prism-dark.min.css")
       }
 
-      prismLink.parentElement.insertBefore(prismDarkLink, prismLink.nextElementSibling);
+      prismLink.parentElement.insertBefore(
+        prismDarkLink,
+        prismLink.nextElementSibling
+      )
     } else if (prismDarkLink) {
-      prismDarkLink.parentElement.removeChild(prismDarkLink);
+      prismDarkLink.parentElement.removeChild(prismDarkLink)
     }
   }
 }
 
-document.addEventListener('keydown', SpectrumSwitcher.keydown);
+document.addEventListener("keydown", SpectrumSwitcher.keydown)
