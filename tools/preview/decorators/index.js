@@ -115,27 +115,26 @@ export const withSizingWrapper = makeDecorator({
 			return size;
 		};
 
-		context.parameters.html.root =
-			'.spectrum-Examples-item[data-value="m"] #scoped-root';
-		context.argTypes.size.table = {
-			...context.argTypes.size.table,
-			disable: true,
-		};
+	context.parameters.html.root =
+		'.site-Examples-item[data-value="m"] #scoped-root';
+	context.argTypes.size.table = {
+		...context.argTypes.size.table,
+		disable: true,
+	};
 
-		return html` <div class="spectrum-Examples">
-			${sizes.map((size) => {
-				context.args.size = size;
-				return html` <div class="spectrum-Examples-item" data-value=${size}>
-					<div class="spectrum-Examples-itemGroup" id="scoped-root">
-						${StoryFn(context)}
-					</div>
-					<h4
-						class="spectrum-Detail spectrum-Detail--sizeXS spectrum-Examples-itemHeading"
-					>
-						${printSize(size)}
-					</h4>
-				</div>`;
-			})}
-		</div>`;
-	},
-});
+	return html` <div class="site-Examples">
+		${sizes.map((size) => {
+			context.args.size = size;
+			return html` <div class="site-Examples-item" data-value=${size}>
+				<div class="site-Examples-itemGroup" id="scoped-root">
+					${StoryFn(context)}
+				</div>
+				<h4
+					class="spectrum-Detail spectrum-Detail--sizeXS site-Examples-itemHeading"
+				>
+					${printSize(size)}
+				</h4>
+			</div>`;
+		})}
+	</div>`;
+};

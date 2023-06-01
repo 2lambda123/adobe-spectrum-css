@@ -38,9 +38,8 @@ import "@spectrum-css/tokens";
 
 // Loading typography on every page because it's a useful utility
 import "@spectrum-css/typography";
-import "@spectrum-css/site";
 
-import "./global.js";
+import "../../assets/scripts/typekit.js";
 
 // Rendered as controls; these properties are assigned
 //      to the document root element
