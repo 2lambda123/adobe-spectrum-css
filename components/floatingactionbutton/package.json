@@ -21,12 +21,11 @@
     "watch": "gulp watch"
   },
   "peerDependencies": {
-    "@spectrum-css/tokens": ">=10.0.0"
+    "@spectrum-css/tokens": ">=10"
   },
   "devDependencies": {
     "@spectrum-css/component-builder-simple": "^2.0.15",
-    "@spectrum-css/tokens": "^10.1.2",
-    "gulp": "^4.0.0"
+    "@spectrum-css/tokens": "^10.1.2"
   },
   "publishConfig": {
     "access": "public"

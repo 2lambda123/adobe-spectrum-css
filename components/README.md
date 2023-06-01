@@ -17,8 +17,6 @@ The following asset will only be seen in legacy components that have not yet mig
 
 - `skin.css` - The theme-specific styles for the component: colors, box-shadows, etc (these change between color stops)
 
-See [documentation generation](/tools/bundle-builder/docs/README.md) documentation for more information on the properties available within the `.yml` files.
-
 ## Editing an existing component
 
 1. Run `gulp dev` in the root of the project to begin developing.
@@ -57,23 +55,23 @@ For example, `actionbar` gets its tokens from `vars`, and requires `button`, `ch
 
 ```json
 {
-	"name": "@spectrum-css/actionbar",
-	"peerDependencies": {
-		"@spectrum-css/button": "^2.0.0",
-		"@spectrum-css/checkbox": "^2.0.0",
-		"@spectrum-css/icon": "^2.0.0",
-		"@spectrum-css/popover": "^2.0.0",
-		"@spectrum-css/vars": "^3.0.0-beta.0"
-	},
-	"devDependencies": {
-		"@spectrum-css/button": "^2.0.0",
-		"@spectrum-css/checkbox": "^2.0.0",
-		"@spectrum-css/component-builder": "^1.0.0",
-		"@spectrum-css/icon": "^2.0.0",
-		"@spectrum-css/popover": "^2.0.0",
-		"@spectrum-css/table": "^2.0.0",
-		"@spectrum-css/vars": "^3.0.0-beta.0"
-	}
+ "name": "@spectrum-css/actionbar",
+ "peerDependencies": {
+  "@spectrum-css/button": "^2.0.0",
+  "@spectrum-css/checkbox": "^2.0.0",
+  "@spectrum-css/icon": "^2.0.0",
+  "@spectrum-css/popover": "^2.0.0",
+  "@spectrum-css/vars": "^3.0.0-beta.0"
+ },
+ "devDependencies": {
+  "@spectrum-css/button": "^2.0.0",
+  "@spectrum-css/checkbox": "^2.0.0",
+  "@spectrum-css/component-builder": "^1.0.0",
+  "@spectrum-css/icon": "^2.0.0",
+  "@spectrum-css/popover": "^2.0.0",
+  "@spectrum-css/table": "^2.0.0",
+  "@spectrum-css/vars": "^3.0.0-beta.0"
+ }
 }
 ```
 
