@@ -25,7 +25,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.22.1",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
+    "@babel/plugin-transform-runtime": "^7.22.4",
+    "@babel/preset-env": "^7.22.4",
+    "@babel/runtime": "^7.22.3",
     "@etchteam/storybook-addon-status": "4.2.4",
+    "@spectrum-css/component-builder-simple": "^2.0.14",
     "@spectrum-css/component-builder": "^4.0.10",
     "@storybook/addon-a11y": "^7.0.18",
     "@storybook/addon-actions": "^7.0.18",
@@ -41,14 +47,19 @@
     "@storybook/theming": "^7.0.18",
     "@storybook/web-components-webpack5": "^7.0.18",
     "@whitespace/storybook-addon-html": "^5.1.4",
+    "babel-loader": "^9.1.2",
     "chromatic": "^6.18.0",
+    "core-js": "^3.30.2",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.8.1",
     "file-loader": "6.2.0",
     "lit": "^2.7.5",
     "lodash-es": "^4.17.21",
     "npm-run-all": "^4.1.5",
     "postcss": "^7.0.36",
     "postcss-class-prefix": "^0.3.0",
-    "postcss-loader": "^4.0.0",
+    "postcss-import": "^11.0.0",
+    "postcss-loader": "^7.3.2",
     "postcss-prefix-selector": "^1.16.0",
     "postcss-selector-replace": "^1.0.2",
     "postcss-warn-cleaner": "^0.1.9",
@@ -62,28 +73,79 @@
     "storybook": "^7.0.18",
     "style-loader": "3.3.3",
     "typescript": "^5.1.3",
-    "webpack": "^5.85.0"
+    "webpack": "^5.85.0",
+    "webpack-merge": "^5.9.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "useBuiltIns": "entry",
+          "corejs": 2
+        }
+      ]
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-object-rest-spread"
+    ]
   },
   "nx": {
+    "namedInputs": {
+      "core": [
+        "{workspaceRoot}/assets",
+        "{workspaceRoot}/decorators",
+        "{workspaceRoot}/*.js",
+        "{workspaceRoot}/*.html",
+        "{projectRoot}/components/*/dist"
+      ],
+      "output": [
+        "{workspaceRoot}/storybook-static"
+      ]
+    },
     "targets": {
       "build": {
         "dependsOn": [
           "^build"
         ],
         "inputs": [
-          "{workspaceRoot}/assets",
-          "{workspaceRoot}/decorators",
-          "{workspaceRoot}/*.js",
-          "{workspaceRoot}/*.html",
-          "{projectRoot}/components/*/dist"
+          "core"
         ],
         "outputs": [
-          "{workspaceRoot}/storybook-static"
+          "output"
         ]
       },
       "clean": {
         "inputs": [
-          "{workspaceRoot}/storybook-static"
+          "output"
+        ]
+      },
+      "start": {
+        "dependsOn": [
+          "^build"
+        ],
+        "inputs": [
+          "core"
+        ]
+      },
+      "storybook": {
+        "dependsOn": [
+          "^build"
+        ],
+        "inputs": [
+          "core"
+        ],
+        "outputs": [
+          "output"
+        ]
+      },
+      "dev": {
+        "dependsOn": [
+          "^build"
+        ],
+        "inputs": [
+          "core"
         ]
       }
     },
@@ -93,10 +155,12 @@
     ],
     "includedScripts": [
       "clean",
-      "test",
-      "test:scope",
+      "build",
       "storybook",
-      "build"
+      "start",
+      "dev",
+      "test",
+      "test:scope"
     ]
   }
 }

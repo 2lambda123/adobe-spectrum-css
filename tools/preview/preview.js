@@ -40,6 +40,7 @@ import "@spectrum-css/tokens";
 import "@spectrum-css/typography";
 import "@spectrum-css/site";
 
+import "core-js/stable";
 import "./global.js";
 
 // Rendered as controls; these properties are assigned

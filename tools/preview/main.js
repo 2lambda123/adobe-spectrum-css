@@ -1,14 +1,19 @@
 const { resolve } = require("path");
 const { readdirSync } = require("fs");
+
 const componentsPath = resolve(__dirname, "../../components");
 const componentPkgs = readdirSync(componentsPath, {
 	withFileTypes: true,
 })
 	.filter((dirent) => dirent.isDirectory())
 	.map((dirent) => dirent.name);
+
+const { mergeWithRules, CustomizeRule } = require("webpack-merge");
+const localWebpack = require("./webpack.config.js");
+
 module.exports = {
 	stories: [
-		"../../components/*/stories/*.stories.md",
+		// "../../components/*/stories/*.stories.md",
 		"../../components/*/stories/*.stories.js",
 	],
 	rootDir: "../../",
@@ -60,105 +65,26 @@ module.exports = {
 		}),
 	},
 	webpackFinal: function (config) {
-		// Removing the global alias as it conflicts with the global npm pkg
-		const { global, ...alias } = config.resolve.alias;
-		config.resolve.alias = alias;
-		let storybookRules =
-			config && config.module && config.module.rules
-				? config.module.rules.filter(
-						(rule) => !(rule.test && rule.test.toString().includes("css"))
-				  )
-				: [];
-		return {
-			...config,
+		return mergeWithRules({
+			module: {
+				rules: {
+					test: CustomizeRule.Match,
+					use: CustomizeRule.Replace,
+				},
+			},
+		})(config, localWebpack, {
+			target: "node",
+			performance: {
+				maxEntrypointSize: 3000000,
+				maxAssetSize: 3000000,
+			},
 			stats: {
 				/* Suppress autoprefixer warnings from storybook build */
 				warningsFilter: [/autoprefixer: /],
 			},
-			/* Add support for root node_modules imports */
-			resolve: {
-				...(config.resolve ? config.resolve : {}),
-				modules: [
-					...(config.resolve ? config.resolve.modules : []),
-					resolve(__dirname, "../../node_modules"),
-				],
-				alias: {
-					...(config.resolve ? config.resolve.alias : {}),
-					...componentPkgs.reduce((pkgs, dir) => {
-						const pkg = require(resolve(componentsPath, dir, "package.json"));
-						pkgs[pkg.name] = resolve(componentsPath, dir);
-						return pkgs;
-					}, {}),
-				},
-			},
-			module: {
-				...(config.module ?? []),
-				rules: [
-					...storybookRules,
-					{
-						test: /^\w+\.{ico,jpg,jpeg,png,gif,webp}$/i,
-						use: [
-							{
-								loader: "file-loader",
-								options: {
-									outputPath: (url, resourcePath, context) => {
-										return `assets/images/${url.replace(/_\//g, "")}`;
-									},
-								},
-							},
-						],
-					},
-					{
-						test: /\.css$/i,
-						sideEffects: true,
-						use: [
-							{
-								loader: "style-loader",
-								options: {
-									injectType: "linkTag",
-									attributes: {
-										"data-source": "processed",
-									},
-								},
-							},
-							{
-								loader: "file-loader",
-								options: {
-									name: "[path][name].[ext][query]",
-									outputPath: (url, resourcePath, context) => {
-										return `assets/css/${url.replace(/_\//g, "")}`;
-									},
-									esModule: false,
-								},
-							},
-							{
-								loader: "postcss-loader",
-								options: {
-									implementation: require("postcss"),
-									postcssOptions: {
-										config: resolve(__dirname, "postcss.config.js"),
-									},
-								},
-							},
-						],
-					},
-					{
-						test: /\.js$/,
-						enforce: "pre",
-						use: ["source-map-loader"],
-					} /* Raw SVG loader */,
-					{
-						test: /\.svg$/i,
-						loader: "raw-loader",
-					},
-				],
-			},
-		};
+		});
 	},
-	framework: {
-		name: "@storybook/web-components-webpack5",
-		options: {},
-	},
+	framework: "@storybook/web-components-webpack5",
 	// refs: {
 	//   'swc': {
 	//     title: 'Spectrum Web Components',
