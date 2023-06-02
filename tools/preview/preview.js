@@ -5,6 +5,7 @@ import {
 	withReducedMotionWrapper,
 	// withSizingWrapper,
 } from "./decorators/index.js";
+import { withActions } from "@storybook/addon-actions/decorator";
 
 // https://github.com/storybookjs/storybook-addon-console
 import "@storybook/addon-console";
@@ -174,7 +175,7 @@ export const parameters = {
 	showNav: true,
 	showPanel: true,
 	panelPosition: "bottom",
-	isToolShown: false,
+	showToolbar: false,
 	isFullscreen: false,
 	controls: {
 		expanded: true,
@@ -195,12 +196,14 @@ export const parameters = {
 		},
 	},
 	docs: {
-		inlineStories: true,
+		story: {
+			inline: true,
+			iframeHeight: "200px",
+		},
 		source: {
 			type: "dynamic",
 			language: "html",
 		},
-		iframeHeight: "200px",
 	},
 	status: {
 		statuses: {
@@ -218,4 +221,13 @@ export const decorators = [
 	withLanguageWrapper,
 	withReducedMotionWrapper,
 	withContextWrapper,
+	withActions,
 ];
+
+export default {
+	globalTypes,
+	argTypes,
+	args,
+	parameters,
+	decorators,
+};
