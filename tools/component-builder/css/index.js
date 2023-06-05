@@ -38,7 +38,7 @@ exports.buildIndexVars = buildIndexVars;
 exports.buildVars = buildVars;
 
 exports.buildCSS = gulp.series(buildVars, function copyIndex() {
-	// Just copy index.vars as index.css to maintain backwards compat
+	// Just copy index-vars as index.css to maintain backwards compat
 	return gulp
 		.src("dist/index-vars.css")
 		.pipe(

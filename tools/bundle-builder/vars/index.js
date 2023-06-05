@@ -66,14 +66,12 @@ function getAllVars() {
 	});
 }
 
-function resolveValue(value, vars) {
-	if (value) {
-		let match = value.match(/var\((.+),?.*?\)/);
-		if (match) {
-			return match[1];
-		}
-		return value;
-	}
+function resolveValue(value) {
+	if (!value) return;
+
+	const match = value.match(/var\((.+),?.*?\)/);
+	if (match) return match[1];
+	return value;
 }
 
 function getUsedVars() {
@@ -94,8 +92,7 @@ function getUsedVars() {
 					for (let varName in variableObject) {
 						let reffedVar = allVars[varName];
 						if (reffedVar && reffedVar.startsWith("var")) {
-							let value = resolveValue(reffedVar);
-							let curVarName = value;
+							let curVarName = resolveValue(reffedVar);
 							while (allVars[curVarName]) {
 								if (!variableObject[curVarName]) {
 									variableObject[curVarName] = true;

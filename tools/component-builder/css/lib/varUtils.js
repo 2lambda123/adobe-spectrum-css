@@ -78,13 +78,8 @@ function getClassNames(contents, pkgName) {
 		}
 	}
 
-	let result = root.walkRules((rule, ruleIndex) => {
-		let selector = rule.selectors[0];
-
-		if (pkgName === "page") {
-			className = "";
-			return "false";
-		}
+	root.walkRules((rule) => {
+		if (pkgName === "page") return false;
 
 		rule.selectors.forEach((fullSelector) => {
 			// Skip compound selectors, they may not start with the component itself
@@ -116,16 +111,6 @@ function getClassNames(contents, pkgName) {
 	return classNames;
 }
 
-function resolveValue(value, vars) {
-	if (value) {
-		let match = value.match(/var\((.+),?.*?\)/);
-		if (match) {
-			return match[1];
-		}
-		return value;
-	}
-}
-
 const varDir = path.join(
 	path.dirname(
 		require.resolve("@spectrum-css/vars", {
@@ -137,12 +122,6 @@ const varDir = path.join(
 const coreTokensFile = require.resolve("@spectrum-css/tokens", {
 	paths: [process.cwd(), path.join(process.cwd(), "../../")],
 });
-
-async function readDNAVariables(file) {
-	let css = await fsp.readFile(path.join(varDir, "css", file));
-	let vars = getVarValues(css);
-	return vars;
-}
 
 function getVariableDeclarations(classNames, vars) {
 	let varNames = Object.keys(vars);
@@ -216,6 +195,4 @@ exports.getVarsDefinedInCSS = getVarsDefinedInCSS;
 exports.getVarsFromCSS = getVarsFromCSS;
 exports.getVarValues = getVarValues;
 exports.getClassNames = getClassNames;
-exports.resolveValue = resolveValue;
-exports.readDNAVariables = readDNAVariables;
 exports.getVariableDeclarations = getVariableDeclarations;

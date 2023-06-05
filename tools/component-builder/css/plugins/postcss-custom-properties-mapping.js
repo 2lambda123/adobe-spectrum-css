@@ -9,84 +9,85 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-var postcss = require("postcss");
-var valueParser = require("postcss-value-parser");
-let varUtils = require("../lib/varUtils.js");
 
-// match custom property inclusions
-const customPropertiesRegExp = /(^|[^\w-])var\([\W\w]+\)/;
+const fs = require("fs");
+const fsp = fs.promises;
 
-let staticVars;
-let allVars;
-async function fetchVars() {
-	if (staticVars && allVars) {
-		return true;
-	}
+const fg = require("fast-glob");
 
-	// Read in all static vars
-	staticVars = Object.assign(
-		{},
-		await varUtils.readDNAVariables("globals/spectrum-staticAliases.css"),
-		await varUtils.readDNAVariables("globals/spectrum-fontGlobals.css"),
-		await varUtils.readDNAVariables("globals/spectrum-fontGlobals.css"),
-		await varUtils.readDNAVariables("globals/spectrum-dimensionGlobals.css"),
-		await varUtils.readDNAVariables("globals/spectrum-colorGlobals.css"),
-		await varUtils.readDNAVariables("globals/spectrum-animationGlobals.css")
-	);
+const postcss = require("postcss");
+const valueParser = require("postcss-value-parser");
 
-	// Read in all variables so we have the value they resolve to
-	allVars = await varUtils.getAllComponentVars();
+module.exports = (_opts = {}) => {
+	return {
+		postcssPlugin: "postcss-custom-properties-mapping",
+		async prepare() {
+			const staticVars = {};
+			const allVars = {};
 
-	return true;
-}
-
-module.exports = postcss.plugin(
-	"postcss-custom-properties-mapping",
-	function () {
-		return async function (root, result) {
-			await fetchVars();
-
-			root.walkRules((rule, ruleIndex) => {
-				rule.walkDecls((decl) => {
-					if (customPropertiesRegExp.test(decl.value)) {
-						let value = valueParser(decl.value);
-
-						if (
-							value.nodes &&
-							value.nodes[0] &&
-							value.nodes[0].value === "url"
-						) {
-							// Don't process custom properties within URLs, it does nothing and breaks parcel
-							// see https://github.com/parcel-bundler/parcel/issues/3881
-							return;
-						}
-
-						value.walk((node, index, nodes) => {
-							if (node.type === "function" && node.value === "var") {
-								let v = node.nodes[0].value;
-
-								// If the value is static, replace the variable with the value.
-								// Otherwise, change the variable name to the mapped name.
-								if (staticVars[v]) {
-									nodes.splice(
-										index,
-										1,
-										...valueParser(`var(${v}, ${staticVars[v]})`).nodes
-									);
-								} else if (allVars[v]) {
-									nodes.splice(
-										index,
-										1,
-										...valueParser(`var(${v}, ${allVars[v]})`).nodes
-									);
-								}
-							}
-						});
-
-						decl.value = value.toString();
-					}
+			// Read in all static vars
+			for (const filename of await fg([
+				"globals/spectrum-staticAliases.css",
+				"globals/spectrum-fontGlobals.css",
+				"globals/spectrum-fontGlobals.css",
+				"globals/spectrum-dimensionGlobals.css",
+				"globals/spectrum-colorGlobals.css",
+				"globals/spectrum-animationGlobals.css",
+			])) {
+				const content = await fsp.readFile(filename, "utf8");
+				postcss.parse(content).then((root) => {
+					root.walkDecls((decl) => (staticVars[decl.prop] = decl.value));
 				});
-			});
-		};
-	}
-);
+			}
+
+			// Read in all variables so we have the value they resolve to
+			for (const filename of await fg([
+				`${varDir}/css/components/*.css`,
+				`${varDir}/css/globals/*.css`,
+				`${varDir}/custom.css`,
+			])) {
+				const content = await fsp.readFile(filename, "utf8");
+				postcss.parse(content).then((root) => {
+					root.walkDecls((decl) => (allVars[decl.prop] = decl.value));
+				});
+			}
+
+			return {
+				Declaration(decl, {}) {
+					if (!/(^|[^\w-])var\([\W\w]+\)/.test(decl.value)) return;
+					const value = valueParser(decl.value);
+
+					if (value.nodes && value.nodes[0] && value.nodes[0].value === "url") {
+						// Don't process custom properties within URLs, it does nothing and breaks parcel
+						// see https://github.com/parcel-bundler/parcel/issues/3881
+						return;
+					}
+
+					value.walk((node, index, nodes) => {
+						if (node.type === "function" && node.value === "var") {
+							let v = node.nodes[0].value;
+
+							// If the value is static, replace the variable with the value.
+							// Otherwise, change the variable name to the mapped name.
+							if (staticVars[v]) {
+								nodes.splice(
+									index,
+									1,
+									...valueParser(`var(${v}, ${staticVars[v]})`).nodes
+								);
+							} else if (allVars[v]) {
+								nodes.splice(
+									index,
+									1,
+									...valueParser(`var(${v}, ${allVars[v]})`).nodes
+								);
+							}
+						}
+					});
+
+					decl.value = value.toString();
+				},
+			};
+		},
+	};
+};

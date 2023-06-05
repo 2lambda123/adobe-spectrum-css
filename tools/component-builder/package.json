@@ -34,7 +34,7 @@
     "postcss-discard-empty": "^4.0.1",
     "postcss-dropdupedvars": "^1.1.2",
     "postcss-droproot": "^1.0.3",
-    "postcss-dropunusedvars": "^1.2.1",
+    "postcss-dropunusedvars": "file:../../../postcss/postcss-dropunusedvars",
     "postcss-focus-ring": "^1.0.0",
     "postcss-import": "^10.0.0",
     "postcss-inherit": "^4.0.3",

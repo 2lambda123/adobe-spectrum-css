@@ -13809,10 +13809,9 @@ postcss-discard-empty@^6.0.0:
   dependencies:
     postcss "^7.0.32"
 
-"postcss-dropunusedvars@file:plugins/postcss-dropunusedvars":
+"postcss-dropunusedvars@file:../postcss/postcss-dropunusedvars":
   version "1.2.1"
   dependencies:
-    postcss "^7.0.32"
     postcss-value-parser "^4.1.0"
 
 postcss-flexbugs-fixes@^4.2.1:
