@@ -1,0 +1,19 @@
+{
+	"name": "tooltip",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/tooltip",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "gulp --gulpfile components/tooltip/gulpfile.js --cwd components/tooltip build"
+			}
+		}
+	}
+}

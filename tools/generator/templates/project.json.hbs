@@ -1,0 +1,27 @@
+{
+	"name": "{{name}}",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"inputs": ["{projectRoot}/dist"],
+			"outputs": [],
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/{{name}}",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"inputs": [
+				"{projectRoot}/index.css",
+				"{projectRoot}/themes/spectrum.css",
+				"{projectRoot}/themes/express.css"
+			],
+			"dependsOn": ["clean", "^build"],
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "gulp"
+			}
+		}
+	}
+}

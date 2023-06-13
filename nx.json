@@ -1,37 +1,51 @@
 {
   "schema": "./node_modules/nx/schemas/nx-schema.json",
+  "extends": "nx/presets/npm.json",
   "npmScope": "@spectrum-css",
+  "affected": {
+    "defaultBase": "main"
+  },
   "cli": {
     "packageManager": "yarn"
+  },
+  "namedInputs": {
+    "legacystyles": [
+      "{workspaceRoot}/index.css",
+      "{workspaceRoot}/skin.css"
+    ],
+    "modernstyles": [
+      "{workspaceRoot}/index.css",
+      "{workspaceRoot}/themes/spectrum.css",
+      "{workspaceRoot}/themes/express.css"
+    ]
+  },
+  "targetDefaults": {
+		"clean": {
+			"inputs": [
+				"{workspaceRoot}/dist"
+			],
+			"outputs": []
+		},
+		"build": {
+			"inputs": ["modernstyles"],
+      "outputs": ["{workspaceRoot}/dist"],
+			"dependsOn": ["clean", "^build"]
+		},
+		"test": {
+			"inputs": [
+				"{workspaceRoot}/dist",
+				"{workspaceRoot}/stories"
+			],
+			"dependsOn": ["build"]
+		}
   },
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "start"]
+        "cacheableOperations": ["build"]
       }
     }
-  },
-  "targetDefaults": {
-    "build": {
-      "dependsOn": ["^build"],
-      "inputs": [
-        "{workspaceRoot}/*.css"
-      ],
-      "outputs": [
-        "{workspaceRoot}/dist"
-      ]
-    },
-    "clean": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "rimraf {workspaceRoot}/dist"
-      }
-    },
-    "implicitDependencies": [
-      "@spectrum-css/component-builder",
-      "@spectrum-css/component-builder-simple"
-    ]
   },
   "includedScripts": ["clean", "dev", "dev:docs", "build", "start", "watch", "test"]
 }

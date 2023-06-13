@@ -1,0 +1,25 @@
+{
+	"name": "actiongroup",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/actiongroup",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "gulp --gulpfile components/actiongroup/gulpfile.js --cwd components/actiongroup build"
+			}
+		},
+		"test": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx test:scope @spectrum-css/preview actiongroup"
+			}
+		}
+	}
+}

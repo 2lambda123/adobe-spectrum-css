@@ -15,9 +15,6 @@
   },
   "main": "dist/spectrum-metadata.json",
   "scripts": {
-    "build": "yarn clean && gulp build",
-    "clean": "rimraf dist/*",
-    "copy:metadata": "cp json/spectrum-metadata.json dist/",
     "dna:clean": "rimraf css/* js/*",
     "dna:update": "yarn dna:clean && gulp update && yarn build"
   },
@@ -34,19 +31,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "nx": {
-    "targets": {
-      "build": {
-        "inputs": [
-          "{workspaceRoot}/*.css",
-          "{workspaceRoot}/css",
-          "{workspaceRoot}/json"
-        ]
-      }
-    },
-    "includedScripts": [
-      "build"
-    ]
   }
 }

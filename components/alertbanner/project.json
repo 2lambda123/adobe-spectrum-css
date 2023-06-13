@@ -1,0 +1,26 @@
+{
+	"name": "alertbanner",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/alertbanner",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/alertbanner",
+				"command": "gulp"
+			}
+		},
+		"test": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx test:scope @spectrum-css/preview alertbanner"
+			}
+		}
+	}
+}

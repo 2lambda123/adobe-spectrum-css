@@ -1,0 +1,25 @@
+{
+	"name": "actionbutton",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/actionbutton",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "gulp --gulpfile components/actionbutton/gulpfile.js --cwd components/actionbutton build"
+			}
+		},
+		"test": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx test:scope @spectrum-css/preview actionbutton"
+			}
+		}
+	}
+}

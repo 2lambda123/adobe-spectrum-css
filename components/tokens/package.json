@@ -14,18 +14,6 @@
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
   "main": "dist/index.css",
-  "scripts": {
-    "prebuild": "rimraf dist/*",
-    "build": "run-s convert:tokens css:prepare format:results clean:empty",
-    "build:tokens": "style-dictionary build --config style-dictionary.config.js && postcss --replace dist/css/*.css",
-    "clean:empty": "find dist -type f -empty -delete",
-    "concat:dist": "concat-cli -f dist/css/*.css dist/css/**/*.css -o dist/index.css",
-    "convert:tokens": "run-p build:tokens copy:*",
-    "copy:express": "postcss --dir dist/css/express/ custom-express/*.css",
-    "copy:spectrum": "postcss --dir dist/css/spectrum/ custom-spectrum/*.css",
-    "css:prepare": "yarn concat:dist && postcss --replace dist/index.css",
-    "format:results": "prettier --no-config --no-error-on-unmatched-pattern --ignore-unknown --loglevel silent --write dist/"
-  },
   "devDependencies": {
     "@adobe/spectrum-tokens": "12.10.0",
     "concat-cli": "^4.0.0",
@@ -46,21 +34,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "nx": {
-    "targets": {
-      "build": {
-        "inputs": [
-          "{workspaceRoot}/postcss.config.js",
-          "{workspaceRoot}/style-dictionary.config.js",
-          "{workspaceRoot}/utilities/style-dictionary.utils.js",
-          "{workspaceRoot}/custom-express/*.css",
-          "{workspaceRoot}/custom-spectrum/*.css"
-        ]
-      }
-    },
-    "includedScripts": [
-      "build"
-    ]
   }
 }

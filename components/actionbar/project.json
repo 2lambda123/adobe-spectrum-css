@@ -1,0 +1,26 @@
+{
+	"name": "actionbar",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/actionbar",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"inputs": ["modernstyles"],
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "gulp --gulpfile components/actionbar/gulpfile.js --cwd components/actionbar build"
+			}
+		},
+		"test": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx test:scope @spectrum-css/preview actionbar"
+			}
+		}
+	}
+}

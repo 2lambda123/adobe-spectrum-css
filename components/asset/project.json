@@ -1,0 +1,27 @@
+{
+	"name": "asset",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/asset",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"inputs": ["legacystyles"],
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/asset",
+				"command": "gulp"
+			}
+		},
+		"test": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx test:scope @spectrum-css/preview asset"
+			}
+		}
+	}
+}

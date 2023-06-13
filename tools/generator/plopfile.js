@@ -196,4 +196,29 @@ export default async (plop) => {
 			];
 		},
 	});
+
+	plop.setGenerator("update", {
+		description: "Update all existing components with missing files",
+		prompts: [],
+		actions: (data) => {
+			data.pkg = pkg;
+			data.tokens = { name: tokens.name, version: tokens.version };
+			data.builder = { name: builder.name, version: builder.version };
+
+			if (existingComponents.length === 0) throw new Error("No components found.");
+			return existingComponents.map((name) => {
+				data.name = name;
+				data.folderName = name;
+				return [
+					{
+						type: "add",
+						path: `${srcPath}/${name}/project.json`,
+						templateFile: "templates/project.json.hbs",
+						skipIfExists: true,
+					},
+					`Successfully updated component ${name}.`,
+				];
+			}).flat();
+		},
+	});
 };

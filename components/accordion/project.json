@@ -1,0 +1,26 @@
+{
+	"name": "accordion",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/accordion",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"inputs": ["modernstyles"],
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "gulp --gulpfile components/accordion/gulpfile.js --cwd components/accordion build"
+			}
+		},
+		"test": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx test:scope @spectrum-css/preview accordion"
+			}
+		}
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"name": "treeview",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/treeview",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"inputs": ["legacystyles"],
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "gulp --gulpfile components/treeview/gulpfile.js --cwd components/treeview build"
+			}
+		}
+	}
+}

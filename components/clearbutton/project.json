@@ -1,0 +1,26 @@
+{
+	"name": "clearbutton",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/clearbutton",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/clearbutton",
+				"command": "gulp"
+			}
+		},
+		"test": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx test:scope @spectrum-css/preview clearbutton"
+			}
+		}
+	}
+}

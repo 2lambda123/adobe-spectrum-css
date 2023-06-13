@@ -19,14 +19,16 @@ const dirs = require("./lib/dirs");
 const subrunner = require("./subrunner");
 const vars = require("./vars");
 
+let dependencyOrder = [];
+
 // Combined
 function concatPackageFiles(taskName, input, output, directory) {
 	let func = function () {
 		let glob;
 		if (Array.isArray(input)) {
 			glob = [];
-
-			dependencyOrder.forEach(function (dep) {
+dependencyOrder
+			.forEach(function (dep) {
 				input.forEach(function (file) {
 					glob.push(dirs.resolve(dep) + `/${file}`);
 				});
@@ -145,7 +147,7 @@ let buildStandalone = gulp.series(
 );
 
 function buildIfTopLevel() {
-	let builtTasks = gulp.parallel(buildCombined, buildStandalone, buildDocs);
+	let builtTasks = gulp.parallel(buildCombined, buildStandalone);
 
 	if (process.cwd() === dirs.topLevel) {
 		// Run a build for all packages first

@@ -16,13 +16,8 @@
     "test": "chromatic --build-script-name build --junit-report",
     "test:scope": "yarn test --only-story-names"
   },
-  "dependencies": {
-    "@adobe/spectrum-css-workflow-icons": "^1.2.1",
-    "@spectrum-css/expressvars": "^3.0.8",
-    "@spectrum-css/tokens": "^10.1.2",
-    "@spectrum-css/vars": "^9.0.8"
-  },
   "devDependencies": {
+    "@adobe/spectrum-css-workflow-icons": "^1.2.1",
     "@babel/core": "^7.22.1",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
@@ -31,6 +26,9 @@
     "@babel/runtime": "^7.21.5",
     "@etchteam/storybook-addon-status": "^4.2.4",
     "@spectrum-css/component-builder": "^4.0.12",
+    "@spectrum-css/expressvars": "^3.0.8",
+    "@spectrum-css/tokens": "^10.1.2",
+    "@spectrum-css/vars": "^9.0.8",
     "@storybook/addon-a11y": "^7.0.20",
     "@storybook/addon-actions": "^7.0.20",
     "@storybook/addon-console": "^1.2.3",
@@ -83,79 +81,6 @@
     "plugins": [
       "@babel/plugin-proposal-class-properties",
       "@babel/plugin-proposal-object-rest-spread"
-    ]
-  },
-  "nx": {
-    "namedInputs": {
-      "core": [
-        "{workspaceRoot}/assets",
-        "{workspaceRoot}/decorators",
-        "{workspaceRoot}/*.js",
-        "{workspaceRoot}/*.html",
-        "{projectRoot}/components/*/dist"
-      ],
-      "output": [
-        "{workspaceRoot}/storybook-static"
-      ]
-    },
-    "targets": {
-      "build": {
-        "dependsOn": [
-          "^build"
-        ],
-        "inputs": [
-          "core"
-        ],
-        "outputs": [
-          "output"
-        ]
-      },
-      "clean": {
-        "inputs": [
-          "output"
-        ]
-      },
-      "start": {
-        "dependsOn": [
-          "^build"
-        ],
-        "inputs": [
-          "core"
-        ]
-      },
-      "storybook": {
-        "dependsOn": [
-          "^build"
-        ],
-        "inputs": [
-          "core"
-        ],
-        "outputs": [
-          "output"
-        ]
-      },
-      "dev": {
-        "dependsOn": [
-          "^build"
-        ],
-        "inputs": [
-          "core"
-        ]
-      }
-    },
-    "implicitDependencies": [
-      "@spectrum-css/*",
-      "!@spectrum-css/generator",
-      "!@spectrum-css/documentation"
-    ],
-    "includedScripts": [
-      "clean",
-      "build",
-      "storybook",
-      "start",
-      "dev",
-      "test",
-      "test:scope"
     ]
   }
 }

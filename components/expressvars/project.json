@@ -1,0 +1,30 @@
+{
+	"name": "expressvars",
+	"tags": ["token", "legacy"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/expressvars",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"inputs": [
+				"{workspaceRoot}/custom.css",
+				"{workspaceRoot}/json/*.json",
+				"{workspaceRoot}/css/*/*.css"
+			],
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/expressvars",
+				"commands": [
+					"mkdir -p dist",
+					"cp json/spectrum-metadata.json dist/spectrum-metadata.json",
+					"gulp build"
+				],
+				"parallel": false
+			}
+		}
+	}
+}

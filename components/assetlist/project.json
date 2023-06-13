@@ -1,0 +1,27 @@
+{
+	"name": "assetlist",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/assetlist",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"inputs": ["legacystyles"],
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/assetlist",
+				"command": "gulp"
+			}
+		},
+		"test": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx test:scope @spectrum-css/preview assetlist"
+			}
+		}
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"name": "actionmenu",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/actionmenu",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"inputs": [
+				"{workspaceRoot}/index.css"
+			],
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/actionmenu",
+				"command": "gulp"
+			}
+		},
+		"test": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx test:scope @spectrum-css/preview actionmenu"
+			}
+		}
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"name": "assetcard",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/assetcard",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"inputs": [
+				"{workspaceRoot}/index.css"
+			],
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/assetcard",
+				"command": "gulp"
+			}
+		},
+		"test": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx test:scope @spectrum-css/preview assetcard"
+			}
+		}
+	}
+}

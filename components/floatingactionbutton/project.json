@@ -1,0 +1,25 @@
+{
+	"name": "floatingactionbutton",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"executor": "nx:run-commands",
+			"cwd": "{workspaceRoot}",
+			"options": {
+				"command": "gulp -config {projectRoot}/gulpfile.js -cwd {workspaceRoot}"
+			}
+		},
+		"test": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx test:scope @spectrum-css/preview floatingactionbutton"
+			}
+		}
+	}
+}

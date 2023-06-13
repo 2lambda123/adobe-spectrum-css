@@ -1,0 +1,19 @@
+{
+	"name": "tray",
+	"tags": ["component"],
+	"targets": {
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "components/tray",
+				"command": "rimraf dist"
+			}
+		},
+		"build": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "gulp --gulpfile components/tray/gulpfile.js --cwd components/tray build"
+			}
+		}
+	}
+}
