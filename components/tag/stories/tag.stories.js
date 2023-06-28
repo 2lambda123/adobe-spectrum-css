@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 import { default as IconStories } from "@spectrum-css/icon/stories/icon.stories.js";
 
@@ -112,3 +112,28 @@ export default {
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const isDisabled = Template.bind({});
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const isSelected = Template.bind({});
+isSelected.args = {
+	isSelected: true,
+};
+
+export const isInvalid = Template.bind({});
+isInvalid.args = {
+	isInvalid: true,
+};
+
+export const isEmphasized = Template.bind({});
+isEmphasized.args = {
+	isEmphasized: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
+};

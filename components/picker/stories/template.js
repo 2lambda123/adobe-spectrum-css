@@ -8,7 +8,7 @@ import { Template as Popover } from "@spectrum-css/popover/stories/template.js";
 import { Template as ProgressCircle } from "@spectrum-css/progresscircle/stories/template.js";
 import { Template as HelpText } from "@spectrum-css/helptext/stories/template.js";
 
-import "../index.css";
+import "@spectrum-css/picker";
 
 export const Template = ({
 	rootClass = "spectrum-Picker",
@@ -35,8 +35,14 @@ export const Template = ({
 
 	const { express } = globals;
 	try {
-		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
-		else import(/* webpackPrefetch: true */ "../themes/express.css");
+		if (!express)
+			import(
+				/* webpackPrefetch: true */ "@spectrum-css/picker/dist/themes/spectrum.css"
+			);
+		else
+			import(
+				/* webpackPrefetch: true */ "@spectrum-css/picker/dist/themes/express.css"
+			);
 	} catch (e) {
 		console.warn(e);
 	}

@@ -1,16 +1,15 @@
 import isChromatic from "chromatic/isChromatic";
-
-import {
-	withContextWrapper,
-	withTextDirectionWrapper,
-	withLanguageWrapper,
-	withReducedMotionWrapper,
-	// withSizingWrapper,
-} from "./decorators/index.js";
+import { useEffect } from "@storybook/preview-api";
 import { withActions } from "@storybook/addon-actions/decorator";
 
+import { html } from "lit";
+import { when } from "lit/directives/when.js";
+import { unsafeSVG } from "lit/directives/unsafe-svg.js";
+
+import workflowIcons from "@adobe/spectrum-css-workflow-icons/dist/spectrum-icons.svg?raw";
+import uiIcons from "@spectrum-css/icon/dist/spectrum-css-icons.svg?raw";
+
 // https://github.com/storybookjs/storybook-addon-console
-import "@storybook/addon-console";
 import { setConsoleOptions } from "@storybook/addon-console";
 
 const panelExclude = setConsoleOptions({}).panelExclude || [];
@@ -47,7 +46,6 @@ import "./global.js";
 // Rendered as controls; these properties are assigned
 //      to the document root element
 // @todo: resolve errors on 'name' and 'title' in console
-
 export const globalTypes = {
 	textDirection: {
 		title: "Text Direction",
@@ -80,6 +78,9 @@ export const globalTypes = {
 	},
 };
 
+const colors = ["light", "dark", "darkest"];
+const scales = ["medium", "large"];
+
 // Global properties added to each component;
 //      determines what stylesheets are loaded
 export const argTypes = {
@@ -92,7 +93,7 @@ export const argTypes = {
 			defaultValue: { summary: "light" },
 			category: "Global",
 		},
-		options: ["light", "dark", "darkest"],
+		options: colors,
 		control: {
 			type: "select",
 			labels: {
@@ -111,7 +112,7 @@ export const argTypes = {
 			category: "Global",
 		},
 		type: { required: true },
-		options: ["medium", "large"],
+		options: scales,
 		control: {
 			type: "radio",
 			labels: {
@@ -119,19 +120,6 @@ export const argTypes = {
 				large: "Large",
 			},
 		},
-	},
-	// @todo https://jira.corp.adobe.com/browse/CSS-314
-	reducedMotion: {
-		name: "Reduce motion",
-		title: "Reduce motion",
-		description: "Reduce animation and transitions",
-		table: {
-			type: { summary: "boolean" },
-			defaultValue: { summary: false },
-			category: "Global",
-		},
-		type: { required: true },
-		control: "boolean",
 	},
 	express: {
 		name: "Express",
@@ -168,7 +156,6 @@ export const argTypes = {
 export const args = {
 	color: "light",
 	scale: "medium",
-	reducedMotion: false,
 	express: false,
 	customClasses: [],
 };
@@ -196,10 +183,10 @@ export const parameters = {
 		sort: "requiredFirst",
 	},
 	html: {
-		root: "#root-inner",
+		root: "#html-capture",
 		removeComments: true,
 		prettier: {
-			tabWidth: 4,
+			tabWidth: 2,
 			useTabs: false,
 			htmlWhitespaceSensitivity: "ignore",
 		},
@@ -230,12 +217,52 @@ export const parameters = {
 };
 
 export const decorators = [
-	withTextDirectionWrapper,
-	withLanguageWrapper,
-	withReducedMotionWrapper,
-	withContextWrapper,
+	(StoryFn, context) => {
+		const { globals, args, argTypes } = context;
+
+		const textDirection = globals.textDirection;
+		const lang = globals.lang;
+
+		const getDefaultValue = (type) => {
+			if (!type) return null;
+			if (type.defaultValue) return type.defaultValue;
+			return type.options ? type.options[0] : null;
+		};
+
+		// This property informs which context stylesheets to source
+		//    but does not source a stylesheet for itself
+		/** @type boolean */
+		const isExpress = args.express
+			? args.express
+			: getDefaultValue(argTypes.express);
+		/** @type string */
+		const color = args.color ? args.color : getDefaultValue(argTypes.color);
+		/** @type string */
+		const scale = args.scale ? args.scale : getDefaultValue(argTypes.scale);
+
+		useEffect(() => {
+			document.documentElement.dir = textDirection;
+			document.documentElement.lang = lang;
+
+			// This adds the classes but not the stylesheet
+			document.body.classList.toggle("spectrum--express", isExpress);
+
+			for (const c of colors) {
+				document.body.classList.toggle(`spectrum--${c}`, c === color);
+			}
+
+			for (const s of scales) {
+				document.body.classList.toggle(`spectrum--${s}`, s === scale);
+			}
+		}, [textDirection, lang, isExpress, color, scale]);
+
+		return html` <div id="html-capture">${StoryFn(context)}</div>
+			<!-- Workflow icons -->
+			${unsafeSVG(workflowIcons)}
+			<!-- UI icons -->
+			${unsafeSVG(uiIcons)}`;
+	},
 	withActions,
-	// ...[isChromatic() ? withSizingWrapper : false].filter(Boolean),
 ];
 
 export default {

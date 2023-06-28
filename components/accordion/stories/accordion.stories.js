@@ -1,5 +1,4 @@
-// Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Accordion",
@@ -7,7 +6,7 @@ export default {
 		"The accordion element contains a list of items that can be expanded or collapsed to reveal additional content or information associated with each item. There can be zero expanded items, exactly one expanded item, or more than one item expanded at a time, depending on the configuration. This list of items is defined by child accordion item elements.",
 	component: "Accordion",
 	argTypes: {
-		items: { table: { disable: true } },
+		items: { control: false },
 		size: {
 			name: "Size",
 			type: { name: "string", required: true },
@@ -91,4 +90,14 @@ Default.args = {
 			},
 		],
 	]),
+};
+
+export const isDisabled = Default;
+isDisabled.args = {
+	disableAll: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

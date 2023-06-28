@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Divider",
@@ -54,3 +54,8 @@ export default {
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
+};

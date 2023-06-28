@@ -2,8 +2,11 @@ import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { when } from "lit/directives/when.js";
 
-import "../index.css";
+import { useArgs } from "@storybook/client-api";
+
+import "@spectrum-css/thumbnail";
 
 export const Template = ({
 	rootClass = "spectrum-Thumbnail",
@@ -18,91 +21,62 @@ export const Template = ({
 	id,
 	isLayer,
 	isSelected,
+	isFocused,
 	backgroundColor,
-	styles = {
-		"background-color": backgroundColor,
-	},
-	...globals
+	styles,
+	// ...globals
 }) => {
-	if (!imageURL && !svg) return html``;
+	const [_, updateArgs] = useArgs();
 
-	if (isLayer)
-		return html`
-			<div
-				class=${classMap({
-					[rootClass]: true,
-					[`${rootClass}--cover`]: isCover,
-					[`${rootClass}-layer`]: isLayer,
-					[`is-selected`]: isSelected,
-					[`is-disabled`]: isDisabled,
-					[`${rootClass}--size${size}`]: typeof size !== "undefined",
-					...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-				})}
-				id=${ifDefined(id)}
-				@click=${onclick}
-			>
-				<div class="${rootClass}-layer-inner">
-					${imageURL
-						? html`<img
-								class="${rootClass}-image"
-								src=${imageURL}
-								alt=${altText}
-						  />`
-						: ""}
-				</div>
-			</div>
-		`;
+	if (!imageURL && !svg) {
+		console.warn(
+			"Thumbnail: Could not render a result because no image or SVG asset was provided."
+		);
+		return html``;
+	}
 
-	if (backgroundColor)
-		return html`
-			<div
-				class=${classMap({
-					[rootClass]: true,
-					[`${rootClass}--cover`]: isCover,
-					[`${rootClass}-layer`]: isLayer,
-					[`is-selected`]: isSelected,
-					[`is-disabled`]: isDisabled,
-					[`${rootClass}--size${size}`]: typeof size !== "undefined",
-					...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-				})}
-				id=${ifDefined(id)}
-				@click=${onclick}
-			>
-				<div class="${rootClass}-background" style=${styleMap(styles)}></div>
-				<div class="${rootClass}-image-wrapper">
-					${imageURL
-						? html`<img
-								class="${rootClass}-image"
-								src=${imageURL}
-								alt=${altText}
-						  />`
-						: ""}
-				</div>
-			</div>
-		`;
+	const imageMarkup = svg
+		? html`${svg}`
+		: html`<img class="${rootClass}-image" src=${imageURL} alt=${altText} />`;
 
 	return html`
 		<div
 			class=${classMap({
 				[rootClass]: true,
 				[`${rootClass}--cover`]: isCover,
+				[`${rootClass}-layer`]: isLayer,
+				[`is-selected`]: isSelected,
+				[`is-focused`]: isFocused,
 				[`is-disabled`]: isDisabled,
 				[`${rootClass}--size${size}`]: typeof size !== "undefined",
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
 			@click=${onclick}
+			@focusin=${() => {
+				updateArgs({ isFocused: true });
+			}}
+			@focusout=${() => {
+				updateArgs({ isFocused: false });
+			}}
 		>
-			<div class="${rootClass}-image-wrapper">
-				${imageURL
-					? html`<img
-							class="${rootClass}-image"
-							src=${imageURL}
-							alt=${altText}
-					  />`
-					: ""}
-				${svg ? html`${svg}` : ""}
-			</div>
+			${when(
+				isLayer,
+				html`<div class="${rootClass}-layer-inner">${imageMarkup}</div>`
+			)}
+			${when(
+				backgroundColor,
+				html`
+					<div
+						class="${rootClass}-background"
+						style=${styleMap({
+							"background-color": backgroundColor,
+							...styles,
+						})}
+					></div>
+				`
+			)}
+			<div class="${rootClass}-image-wrapper">${imageMarkup}</div>
 		</div>
 	`;
 };

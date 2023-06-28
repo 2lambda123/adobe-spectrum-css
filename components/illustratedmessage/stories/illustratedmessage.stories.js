@@ -1,7 +1,7 @@
 import { html } from "lit";
 
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 import { Template as Link } from "@spectrum-css/link/stories/template.js";
 
 export default {
@@ -68,4 +68,9 @@ AccentColor.args = {
 	description: html`${Link({ url: "#", text: "Select a file" })} from your
 	computer.`,
 	useAccentColor: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

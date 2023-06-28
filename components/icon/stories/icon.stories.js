@@ -1,7 +1,18 @@
-// Import the component markup template
-import { Template } from "./template";
+import { html } from "lit";
+import { styleMap } from "lit/directives/style-map.js";
 
-import { workflowIcons, uiIcons } from "./utilities.js";
+// Import the component markup template
+import { Template } from "./template.js";
+import { Template as Thumbnail } from "@spectrum-css/thumbnail/stories/template.js";
+
+import path from "path";
+
+// Imports an array of all icon names in the workflow set
+import iconOpts from "@adobe/spectrum-css-workflow-icons";
+
+const workflowIcons = (iconOpts || []).map((icon) =>
+	path.basename(icon, ".svg")
+);
 
 export default {
 	title: "Components/Icon",
@@ -50,7 +61,18 @@ export default {
 				type: { summary: "string" },
 				category: "Content",
 			},
-			options: uiIcons,
+			options: [
+				"Arrow",
+				"Asterisk",
+				"Checkmark",
+				"Chevron",
+				"CornerTriangle",
+				"Cross",
+				"Dash",
+				"SingleGripper",
+				"DoubleGripper",
+				"TripleGripper",
+			],
 			control: "select",
 			if: { arg: "setName", eq: "ui" },
 		},
@@ -87,3 +109,97 @@ export const Default = (args) =>
 		setName: args.setName ?? (args.uiIconName ? "ui" : "workflow"),
 	});
 Default.args = {};
+
+export const UIIcons = (args) => html`
+	<div
+		style=${styleMap({
+			display: "grid",
+			gap: "var(--spectrum-spacing-100, 1em)",
+			gridTemplateColumns:
+				"repeat(auto-fill, var(--spectrum-thumbnail-size-500))",
+			gridTemplateRows: "auto",
+		})}
+	>
+		${[
+			"Arrow",
+			"Asterisk",
+			"Checkmark",
+			"Chevron",
+			"CornerTriangle",
+			"Cross",
+			"Dash",
+			"SingleGripper",
+			"DoubleGripper",
+			"TripleGripper",
+		].map((iconName) => {
+			const svg = Template({ ...args, iconName: iconName, setName: "ui" });
+			return Thumbnail({
+				svg,
+				onclick: (e) => {
+					e.preventDefault();
+					e.stopPropagation();
+
+					// Copy SVG to clipboard
+					navigator.clipboard.writeText(svg);
+				},
+			});
+		})}
+	</div>
+`;
+
+UIIcons.args = {
+	rootClass: "spectrum-Icon",
+	setName: "ui",
+	size: "xl",
+};
+
+UIIcons.argTypes = {
+	setName: { table: { disable: true } },
+	iconName: { table: { disable: true } },
+	uiIconName: { table: { disable: true } },
+};
+
+export const WorkflowIcons = (args) => html`
+	<div
+		style=${styleMap({
+			display: "grid",
+			gap: "var(--spectrum-spacing-100, 1em)",
+			gridTemplateColumns:
+				"repeat(auto-fill, var(--spectrum-thumbnail-size-500))",
+			gridTemplateRows: "auto",
+		})}
+	>
+		${workflowIcons.map((iconName) => {
+			const svg = Template({ ...args, iconName: iconName, setName: "ui" });
+			return Thumbnail({
+				svg,
+				altText: iconName,
+				backgroundColor: "var(--spectrum-gray-100)",
+				onclick: (e) => {
+					e.preventDefault();
+					e.stopPropagation();
+
+					// Copy SVG to clipboard
+					navigator.clipboard.writeText(svg);
+				},
+			});
+		})}
+	</div>
+`;
+
+WorkflowIcons.args = {
+	rootClass: "spectrum-Icon",
+	setName: "workflow",
+	size: "xl",
+};
+
+WorkflowIcons.argTypes = {
+	setName: { table: { disable: true } },
+	iconName: { table: { disable: true } },
+	uiIconName: { table: { disable: true } },
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
+};

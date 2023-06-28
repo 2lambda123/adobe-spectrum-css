@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 import { default as ActionButton } from "@spectrum-css/actionbutton/stories/actionbutton.stories";
 

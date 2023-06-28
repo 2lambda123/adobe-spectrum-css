@@ -2,7 +2,7 @@ import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import "../index.css";
+import "@spectrum-css/radio";
 
 export const Template = ({
 	rootClass = "spectrum-Radio",
@@ -16,8 +16,14 @@ export const Template = ({
 	const { express } = globals;
 
 	try {
-		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
-		else import(/* webpackPrefetch: true */ "../themes/express.css");
+		if (!express)
+			import(
+				/* webpackPrefetch: true */ "@spectrum-css/radio/dist/themes/spectrum.css"
+			);
+		else
+			import(
+				/* webpackPrefetch: true */ "@spectrum-css/radio/dist/themes/express.css"
+			);
 	} catch (e) {
 		console.warn(e);
 	}

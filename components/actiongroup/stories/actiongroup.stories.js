@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 import { default as ActionButton } from "@spectrum-css/actionbutton/stories/actionbutton.stories.js";
 
@@ -90,37 +90,36 @@ const items = [
 
 export const Default = Template.bind({});
 Default.args = {
-	content: items
+	content: items,
 };
-
 
 export const Compact = Template.bind({});
 Compact.args = {
 	compact: true,
-	content: items
+	content: items,
 };
 
 export const Vertical = Template.bind({});
 Vertical.args = {
 	vertical: true,
-	content: items
+	content: items,
 };
 
 export const VerticalCompact = Template.bind({});
 VerticalCompact.args = {
 	vertical: true,
 	compact: true,
-	content: items
+	content: items,
 };
 
 export const Justified = Template.bind({});
 Justified.args = {
 	justified: true,
-	content: items
+	content: items,
 };
 
 export const Quiet = Template.bind({});
 Quiet.args = {
 	areQuiet: true,
-	content: items
+	content: items,
 };

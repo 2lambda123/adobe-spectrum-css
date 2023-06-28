@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Tabs",
@@ -196,4 +196,9 @@ VerticalWithIcon.args = {
 			icon: "Document",
 		},
 	],
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

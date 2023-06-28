@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Logic button",
@@ -56,3 +56,18 @@ export default {
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const isDisabled = Default;
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const isFocused = Default;
+isFocused.args = {
+	isFocused: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
+};

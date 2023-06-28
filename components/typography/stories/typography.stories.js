@@ -1,4 +1,4 @@
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 import { html } from "lit";
 
@@ -201,4 +201,9 @@ Code.argTypes = {
 Code.args = {
 	semantics: "code",
 	content: ["console.log('Hello World!');"],
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

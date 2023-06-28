@@ -129,9 +129,9 @@ const buildIcons = gulp.parallel(
 const build = gulp.parallel(buildIcons, tasks.buildCSS);
 
 exports.updateIcons = updateIcons;
-exports.build =
+exports.default =
+	exports.build =
 	exports.buildLite =
 	exports.buildHeavy =
 	exports.buildMedium =
 		build;
-exports.default = build;

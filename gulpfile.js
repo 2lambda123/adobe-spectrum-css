@@ -9,9 +9,7 @@ exports.dev = gulp.series(exports.copySiteResources, exports.dev);
 
 exports.devHeavy = gulp.series(exports.copySiteResources, exports.devHeavy);
 
-exports["watch-relaunch"] = function () {
-	process.env["BROWSERSYNC_OPEN"] = true;
-	exports.watch();
-};
+exports.watch = builder.watch;
+exports.devSite = site.dev;
 
 exports.buildDocs = gulp.series(builder.buildDocs, site.copySiteResources);

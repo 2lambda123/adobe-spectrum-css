@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Color area",
@@ -54,4 +54,14 @@ export const CustomSize = Template.bind({});
 CustomSize.args = {
 	customWidth: "80px",
 	customHeight: "80px",
+};
+
+export const isDisabled = Default;
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

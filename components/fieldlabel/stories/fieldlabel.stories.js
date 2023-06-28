@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Field label",
@@ -84,4 +84,19 @@ RightAligned.args = {
 	label: "Label",
 	alignment: "right",
 	style: { width: "72px" },
+};
+
+export const isDisabled = Default;
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const isRequired = Default;
+isRequired.args = {
+	isRequired: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

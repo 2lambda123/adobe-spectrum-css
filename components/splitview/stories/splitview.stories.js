@@ -1,9 +1,10 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Split view",
-	description: "The Splitview component is...",
+	description:
+		"A split view component is used to display two panes side-by-side.",
 	component: "Splitview",
 	argTypes: {
 		orientation: {

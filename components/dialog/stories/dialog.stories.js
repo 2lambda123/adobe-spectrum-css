@@ -1,7 +1,7 @@
 import { html } from "lit";
 
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Dialog",
@@ -83,4 +83,9 @@ Default.args = {
 			elit ullamcorper dignissim cras lobortis.
 		</p>`,
 	],
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

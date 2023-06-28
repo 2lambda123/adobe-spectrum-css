@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Menu",
@@ -143,3 +143,18 @@ MenuWithCheckbox.args = {
 //     { label: 'Save Selection' }
 //   ]
 // };
+
+export const isDisabled = Default;
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const isSelectable = Default;
+isSelectable.args = {
+	isSelectable: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
+};

@@ -1,7 +1,7 @@
 import { html } from "lit";
 
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 import { default as IconStories } from "@spectrum-css/icon/stories/icon.stories.js";
 
@@ -161,8 +161,13 @@ StaticColorBlack.args = {
 	staticColor: "black",
 };
 
-export const Disabled = CustomButton.bind({});
-Disabled.args = {
+export const isDisabled = CustomButton.bind({});
+isDisabled.args = {
 	isDisabled: true,
 	iconName: "Actions",
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

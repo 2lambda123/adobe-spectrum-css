@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Color loupe",
@@ -21,7 +21,7 @@ export default {
 	},
 	args: {
 		rootClass: "spectrum-ColorLoupe",
-    isOpen: true,
+		isOpen: true,
 	},
 	parameters: {
 		actions: {

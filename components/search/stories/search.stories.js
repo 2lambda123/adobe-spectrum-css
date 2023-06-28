@@ -58,3 +58,18 @@ export default {
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const Quiet = Template.bind({});
+isQuiet.args = {
+	isQuiet: true,
+};
+
+export const isDisabled = Template.bind({});
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
+};

@@ -1,9 +1,10 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Status light",
-	description: "The Status light component is...",
+	description:
+		"The status light component is used to visually indicate the status of an item.",
 	component: "Statuslight",
 	argTypes: {
 		size: {
@@ -77,3 +78,8 @@ export default {
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
+};

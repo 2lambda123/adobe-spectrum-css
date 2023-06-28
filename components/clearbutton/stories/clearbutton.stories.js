@@ -1,9 +1,10 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Clear button",
-	description: "The Clear button component is and in-field button used in Search and Tag",
+	description:
+		"The Clear button component is and in-field button used in Search and Tag",
 	component: "Clearbutton",
 	argTypes: {
 		size: {
@@ -55,3 +56,13 @@ export default {
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const isDisabled = Default;
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
+};

@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Progress bar",
@@ -65,4 +65,9 @@ export const StaticWhite = Template.bind({});
 StaticWhite.args = {
 	backgroundColor: "rgb(15, 121, 125)",
 	staticWhite: "staticWhite",
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

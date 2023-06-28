@@ -1,8 +1,7 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 import { Default as MenuStories } from "@spectrum-css/menu/stories/menu.stories.js";
-import { default as IconStories } from "@spectrum-css/icon/stories/icon.stories.js";
 
 export default {
 	title: "Components/Picker",
@@ -134,22 +133,32 @@ Quiet.args = {
 	content: [MenuStories(MenuStories.args)],
 };
 
-export const Loading = Template.bind({});
-Loading.args = {
+export const isLoading = Template.bind({});
+isLoading.args = {
 	isLoading: true,
 	content: [MenuStories(MenuStories.args)],
 };
 
-export const Invalid = Template.bind({});
-Invalid.args = {
+export const isInvalid = Template.bind({});
+isInvalid.args = {
 	helpText: "Please select a country",
 	isInvalid: true,
 	content: [MenuStories(MenuStories.args)],
 };
 
-export const Focused = Template.bind({});
-Focused.args = {
+export const isFocused = Template.bind({});
+isFocused.args = {
 	helpText: "Please select a country",
 	isFocused: true,
 	content: [MenuStories(MenuStories.args)],
+};
+
+export const isDisabled = Default;
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

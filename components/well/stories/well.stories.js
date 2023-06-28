@@ -1,6 +1,6 @@
 // Import the component markup template
 import { html } from "lit";
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Well",

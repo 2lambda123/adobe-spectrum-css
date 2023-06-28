@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Rating",
@@ -85,23 +85,33 @@ export default {
 export const Default = Template.bind({});
 Default.args = {};
 
-export const ReadOnly = Template.bind({});
-ReadOnly.args = {
+export const isReadOnly = Template.bind({});
+isReadOnly.args = {
 	isReadOnly: true,
 };
 
-export const Emphasized = Template.bind({});
-Emphasized.args = {
+export const isEmphasized = Template.bind({});
+isEmphasized.args = {
 	isEmphasized: true,
 };
 
-export const ReadOnlyEmphasized = Template.bind({});
-ReadOnlyEmphasized.args = {
+export const isReadOnlyEmphasized = Template.bind({});
+isReadOnlyEmphasized.args = {
 	isEmphasized: true,
 	isReadOnly: true,
 };
 
-export const Disabled = Template.bind({});
-Disabled.args = {
+export const isDisabled = Template.bind({});
+isDisabled.args = {
 	isDisabled: true,
+};
+
+export const isFocused = Template.bind({});
+isFocused.args = {
+	isFocused: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Thumbnail",
@@ -136,4 +136,19 @@ Layer.args = {
 export const WithBackground = Template.bind({});
 WithBackground.args = {
 	backgroundColor: "orange",
+};
+
+export const isDisabled = Template.bind({});
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const isSelected = Template.bind({});
+isSelected.args = {
+	isSelected: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

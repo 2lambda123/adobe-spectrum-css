@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Breadcrumbs",
@@ -69,4 +69,9 @@ NestedMultiline.args = {
 		},
 	],
 	variant: "multiline",
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

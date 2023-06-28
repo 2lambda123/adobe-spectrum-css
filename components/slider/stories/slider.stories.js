@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Slider",
@@ -169,8 +169,8 @@ Tick.args = {
 	showTicks: true,
 };
 
-export const Disabled = Template.bind({});
-Disabled.args = {
+export const isDisabled = Template.bind({});
+isDisabled.args = {
 	...Default.args,
 	isDisabled: true,
 };
@@ -184,4 +184,9 @@ Gradient.args = {
 		"--spectrum-slider-track-color-rtl":
 			"linear-gradient(to left, red, green 100%)",
 	},
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

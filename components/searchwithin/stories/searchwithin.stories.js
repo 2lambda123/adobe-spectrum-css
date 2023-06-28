@@ -1,12 +1,12 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 import { default as PickerStories } from "@spectrum-css/picker/stories/picker.stories.js";
 const ignoreProps = ["rootClass", "position", "isRounded"];
 
 export default {
 	title: "Components/Search within",
-	description: "The Search within component is...",
+	description: "The Search within component",
 	component: "SearchWithin",
 	argTypes: {
 		...Object.entries(PickerStories.argTypes).reduce((acc, [key, value]) => {
@@ -46,3 +46,13 @@ export default {
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const Quiet = Template.bind({});
+isQuiet.args = {
+	isQuiet: true,
+};
+
+export const isDisabled = Template.bind({});
+isDisabled.args = {
+	isDisabled: true,
+};

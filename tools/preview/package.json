@@ -6,96 +6,44 @@
   "author": "Adobe",
   "homepage": "https://opensource.adobe.com/spectrum-css/preview",
   "main": "main.js",
+  "module": "main.js",
   "scripts": {
-    "build": "yarn storybook",
+    "build": "storybook build --quiet --config-dir .",
+    "ci": "storybook build --quiet --config-dir .",
     "clean": "rimraf storybook-static",
     "new": "yarn workspace @spectrum-css/generator new story",
     "start": "WATCH_MODE=true storybook dev --quiet --config-dir .",
-    "storybook": "storybook build --quiet --config-dir .",
     "test": "chromatic --build-script-name build --junit-report",
     "test:scope": "yarn test --only-story-names"
   },
-  "dependencies": {
-    "@adobe/spectrum-css-workflow-icons": "^1.2.1",
-    "@spectrum-css/expressvars": "^3.0.8",
-    "@spectrum-css/icon": "^3.0.49",
-    "@spectrum-css/site": "^3.0.21",
-    "@spectrum-css/tokens": "^10.2.0",
-    "@spectrum-css/vars": "^9.0.8"
-  },
   "devDependencies": {
-    "@babel/core": "^7.22.1",
+    "@adobe/spectrum-css-workflow-icons": "^1.2.1",
+    "@babel/core": "^7.22.5",
     "@etchteam/storybook-addon-status": "^4.2.4",
-    "@spectrum-css/component-builder": "^4.0.12",
-    "@storybook/addon-a11y": "^7.0.20",
-    "@storybook/addon-actions": "^7.0.20",
-    "@storybook/addon-console": "^1.2.3",
-    "@storybook/addon-docs": "^7.0.20",
-    "@storybook/addon-essentials": "^7.0.20",
-    "@storybook/api": "^7.0.20",
-    "@storybook/client-api": "^7.0.20",
-    "@storybook/components": "^7.0.20",
-    "@storybook/core-events": "^7.0.20",
-    "@storybook/manager-api": "^7.0.20",
-    "@storybook/preview-api": "^7.0.20",
-    "@storybook/theming": "^7.0.20",
-    "@storybook/web-components-webpack5": "^7.0.20",
+    "@storybook/addon-a11y": "^7.0.24",
+    "@storybook/addon-actions": "^7.0.24",
+    "@storybook/addon-console": "^2.0.0",
+    "@storybook/addon-docs": "^7.0.24",
+    "@storybook/addon-essentials": "^7.0.24",
+    "@storybook/builder-vite": "^7.0.24",
+    "@storybook/client-api": "^7.0.24",
+    "@storybook/components": "^7.0.24",
+    "@storybook/core-events": "^7.0.24",
+    "@storybook/manager-api": "^7.0.24",
+    "@storybook/preview-api": "^7.0.24",
+    "@storybook/theming": "^7.0.24",
+    "@storybook/web-components-vite": "^7.0.24",
     "@whitespace/storybook-addon-html": "^5.1.6",
     "chromatic": "^6.19.9",
-    "file-loader": "6.2.0",
     "lit": "^2.7.4",
     "lodash-es": "^4.17.21",
     "npm-run-all": "^4.1.5",
-    "postcss": "^7.0.36",
-    "postcss-class-prefix": "^0.3.0",
-    "postcss-loader": "^4.0.0",
-    "postcss-prefix-selector": "^1.16.0",
-    "postcss-selector-replace": "^1.0.2",
-    "postcss-warn-cleaner": "^0.1.9",
     "prettier": "^2.8.8",
-    "raw-loader": "^4.0.2",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-syntax-highlighter": "^15.5.0",
     "rimraf": "^5.0.1",
-    "source-map-loader": "^1.0.0",
     "storybook": "^7.0.24",
-    "style-loader": "3.3.3",
-    "webpack": "^5.83.1"
-  },
-  "nx": {
-    "targets": {
-      "build": {
-        "dependsOn": [
-          "^build"
-        ],
-        "inputs": [
-          "{workspaceRoot}/assets",
-          "{workspaceRoot}/decorators",
-          "{workspaceRoot}/*.js",
-          "{workspaceRoot}/*.html",
-          "{projectRoot}/components/*/dist"
-        ],
-        "outputs": [
-          "{workspaceRoot}/storybook-static"
-        ]
-      },
-      "clean": {
-        "inputs": [
-          "{workspaceRoot}/storybook-static"
-        ]
-      }
-    },
-    "implicitDependencies": [
-      "@spectrum-css/*",
-      "!@spectrum-css/generator"
-    ],
-    "includedScripts": [
-      "clean",
-      "test",
-      "test:scope",
-      "storybook",
-      "build"
-    ]
+    "vite": "^4.3.9"
   }
 }

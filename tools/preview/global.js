@@ -40,3 +40,15 @@ window.addEventListener("DOMContentLoaded", () => {
 	// Add the spectrum root class
 	document.body.classList.add("spectrum");
 });
+
+// Shortkeys for the global types
+document.addEventListener("keydown", (e) => {
+	switch (e.key || e.keyCode) {
+		case "r":
+			document.documentElement.dir = "rtl";
+			break;
+		case "n":
+			document.documentElement.dir = "ltr";
+			break;
+	}
+});

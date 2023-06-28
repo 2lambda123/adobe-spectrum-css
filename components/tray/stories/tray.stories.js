@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 import { Template as Dialog } from "@spectrum-css/dialog/stories/template.js";
 
@@ -56,4 +56,9 @@ Default.args = {
 			isDismissable: false,
 		},
 	],
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

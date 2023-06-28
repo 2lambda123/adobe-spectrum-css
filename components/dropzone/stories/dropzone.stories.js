@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Drop zone",
@@ -56,4 +56,9 @@ export const FilledAndDragged = Template.bind({});
 FilledAndDragged.args = {
 	isDragged: true,
 	isFilled: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

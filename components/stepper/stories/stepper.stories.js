@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Stepper",
@@ -88,4 +88,34 @@ Default.args = {};
 export const HideStepper = Template.bind({});
 HideStepper.args = {
 	hideStepper: true,
+};
+
+export const Quiet = Template.bind({});
+Quiet.args = {
+	Quiet: true,
+};
+
+export const isDisabled = Template.bind({});
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const isFocused = Template.bind({});
+isFocused.args = {
+	isFocused: true,
+};
+
+export const isKeyboardFocused = Template.bind({});
+isKeyboardFocused.args = {
+	isKeyboardFocused: true,
+};
+
+export const isInvalid = Template.bind({});
+isInvalid.args = {
+	isInvalid: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

@@ -1,10 +1,4 @@
-// More on args: https://storybook.js.org/docs/web-components/writing-stories/args
-
-// Uncomment if you plan to include an icon
-// import { default as IconStories } from '@spectrum-css/icon/stories/icon.stories.js';
-
-// Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Toast",
@@ -82,3 +76,8 @@ export default {
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
+};

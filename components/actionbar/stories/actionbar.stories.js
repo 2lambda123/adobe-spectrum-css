@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 import { default as Popover } from "@spectrum-css/popover/stories/popover.stories.js";
 import { default as CloseButton } from "@spectrum-css/closebutton/stories/closebutton.stories.js";
@@ -7,7 +7,8 @@ import { default as ActionButton } from "@spectrum-css/actionbutton/stories/acti
 
 export default {
 	title: "Components/Action bar",
-	description: "The Action bar component is a floating full width bar that appears upon selection",
+	description:
+		"The Action bar component is a floating full width bar that appears upon selection",
 	component: "Actionbar",
 	argTypes: {
 		isOpen: {
@@ -82,3 +83,8 @@ export default {
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
+};

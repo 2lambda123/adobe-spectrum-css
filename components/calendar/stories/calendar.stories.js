@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 import isChromatic from "chromatic/isChromatic";
 import ActionButtonStories from "@spectrum-css/actionbutton/stories/actionbutton.stories.js";
@@ -127,4 +127,14 @@ export const TodayHighlighted = Template.bind({});
 TodayHighlighted.args = {
 	month: isChromatic() ? months[0] : months[new Date().getMonth()],
 	year: isChromatic() ? 2021 : new Date().getFullYear(),
+};
+
+export const isDisabled = Default;
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const HighContrast = Default;
+HighContrast.parameters = {
+	chromatic: { forcedColors: "active" },
 };

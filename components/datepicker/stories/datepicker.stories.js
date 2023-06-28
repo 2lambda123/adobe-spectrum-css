@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 import { default as CalendarStories } from "@spectrum-css/calendar/stories/calendar.stories.js";
 
@@ -111,4 +111,9 @@ Default.args = {
 	selectedDay: 1,
 	year: 2023,
 	content: [{}],
+};
+
+export const isDisabled = Default;
+isDisabled.args = {
+	isDisabled: true,
 };

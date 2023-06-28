@@ -1,5 +1,5 @@
 // Import the component markup template
-import { Template } from "./template";
+import { Template } from "./template.js";
 
 export default {
 	title: "Components/Dial",
@@ -73,3 +73,18 @@ export default {
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const isDisabled = Default;
+isDisabled.args = {
+	isDisabled: true,
+};
+
+export const isDragged = Default;
+isDragged.args = {
+	isDragged: true,
+};
+
+export const isFocused = Default;
+isFocused.args = {
+	isFocused: true,
+};
