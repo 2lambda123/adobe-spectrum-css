@@ -1,3 +1,6 @@
+import { html } from "lit";
+import { styleMap } from "lit/directives/style-map.js";
+
 // Import the component markup template
 import { Template } from "./template";
 
@@ -86,4 +89,43 @@ export const Default = (args) =>
 		iconName: args.iconName ?? args.uiIconName,
 		setName: args.setName ?? (args.uiIconName ? "ui" : "workflow"),
 	});
-Default.args = {};
+
+export const UI = (args) => {
+	return html`
+		<div style=${styleMap({ display: "flex", flexWrap: "wrap", gap: "1em" })}>
+			${uiIcons.map((iconName) =>
+				Template({
+					...args,
+					useRef: true,
+					iconName,
+					setName: "ui",
+				})
+			)}
+		</div>
+	`;
+};
+UI.argTypes = {
+	setName: { table: { disable: true } },
+	iconName: { table: { disable: true } },
+	uiIconName: { table: { disable: true } },
+};
+
+export const Workflow = (args) => {
+	return html`
+		<div style=${styleMap({ display: "flex", flexWrap: "wrap", gap: "1em" })}>
+			${workflowIcons.map((iconName) =>
+				Template({
+					...args,
+					useRef: true,
+					iconName,
+					setName: "workflow",
+				})
+			)}
+		</div>
+	`;
+};
+Workflow.argTypes = {
+	setName: { table: { disable: true } },
+	iconName: { table: { disable: true } },
+	uiIconName: { table: { disable: true } },
+};

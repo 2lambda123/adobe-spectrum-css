@@ -5,7 +5,7 @@ import { classMap } from "lit/directives/class-map.js";
 
 import { fetchIconSVG, workflowIcons, uiIcons } from "./utilities.js";
 
-import "../index.css";
+import "@spectrum-css/icon";
 
 /**
  * @typedef { keyof import("./icon.stories.js").default.args } IconArgs
@@ -123,7 +123,7 @@ export const Template = ({
 	};
 
 	// If we found an icon above, return that value with the appended class list
-	if (icon) {
+	if (!useRef && icon) {
 		return html`${unsafeHTML(
 			icon.replace(
 				/^<svg(.*)>/,
@@ -145,17 +145,6 @@ export const Template = ({
 		setName !== "workflow"
 			? `spectrum-css-icon-${idKey}`
 			: `spectrum-icon-${scale !== "medium" ? `24` : `18`}-${idKey}`;
-
-	try {
-		import(
-			/* webpackPrefetch: true */ `!!raw-loader!@adobe/spectrum-css-workflow-icons/dist/spectrum-icons.svg`
-		);
-		import(
-			/* webpackPrefetch: true */ `!!raw-loader!@spectrum-css/icon/dist/spectrum-css-icons.svg`
-		);
-	} catch (e) {
-		console.warn(e);
-	}
 
 	return html` <svg
 		class=${classMap(classList)}

@@ -1,4 +1,9 @@
-import { useEffect, makeDecorator } from "@storybook/preview-api";
+import {
+	useEffect,
+	makeDecorator,
+	useGlobals,
+	useParameter,
+} from "@storybook/preview-api";
 import { html } from "lit";
 
 export { withContextWrapper } from "./contextsWrapper.js";
@@ -10,9 +15,15 @@ export { withContextWrapper } from "./contextsWrapper.js";
 export const withTextDirectionWrapper = makeDecorator({
 	name: "withTextDirectionWrapper",
 	parameterName: "context",
-	wrapper: (StoryFn, context) => {
-		const { globals } = context;
-		const textDirection = globals.textDirection;
+	wrapper: () => {
+		const [globals, updateGlobals] = useGlobals();
+
+		addons
+			.getChannel()
+			.emit(`@spectrum-css/addon-toolkit/context-switcher/REGISTER_THEMES`, {
+				defaultTextDirection: "ltr",
+				TextDirections: ["ltr", "rtl"],
+			});
 
 		// Shortkeys for the global types
 		document.addEventListener("keydown", (e) => {
@@ -26,11 +37,18 @@ export const withTextDirectionWrapper = makeDecorator({
 			}
 		});
 
-		useEffect(() => {
-			if (textDirection) document.documentElement.dir = textDirection;
-		}, [textDirection]);
+		return (StoryFn, context) => {
+			const override = useParameter("textDirection", "ltr");
+			const selected = globals.textDirection || "";
 
-		return StoryFn(context);
+			useEffect(() => {
+				const selectedName = override || selected || "ltr";
+
+				if (selectedName) document.documentElement.dir = selectedName;
+			}, [override, selected, updateGlobals]);
+
+			return StoryFn(context);
+		};
 	},
 });
 

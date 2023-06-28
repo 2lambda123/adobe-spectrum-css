@@ -1,19 +1,19 @@
 const { resolve } = require("path");
 const { readdirSync } = require("fs");
+
 const componentsPath = resolve(__dirname, "../../components");
 const componentPkgs = readdirSync(componentsPath, {
 	withFileTypes: true,
 })
 	.filter((dirent) => dirent.isDirectory())
 	.map((dirent) => dirent.name);
+
 module.exports = {
-	stories: [
-		"../../components/*/stories/*.stories.mdx",
-		"../../components/*/stories/*.stories.@(js|jsx|ts|tsx)",
-	],
+	stories: [`../../components/*/stories/*.stories.js`],
 	rootDir: "../../",
 	staticDirs: ["../../assets"],
 	addons: [
+		// "@storybook/addon-actions/register",
 		{
 			name: "@storybook/addon-essentials",
 			// Supported booleans: actions, controls, docs, toolbars, measure, outline.
@@ -27,18 +27,30 @@ module.exports = {
 				transcludeMarkdown: true, // Support markdown in MDX files.
 			},
 		},
+		{
+			name: "@storybook/addon-styling",
+			options: {
+				postCss: {
+					implementation: require("postcss"),
+					postcssOptions: {
+						config: resolve(__dirname, "postcss.config.js"),
+					},
+				},
+			},
+		},
 		// https://github.com/storybookjs/storybook/tree/next/code/addons/a11y
 		"@storybook/addon-a11y",
 		// https://www.npmjs.com/package/@whitespace/storybook-addon-html
 		"@whitespace/storybook-addon-html",
 		// https://storybook.js.org/addons/@etchteam/storybook-addon-status
 		"@etchteam/storybook-addon-status",
+		"@spectrum-css/addon-toolkit",
 	],
 	core: {
 		disableTelemetry: true,
 	},
 	env: {
-		MIGRATED_PACKAGES: componentPkgs.filter((dir) => {
+		MIGRATED_PACKAGES: componentPkgs?.filter((dir) => {
 			const pkg = require(resolve(componentsPath, dir, "package.json"));
 			if (
 				pkg.devDependencies &&
@@ -49,31 +61,27 @@ module.exports = {
 			return false;
 		}),
 	},
-	webpackFinal: function (config) {
-		// Removing the global alias as it conflicts with the global npm pkg
-		const { global, ...alias } = config.resolve.alias;
-		config.resolve.alias = alias;
-		let storybookRules =
-			config && config.module && config.module.rules
-				? config.module.rules.filter(
-						(rule) => !(rule.test && rule.test.toString().includes("css"))
-				  )
-				: [];
+	framework: {
+		name: "@storybook/web-components-webpack5",
+		options: {
+			fsCache: true,
+			lazyCompilation: true,
+		},
+	},
+	webpackFinal(config) {
 		return {
 			...config,
-			stats: {
-				/* Suppress autoprefixer warnings from storybook build */
-				warningsFilter: [/autoprefixer: /],
-			},
+			/* Suppress autoprefixer warnings from storybook build */
+			ignoreWarnings: [...config.ignoreWarnings, /autoprefixer: /],
 			/* Add support for root node_modules imports */
 			resolve: {
-				...(config.resolve ? config.resolve : {}),
+				...(config.resolve || {}),
 				modules: [
-					...(config.resolve ? config.resolve.modules : []),
+					...(config.resolve.modules || []),
 					resolve(__dirname, "../../node_modules"),
 				],
 				alias: {
-					...(config.resolve ? config.resolve.alias : {}),
+					...(config.resolve.alias || {}),
 					...componentPkgs.reduce((pkgs, dir) => {
 						const pkg = require(resolve(componentsPath, dir, "package.json"));
 						pkgs[pkg.name] = resolve(componentsPath, dir);
@@ -81,73 +89,7 @@ module.exports = {
 					}, {}),
 				},
 			},
-			module: {
-				...(config.module ?? []),
-				rules: [
-					...storybookRules,
-					{
-						test: /^\w+\.{ico,jpg,jpeg,png,gif,webp}$/i,
-						use: [
-							{
-								loader: "file-loader",
-								options: {
-									outputPath: (url, resourcePath, context) => {
-										return `assets/images/${url.replace(/_\//g, "")}`;
-									},
-								},
-							},
-						],
-					},
-					{
-						test: /\.css$/i,
-						sideEffects: true,
-						use: [
-							{
-								loader: "style-loader",
-								options: {
-									injectType: "linkTag",
-									attributes: {
-										"data-source": "processed",
-									},
-								},
-							},
-							{
-								loader: "file-loader",
-								options: {
-									name: "[path][name].[ext][query]",
-									outputPath: (url, resourcePath, context) => {
-										return `assets/css/${url.replace(/_\//g, "")}`;
-									},
-									esModule: false,
-								},
-							},
-							{
-								loader: "postcss-loader",
-								options: {
-									implementation: require("postcss"),
-									postcssOptions: {
-										config: resolve(__dirname, "postcss.config.js"),
-									},
-								},
-							},
-						],
-					},
-					{
-						test: /\.js$/,
-						enforce: "pre",
-						use: ["source-map-loader"],
-					} /* Raw SVG loader */,
-					{
-						test: /\.svg$/i,
-						loader: "raw-loader",
-					},
-				],
-			},
 		};
-	},
-	framework: {
-		name: "@storybook/web-components-webpack5",
-		options: {},
 	},
 	features: {
 		/* Code splitting flag; load stories on-demand */
@@ -163,7 +105,7 @@ module.exports = {
 	//   },
 	// },
 	docs: {
-		autodocs: true, // see below for alternatives
-		defaultName: "Docs", // set to change the name of generated docs entries
+		autodocs: true,
+		defaultName: "Docs",
 	},
 };
