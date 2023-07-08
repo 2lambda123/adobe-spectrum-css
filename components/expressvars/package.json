@@ -15,7 +15,7 @@
   },
   "main": "dist/spectrum-metadata.json",
   "scripts": {
-    "build": "yarn clean && gulp build",
+    "build": "gulp build",
     "clean": "rimraf dist/*",
     "copy:metadata": "cp json/spectrum-metadata.json dist/",
     "dna:clean": "rimraf css/* js/*",

@@ -15,19 +15,27 @@
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
   "main": "dist/index-vars.css",
+  "files": [
+    "dist/*.css",
+    "dist/themes/*.css"
+  ],
   "scripts": {
-    "build": "gulp",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "gulp watch"
+    "build": "node index.js"
   },
   "peerDependencies": {
-    "@spectrum-css/tokens": ">=10.0.0"
+    "@spectrum-css/tokens": ">=10"
   },
   "devDependencies": {
     "@spectrum-css/component-builder-simple": "^2.0.15",
-    "@spectrum-css/tokens": "^10.2.1",
-    "gulp": "^4.0.0"
+    "@spectrum-css/tokens": "^10.2.1"
   },
+  "keywords": [
+    "adobe",
+    "components",
+    "css",
+    "design system",
+    "spectrum"
+  ],
   "publishConfig": {
     "access": "public"
   }

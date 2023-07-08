@@ -88,10 +88,11 @@
     "stylelint-config-standard": "^33.0.0",
     "stylelint-use-logical": "^2.1.0",
     "through2": "^3.0.1",
+    "wireit": "^0.9.5",
     "yargs": "^17.7.2"
   },
   "engines": {
-    "node": ">=14.0.0 <18"
+    "node": ">=14 <18"
   },
   "browserslist": [
     "last 2 Edge versions",

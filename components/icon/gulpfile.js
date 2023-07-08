@@ -20,10 +20,6 @@ const svgstore = require("gulp-svgstore");
 const del = require("del");
 const vinylPaths = require("vinyl-paths");
 
-function clean() {
-	return del(["combined/**"]);
-}
-
 function sanitizeIcons() {
 	return gulp
 		.src("{medium,large}/*.svg")
@@ -74,11 +70,6 @@ function generateCombinedIcons() {
 		.pipe(gulp.dest("combined/"));
 }
 
-// Only ran by Adobe
-const updateIcons = gulp.series(clean, sanitizeIcons, generateCombinedIcons);
-
-const tasks = require("@spectrum-css/component-builder");
-
 function generateSVGSprite() {
 	return gulp
 		.src("combined/*.svg")
@@ -120,18 +111,10 @@ function getSVGSpriteTask(size) {
 const generateSVGSpriteMedium = getSVGSpriteTask("medium");
 const generateSVGSpriteLarge = getSVGSpriteTask("large");
 
-const buildIcons = gulp.parallel(
+exports.buildIcons = gulp.parallel(
 	generateSVGSpriteMedium,
 	generateSVGSpriteLarge,
 	generateSVGSprite
 );
 
-const build = gulp.parallel(buildIcons, tasks.buildCSS);
-
-exports.updateIcons = updateIcons;
-exports.build =
-	exports.buildLite =
-	exports.buildHeavy =
-	exports.buildMedium =
-		build;
-exports.default = build;
+exports.updateIcons = gulp.series(sanitizeIcons, generateCombinedIcons);

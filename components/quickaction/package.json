@@ -14,8 +14,12 @@
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
   "main": "dist/index-vars.css",
+  "files": [
+    "dist/*.css",
+    "dist/themes/*.css"
+  ],
   "scripts": {
-    "build": "gulp"
+    "build": "node index.js"
   },
   "peerDependencies": {
     "@spectrum-css/actionbutton": ">=4.0.0",
@@ -26,9 +30,15 @@
     "@spectrum-css/actionbutton": "^4.0.6",
     "@spectrum-css/checkbox": "^6.1.5",
     "@spectrum-css/component-builder": "^4.0.12",
-    "@spectrum-css/vars": "^9.0.8",
-    "gulp": "^4.0.0"
+    "@spectrum-css/vars": "^9.0.8"
   },
+  "keywords": [
+    "adobe",
+    "components",
+    "css",
+    "design system",
+    "spectrum"
+  ],
   "publishConfig": {
     "access": "public"
   }

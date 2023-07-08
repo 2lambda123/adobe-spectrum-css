@@ -14,8 +14,15 @@
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
   "main": "dist/index-vars.css",
+  "files": [
+    "dist/*.css",
+    "dist/themes/*.css"
+  ],
   "scripts": {
-    "build": "gulp",
+    "build": "run-p build:*",
+    "build:css": "node index.js",
+    "build:icons": "gulp buildIcons",
+    "clean:icons": "rimraf combined",
     "update": "gulp updateIcons"
   },
   "peerDependencies": {
@@ -33,6 +40,13 @@
     "gulp-svgstore": "^7.0.1",
     "vinyl-paths": "^3.0.1"
   },
+  "keywords": [
+    "adobe",
+    "components",
+    "css",
+    "design system",
+    "spectrum"
+  ],
   "publishConfig": {
     "access": "public"
   }

@@ -10,11 +10,14 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const fs = require("fs");
+const fsp = fs.promises;
+const path = require("path");
+
 const gulp = require("gulp");
 const concat = require("gulp-concat");
 const rename = require("gulp-rename");
 
-const depUtils = require("./lib/depUtils");
 const dirs = require("./lib/dirs");
 
 const docs = require("./docs");
@@ -22,44 +25,106 @@ const dev = require("./dev");
 const subrunner = require("./subrunner");
 const vars = require("./vars");
 
+const depSolver = require("dependency-solver");
+
 var dependencyOrder = null;
 
 // Combined
 function concatPackageFiles(taskName, input, output, directory) {
-	let func = function () {
-		let glob;
-		if (Array.isArray(input)) {
-			glob = [];
+	return class {
+		constructor() {
+			this.name = taskName;
 
-			dependencyOrder.forEach(function (dep) {
-				input.forEach(function (file) {
-					glob.push(dirs.resolve(dep) + `/${file}`);
+			let glob;
+			if (Array.isArray(input)) {
+				glob = [];
+
+				dependencyOrder.forEach(function (dep) {
+					input.forEach(function (file) {
+						glob.push(dirs.resolve(dep) + `/${file}`);
+					});
 				});
-			});
-		} else {
-			glob = dependencyOrder.map(function (dep) {
-				return dirs.resolve(dep) + `/${input}`;
-			});
+			} else {
+				glob = dependencyOrder.map(function (dep) {
+					return dirs.resolve(dep) + `/${input}`;
+				});
+			}
+
+			return gulp
+				.src(glob, { allowEmpty: true })
+				.pipe(concat(output))
+				.pipe(gulp.dest(`dist/${directory || ""}`));
 		}
-
-		return gulp
-			.src(glob, { allowEmpty: true })
-			.pipe(concat(output))
-			.pipe(gulp.dest(`dist/${directory || ""}`));
 	};
-
-	Object.defineProperty(func, "name", { value: taskName, writable: false });
-
-	return func;
 }
 
-async function getDependencyOrder(done) {
-	dependencyOrder = await depUtils.getFolderDependencyOrder(dirs.components);
-	done();
+/**
+ * Given a package path, get its dependencies
+ * @param {string} packages - package directory
+ * @return {Object} An object mapping the package name to its dependencies, or null if no dependencies
+ */
+async function getDependencies(pkg) {
+	let dependencies = [];
+
+	if (pkg.devDependencies) {
+		dependencies = Object.keys(pkg.devDependencies).filter((dep) => {
+			return (
+				dep.indexOf("@spectrum-css") === 0 &&
+				dep !== "@spectrum-css/bundle-builder" &&
+				dep !== "@spectrum-css/component-builder" &&
+				dep !== "@spectrum-css/component-builder-simple"
+			);
+		});
+	}
+
+	return { name: pkg.name, dependencies: dependencies };
+}
+
+/**
+ * Get the list of all packages in given directory
+ * @param {string} packagesDir - directory of packages
+ * @return {Object} An array of package names in dependency order
+ */
+async function getFolderDependencyOrder(packagesDir) {
+	async function getDependenciesForSolver(package) {
+		const { name, dependencies } = await getDependencies(package);
+		if (dependencies.length === 0) return null;
+		return { [name]: dependencies };
+	}
+
+	// Get list of all packages
+	const packagePaths = (await fsp.readdir(packagesDir, { withFileTypes: true }))
+		.filter((dirent) => dirent.isDirectory() || dirent.isSymbolicLink())
+		.map((dirent) => path.join(packagesDir, dirent.name));
+
+	const dependencies = await Promise.all(
+		packagePaths.map((pkgPath) => {
+			const pkg = require(path.join(pkgPath, "/package.json")) ?? {};
+			return getDependenciesForSolver(pkg);
+		})
+	)
+		.then((deps) => {
+			return deps.reduce((acc, dep) => ({ ...acc, ...dep }), {});
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+
+	const solution = depSolver.solve(dependencies);
+
+	// Nobody relies on it, so it gets clipped out of the solution
+	solution.push("@spectrum-css/expressvars");
+
+	// Build tokens first
+	// This is because not every package relies on tokens, but the builder needs tokens to bake vars
+	solution = solution.filter((p) => p !== "@spectrum-css/tokens");
+	solution.unshift("@spectrum-css/tokens");
+
+	return solution;
 }
 
 let buildCombined = gulp.series(
-	getDependencyOrder,
+	async () => getFolderDependencyOrder(dirs.components),
 	gulp.parallel(
 		concatPackageFiles("buildCombined_core", "index.css", "spectrum-core.css"),
 		concatPackageFiles(
@@ -96,7 +161,7 @@ let buildCombined = gulp.series(
 );
 
 let buildStandalone = gulp.series(
-	getDependencyOrder,
+	async () => getFolderDependencyOrder(dirs.components),
 	gulp.parallel(
 		concatPackageFiles(
 			"buildStandalone_light",

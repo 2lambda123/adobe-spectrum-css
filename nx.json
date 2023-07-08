@@ -10,8 +10,9 @@
 	},
 	"targetDefaults": {
 		"build": {
-			"dependsOn": ["clean", "^build"],
-			"inputs": ["{workspaceRoot}/*.css"]
+			"dependsOn": ["^build"],
+			"inputs": ["{workspaceRoot}/*.css"],
+			"outputs": ["{workspaceRoot}/dist"]
 		}
 	},
 	"includedScripts": ["build"]
