@@ -15,11 +15,14 @@
   },
   "main": "dist/index.css",
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "clean": "rimraf dist/*",
+    "test": "yarn workspace @spectrum-css/preview test:scope -- fieldlabel",
+    "watch": "chokidar \"*.css\" \"themes/*.css\" -c \"yarn build\""
   },
   "peerDependencies": {
     "@spectrum-css/icon": ">=3",
-    "@spectrum-css/tokens": ">=10.0.0"
+    "@spectrum-css/tokens": ">=10"
   },
   "devDependencies": {
     "@spectrum-css/checkbox": "^6.1.5",
@@ -31,6 +34,7 @@
     "@spectrum-css/stepper": "^4.0.40",
     "@spectrum-css/textfield": "^6.0.4",
     "@spectrum-css/tokens": "^10.2.1",
+    "chokidar-cli": "^3.0.0",
     "gulp": "^4.0.0"
   },
   "publishConfig": {

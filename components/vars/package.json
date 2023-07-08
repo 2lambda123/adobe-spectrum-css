@@ -15,14 +15,16 @@
   },
   "main": "dist/spectrum-metadata.json",
   "scripts": {
-    "build": "yarn clean && gulp build",
+    "build": "gulp build",
     "clean": "rimraf dist/*",
     "copy:metadata": "cp json/spectrum-metadata.json dist/",
     "dna:clean": "rimraf css/* js/*",
-    "dna:update": "yarn dna:clean && gulp update && yarn build"
+    "dna:update": "yarn dna:clean && gulp update && yarn build",
+    "watch": "chokidar \"custom.css\" \"css/*/*.css\" -c \"yarn build\""
   },
   "devDependencies": {
     "@adobe/spectrum-tokens-deprecated": "^11.8.0",
+    "chokidar-cli": "^3.0.0",
     "gulp": "^4.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-insert": "^0.5.0",
@@ -34,19 +36,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "nx": {
-    "targets": {
-      "build": {
-        "inputs": [
-          "{workspaceRoot}/*.css",
-          "{workspaceRoot}/css",
-          "{workspaceRoot}/json"
-        ]
-      }
-    },
-    "includedScripts": [
-      "build"
-    ]
   }
 }

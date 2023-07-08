@@ -13,9 +13,12 @@
   "bugs": {
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
-  "main": "dist/index-vars.css",
+  "main": "dist/index.css",
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "clean": "rimraf dist/*",
+    "test": "yarn workspace @spectrum-css/preview test:scope -- dialog",
+    "watch": "chokidar \"*.css\" \"themes/*.css\" -c \"yarn build\""
   },
   "peerDependencies": {
     "@spectrum-css/button": ">=10",
@@ -37,6 +40,7 @@
     "@spectrum-css/modal": "^3.0.47",
     "@spectrum-css/underlay": "^2.0.52",
     "@spectrum-css/vars": "^9.0.8",
+    "chokidar-cli": "^3.0.0",
     "gulp": "^4.0.0"
   },
   "publishConfig": {

@@ -13,15 +13,18 @@
   "bugs": {
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
-  "main": "dist/index-vars.css",
+  "main": "dist/index.css",
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "clean": "rimraf dist/*",
+    "test": "yarn workspace @spectrum-css/preview test:scope -- picker",
+    "watch": "chokidar \"*.css\" \"themes/*.css\" -c \"yarn build\""
   },
   "peerDependencies": {
     "@spectrum-css/icon": ">=3",
     "@spectrum-css/menu": ">=4",
     "@spectrum-css/popover": ">=5 <=6",
-    "@spectrum-css/tokens": ">=10.0.0"
+    "@spectrum-css/tokens": ">=10"
   },
   "devDependencies": {
     "@spectrum-css/component-builder-simple": "^2.0.15",
@@ -31,6 +34,7 @@
     "@spectrum-css/popover": "^6.0.57",
     "@spectrum-css/progresscircle": "^2.0.50",
     "@spectrum-css/tokens": "^10.2.1",
+    "chokidar-cli": "^3.0.0",
     "gulp": "^4.0.0"
   },
   "publishConfig": {

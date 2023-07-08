@@ -13,19 +13,23 @@
   "bugs": {
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
-  "main": "dist/index-vars.css",
+  "main": "dist/index.css",
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "clean": "rimraf dist/*",
+    "test": "yarn workspace @spectrum-css/preview test:scope -- colorwheel",
+    "watch": "chokidar \"*.css\" \"themes/*.css\" -c \"yarn build\""
   },
   "peerDependencies": {
-    "@spectrum-css/colorhandle": ">=5.0.0",
-    "@spectrum-css/tokens": ">=10.0.0"
+    "@spectrum-css/colorhandle": ">=5",
+    "@spectrum-css/tokens": ">=10"
   },
   "devDependencies": {
     "@spectrum-css/colorarea": "^4.0.24",
     "@spectrum-css/colorhandle": "^5.0.12",
     "@spectrum-css/component-builder-simple": "^2.0.15",
     "@spectrum-css/tokens": "^10.2.1",
+    "chokidar-cli": "^3.0.0",
     "gulp": "^4.0.0"
   },
   "publishConfig": {

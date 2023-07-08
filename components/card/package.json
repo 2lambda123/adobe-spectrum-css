@@ -13,9 +13,12 @@
   "bugs": {
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
-  "main": "dist/index-vars.css",
+  "main": "dist/index.css",
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "clean": "rimraf dist/*",
+    "test": "yarn workspace @spectrum-css/preview test:scope -- card",
+    "watch": "chokidar \"*.css\" \"themes/*.css\" -c \"yarn build\""
   },
   "peerDependencies": {
     "@spectrum-css/actionbutton": ">=4.0.0",
@@ -35,6 +38,7 @@
     "@spectrum-css/quickaction": "^3.0.66",
     "@spectrum-css/tokens": "^10.2.1",
     "@spectrum-css/typography": "^5.0.25",
+    "chokidar-cli": "^3.0.0",
     "gulp": "^4.0.0"
   },
   "publishConfig": {

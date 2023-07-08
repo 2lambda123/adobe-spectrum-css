@@ -22,3 +22,6 @@ build-storybook.log
 # Chromatic
 chromatic-build-*.xml
 chromatic-diagnostics*.json
+
+# Turbo log folder
+.turbo

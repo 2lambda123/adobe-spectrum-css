@@ -1,0 +1,15 @@
+{
+	"extends": ["//"],
+	"pipeline": {
+		"build": {
+			"dependsOn": ["clean", "^build"],
+			"inputs": ["custom-express/*.css", "custom-spectrum/*.css"],
+			"outputs": ["dist/**/*.css"],
+			"globalDependencies": [
+				"utilities/style-dictionary.utils.js",
+				"style-dictionary.config.js",
+				"postcss.config.js"
+			]
+		}
+	}
+}

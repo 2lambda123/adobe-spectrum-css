@@ -1,0 +1,34 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"pipeline": {
+		"clean": {
+			"inputs": ["dist/*"],
+			"cache": false
+		},
+		"build": {
+			"dependsOn": ["^build", "clean"],
+			"inputs": ["index.css", "skin.css", "themes/*.css"],
+			"outputs": [
+				"dist/index.css",
+				"dist/index-base.css",
+				"dist/index-theme.css",
+				"dist/index-vars.css",
+				"themes/*.css"
+			]
+		},
+		"lint": {},
+		"test": {
+			"outputs": [],
+			"dependsOn": ["build"],
+			"env": ["CHROMATIC_PROJECT_TOKEN"]
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"deploy": {
+			"dependsOn": ["build", "test", "lint"]
+		}
+	},
+	"globalDependencies": ["gulpfile.js"]
+}

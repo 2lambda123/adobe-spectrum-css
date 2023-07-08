@@ -1,0 +1,11 @@
+{
+	"extends": ["//"],
+	"pipeline": {
+		"build": {
+			"dependsOn": ["clean", "^build"],
+			"inputs": ["custom.css", "css/*/*.css", "json/*.json"],
+			"outputs": ["dist/*.css"]
+		}
+	},
+	"globalDependencies": ["gulpfile.js"]
+}

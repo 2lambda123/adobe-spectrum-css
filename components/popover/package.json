@@ -13,13 +13,16 @@
   "bugs": {
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
-  "main": "dist/index-vars.css",
+  "main": "dist/index.css",
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "clean": "rimraf dist/*",
+    "test": "yarn workspace @spectrum-css/preview test:scope -- popover",
+    "watch": "chokidar \"*.css\" \"themes/*.css\" -c \"yarn build\""
   },
   "peerDependencies": {
     "@spectrum-css/dialog": ">=6",
-    "@spectrum-css/tokens": ">=10.0.0"
+    "@spectrum-css/tokens": ">=10"
   },
   "devDependencies": {
     "@spectrum-css/button": "^10.1.7",
@@ -28,6 +31,7 @@
     "@spectrum-css/divider": "^2.1.10",
     "@spectrum-css/menu": "^4.0.45",
     "@spectrum-css/tokens": "^10.2.1",
+    "chokidar-cli": "^3.0.0",
     "gulp": "^4.0.0"
   },
   "publishConfig": {

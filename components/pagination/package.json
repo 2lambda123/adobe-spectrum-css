@@ -13,16 +13,19 @@
   "bugs": {
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
-  "main": "dist/index-vars.css",
+  "main": "dist/index.css",
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "clean": "rimraf dist/*",
+    "test": "yarn workspace @spectrum-css/preview test:scope -- pagination",
+    "watch": "chokidar \"*.css\" \"themes/*.css\" -c \"yarn build\""
   },
   "peerDependencies": {
     "@spectrum-css/actionbutton": ">=4.0.0",
     "@spectrum-css/button": ">=10",
     "@spectrum-css/icon": ">=3",
     "@spectrum-css/splitbutton": ">=5",
-    "@spectrum-css/textfield": ">=5.0.0",
+    "@spectrum-css/textfield": ">=5",
     "@spectrum-css/vars": ">=9"
   },
   "devDependencies": {
@@ -33,6 +36,7 @@
     "@spectrum-css/splitbutton": "^5.0.53",
     "@spectrum-css/textfield": "^6.0.4",
     "@spectrum-css/vars": "^9.0.8",
+    "chokidar-cli": "^3.0.0",
     "gulp": "^4.0.0"
   },
   "publishConfig": {
