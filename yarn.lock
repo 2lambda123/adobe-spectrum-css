@@ -3669,6 +3669,27 @@
     telejson "^7.0.3"
     ts-dedent "^2.0.0"
 
+"@storybook/manager-api@7.0.26":
+  version "7.0.26"
+  resolved "https://registry.yarnpkg.com/@storybook/manager-api/-/manager-api-7.0.26.tgz#28b5528726d918d13c5138c002f1966bfb6eb84b"
+  integrity sha512-/2p6lU7r30qMXob/UnzRL9yq7XjoE+YQXv1KhrcePfMBARbelYw9RYhYT/AkXGtb9/Fa95uG3lNvoDLC1IQfMQ==
+  dependencies:
+    "@storybook/channels" "7.0.26"
+    "@storybook/client-logger" "7.0.26"
+    "@storybook/core-events" "7.0.26"
+    "@storybook/csf" "^0.1.0"
+    "@storybook/global" "^5.0.0"
+    "@storybook/router" "7.0.26"
+    "@storybook/theming" "7.0.26"
+    "@storybook/types" "7.0.26"
+    dequal "^2.0.2"
+    lodash "^4.17.21"
+    memoizerific "^1.11.3"
+    semver "^7.3.7"
+    store2 "^2.14.2"
+    telejson "^7.0.3"
+    ts-dedent "^2.0.0"
+
 "@storybook/manager@7.0.26":
   version "7.0.26"
   resolved "https://registry.yarnpkg.com/@storybook/manager/-/manager-7.0.26.tgz#017fac78219c9d9fabc3cb89abc764b6b31aa5a1"
