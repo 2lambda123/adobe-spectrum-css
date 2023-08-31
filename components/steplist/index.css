@@ -11,9 +11,6 @@ governing permissions and limitations under the License.
 */
 
 .spectrum-Steplist {
-	/* The width of a step */
-	--spectrum-steplist-step-width: 80px;
-
 	/* The diameter of the marker */
 	--spectrum-steplist-marker-diameter: 8px;
 
