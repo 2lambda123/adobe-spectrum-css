@@ -11,30 +11,6 @@ governing permissions and limitations under the License.
 */
 
 .spectrum-Steplist {
-	/* The diameter of the marker */
-	--spectrum-steplist-marker-diameter: 8px;
-
-	/* The width of the hit area */
-	--spectrum-steplist-marker-hitArea: 20px;
-
-	/* The height of the line */
-	--spectrum-steplist-segment-height: 2px;
-
-	/* This gives enough space for one line of text */
-	--spectrum-steplist-topPadding: 22px;
-	--spectrum-steplist-small-topPadding: 11px;
-
-	/* This gives enough space for the longest possible label */
-	--spectrum-steplist-sidePadding: 60px;
-
-	/* Offset from the BOTTOM of the steplist */
-	--spectrum-steplist-label-labelOffset: 10px;
-
-	/* Font size of the label */
-	--spectrum-steplist-label-text-size: 12px;
-}
-
-.spectrum-Steplist {
 	/* Contain child elements with positive z-index */
 	z-index: 0;
 	position: relative;
