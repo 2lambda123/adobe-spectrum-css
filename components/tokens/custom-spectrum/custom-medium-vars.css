@@ -65,14 +65,4 @@ governing permissions and limitations under the License.
 
   --spectrum-alert-dialog-padding: var(--spectrum-spacing-500);
   --spectrum-alert-dialog-description-to-buttons: var(--spectrum-spacing-700);
-
-  --spectrum-steplist-step-width: 80px;
-  --spectrum-steplist-marker-diameter: 8px;
-  --spectrum-steplist-marker-hitArea: 20px;
-  --spectrum-steplist-segment-height: 2px;
-  --spectrum-steplist-topPadding: 22px;
-  --spectrum-steplist-small-topPadding: 11px;
-  --spectrum-steplist-sidePadding: 60px;
-  --spectrum-steplist-label-labelOffset: 10px;
-  --spectrum-steplist-label-text-size: 12px;
 }

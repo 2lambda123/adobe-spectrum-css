@@ -18,7 +18,7 @@ governing permissions and limitations under the License.
   --spectrum-menu-item-background-color-key-focus: var(--spectrum-transparent-white-200);
 
   /* Drop Zone background color rgb */
-  --spectrum-drop-zone-background-color-rgb: var( --spectrum-blue-900-rgb); /* var(--spectrum-accent-color-900);*/
+  --spectrum-drop-zone-background-color-rgb: var(--spectrum-blue-900-rgb); /* var(--spectrum-accent-color-900);*/
 
   --spectrum-calendar-day-background-color-selected: rgba(var(--spectrum-blue-800-rgb), 0.2);
   --spectrum-calendar-day-background-color-hover: rgba(var(--spectrum-white-rgb), 0.08);
@@ -30,4 +30,6 @@ governing permissions and limitations under the License.
   --spectrum-calendar-day-border-color-key-focus: var(--spectrum-blue-700);
 
   --spectrum-badge-label-icon-color-primary: var(--spectrum-black);
-  }
+
+  --spectrum-steplist-current-marker-color-key-focus: var(--spectrum-blue-700);
+}
