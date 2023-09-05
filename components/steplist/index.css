@@ -48,9 +48,9 @@ governing permissions and limitations under the License.
 
   --spectrum-steplist-incomplete-marker-border-color: var(--spectrum-gray-300);
 
-  --spectrum-steplist-incomplete-segment-border-bottom-color: var(--spectrum-gray-300);
+  --spectrum-steplist-incomplete-segment-border-block-end-color: var(--spectrum-gray-300);
 
-  --spectrum-steplist-complete-segment-border-bottom-color: var(--spectrum-gray-600);
+  --spectrum-steplist-complete-segment-border-block-end-color: var(--spectrum-gray-600);
 }
 
 .spectrum-Steplist {
@@ -174,7 +174,7 @@ governing permissions and limitations under the License.
   &.is-complete,
   &.is-selected {
     .spectrum-Steplist-segment {
-      border-bottom-color: var(--mod-steplist-complete-segment-border-bottom-color, var(--spectrum-steplist-complete-segment-border-bottom-color));
+      border-bottom-color: var(--mod-steplist-complete-segment-border-block-end-color, var(--spectrum-steplist-complete-segment-border-block-end-color));
     }
   }
 }
@@ -249,7 +249,7 @@ governing permissions and limitations under the License.
   border-block-end-width: var(--mod-steplist-segment-height, var(--spectrum-steplist-segment-height));
   border-block-end-style: dashed;
 
-  border-bottom-color: var(--mod-steplist-incomplete-segment-border-bottom-color, var(--spectrum-steplist-incomplete-segment-border-bottom-color));
+  border-bottom-color: var(--mod-steplist-incomplete-segment-border-block-end-color, var(--spectrum-steplist-incomplete-segment-border-block-end-color));
 }
 
 /* First step overrides */
