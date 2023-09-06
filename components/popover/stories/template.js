@@ -17,17 +17,126 @@ export const Template = ({
 	customClasses = [],
 	id = "popover-1",
 	testId,
-	triggerId = "trigger",
-	customStyles = {
-		"--spectrum-popover-offset": "8px",
-		"inset-inline-start": "0px",
-		"inset-block-start": "0px",
-	},
+	customStyles,
 	trigger,
 	content = [],
 	...globals
 }) => {
 	const [, updateArgs] = useArgs();
+
+	function popoverPosition(target, popover) {
+		console.log(target);
+		if (!target || !popover) return {};
+		if (typeof target.getBoundingClientRect !== "function") return {};
+
+		const rect = target.getBoundingClientRect();
+
+		const transforms = [];
+		const additionalStyles = {};
+		const triggerXCenter = (rect.left + rect.right) / 2;
+		const triggerYCenter = (rect.top + rect.bottom) / 2;
+		const popWidth = popover.offsetWidth ?? 0;
+		const popHeight = popover.offsetHeight ?? 0;
+		const textDir = getComputedStyle(popover).direction;
+
+		let x, y;
+		let xOffset = "+ 0px";
+		let yOffset = "+ 0px";
+		if (
+			position.includes("top") ||
+			(position.includes("bottom") &&
+				!(position.includes("-top") || position.includes("-bottom")))
+		) {
+			x = triggerXCenter - (popWidth > 0 ? popWidth / 2 : popWidth);
+		}
+		if (position.includes("left") || position.includes("right")) {
+			y = triggerYCenter - (popHeight > 0 ? popHeight / 2 : popHeight);
+		}
+		if (position.includes("top") && !position.includes("-top")) {
+			y = rect.top - popHeight;
+			yOffset = "- var(--spectrum-popover-offset)";
+		} else if (position.includes("bottom") && !position.includes("-bottom")) {
+			y = rect.bottom;
+			yOffset = "+ var(--spectrum-popover-offset)";
+		} else if (position.includes("left")) {
+			if (textDir == "rtl") {
+				x = rect.right;
+				xOffset = "+ var(--spectrum-popover-offset)";
+			} else {
+				x = rect.left - popWidth;
+				xOffset = "- var(--spectrum-popover-offset)";
+			}
+		} else if (position.includes("right")) {
+			if (textDir == "rtl") {
+				x = rect.left - popWidth;
+				xOffset = "- var(--spectrum-popover-offset)";
+			} else {
+				x = rect.right;
+				xOffset = "+ var(--spectrum-popover-offset)";
+			}
+		}
+
+		if (x)
+			transforms.push(
+				`translateX(calc(var(--flow-direction) * calc(${parseInt(
+					x,
+					10
+				)}px ${xOffset})))`
+			);
+		if (y) transforms.push(`translateY(calc(${y}px ${yOffset}))`);
+
+		// Add start and end styles
+		if (position === "top-start" || position === "bottom-start") {
+			additionalStyles["inset-inline-start"] =
+				"calc(" +
+				popWidth / 2 +
+				"px - var(--spectrum-popover-pointer-edge-offset))";
+		} else if (position === "top-end" || position === "bottom-end") {
+			additionalStyles["inset-inline-start"] =
+				"calc(-1 *" +
+				popWidth / 2 +
+				"px + var(--spectrum-popover-pointer-edge-offset))";
+		} else if (position === "left-top" || position === "right-top") {
+			additionalStyles["inset-block-start"] =
+				"calc(" +
+				popHeight / 2 +
+				"px - var(--spectrum-popover-pointer-edge-offset))";
+		} else if (position === "left-bottom" || position === "right-bottom") {
+			additionalStyles["inset-block-start"] =
+				"calc(-1 *" +
+				popHeight / 2 +
+				"px + var(--spectrum-popover-pointer-edge-offset))";
+		}
+
+		return {
+			transform: transforms.join(" "),
+			...additionalStyles,
+		};
+	}
+
+	function onclickHandler(event) {
+		updateArgs({
+			isOpen: !isOpen,
+		});
+
+		let popover = document.querySelector(`#${id}`);
+
+		if (!popover) {
+			popover = event.target.closest(`.${rootClass}`);
+		}
+
+		console.log(popover);
+
+		// No trigger? Nothing to do.
+		if (!event || !event.target || !popover) return;
+
+		updateArgs({
+			customStyles: {
+				...customStyles,
+				...popoverPosition(event.target, popover),
+			},
+		});
+	}
 
 	if (content.length === 0) {
 		console.warn("Popover: No content provided.");
@@ -43,89 +152,17 @@ export const Template = ({
 		console.warn(e);
 	}
 
+	const triggerEl =
+		typeof trigger === "function"
+			? trigger({
+					...globals,
+					isSelected: isOpen,
+					onclick: onclickHandler,
+			  })
+			: "";
+
 	return html`
-		${when(typeof trigger === "function", () => trigger({
-			...globals,
-			isSelected: isOpen,
-			onclick: () => {
-				setTimeout(() => {
-				// No trigger? Nothing to do.
-				if (!trigger || !position) return [];
-
-				// Get trigger element and popover
-				const element = document.querySelector(`#${triggerId}`);
-
-				if (!element) return [];
-				const rect = element.getBoundingClientRect();
-				const popover = document.querySelector(`#${id}`);
-				if (!popover) return [];
-
-				const transforms = [];
-				const additionalStyles = {};
-				const triggerXCenter = (rect.left + rect.right) / 2;
-				const triggerYCenter = (rect.top + rect.bottom) / 2;
-				const popWidth = popover.offsetWidth ?? 0;
-				const popHeight = popover.offsetHeight ?? 0;
-				const textDir = getComputedStyle(document.querySelector('html')).direction;
-				let x, y;
-				let xOffset = "+ 0px";
-				let yOffset = "+ 0px";
-				if (position.includes("top") || position.includes("bottom") && !(position.includes("-top") || position.includes("-bottom"))) {
-					x = triggerXCenter - (popWidth > 0 ? popWidth / 2 : popWidth);
-				} 
-				if (position.includes("left") || position.includes("right")) {
-					y = triggerYCenter - (popHeight > 0 ? popHeight / 2 : popHeight);
-				}
-				if (position.includes("top") && !position.includes("-top")) {
-					y = rect.top - popHeight;
-					yOffset = "- var(--spectrum-popover-offset)";
-				} else if (position.includes("bottom") && !position.includes("-bottom")) {
-					y = rect.bottom;
-					yOffset = "+ var(--spectrum-popover-offset)";
-				} else if (position.includes("left")) {
-					if (textDir == 'rtl') {
-						x = rect.right;
-						xOffset = "+ var(--spectrum-popover-offset)";
-					} else {
-						x = rect.left - popWidth;
-						xOffset = "- var(--spectrum-popover-offset)";
-					}
-				} else if (position.includes("right")) {
-					if (textDir == 'rtl') {
-						x = rect.left - popWidth;
-						xOffset = "- var(--spectrum-popover-offset)";
-					} else {
-						x = rect.right;
-						xOffset = "+ var(--spectrum-popover-offset)";
-					}
-				}
-
-				if (x) transforms.push(`translateX(calc(var(--flow-direction) * calc(${parseInt(x, 10)}px ${xOffset})))`);
-				if (y) transforms.push(`translateY(calc(${y}px ${yOffset}))`);
-
-				// Add start and end styles
-				if (position === "top-start" || position === "bottom-start") {
-					additionalStyles["inset-inline-start"] = "calc(" + (popWidth / 2) + "px - var(--spectrum-popover-pointer-edge-offset))";
-				} else if (position === "top-end" || position === "bottom-end") {
-					additionalStyles["inset-inline-start"] = "calc(-1 *" + (popWidth / 2) + "px + var(--spectrum-popover-pointer-edge-offset))";
-				} else if (position === "left-top" || position === "right-top") {
-					additionalStyles["inset-block-start"] = "calc(" + (popHeight / 2) + "px - var(--spectrum-popover-pointer-edge-offset))";
-				} else if (position === "left-bottom" || position === "right-bottom") {
-					additionalStyles["inset-block-start"] = "calc(-1 *" + (popHeight / 2) + "px + var(--spectrum-popover-pointer-edge-offset))";
-				}
-
-				updateArgs({
-					isOpen: !isOpen,
-					customStyles: {
-						...customStyles,
-						transform: transforms.join(" "),
-						...additionalStyles,
-					}
-				});
-			}, 100)
-			}
-		}))}
-
+		${triggerEl}
 		<div
 			class=${classMap({
 				[rootClass]: true,
@@ -136,12 +173,16 @@ export const Template = ({
 				[`${rootClass}--${position}`]: typeof position !== "undefined",
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
-			style=${ifDefined(styleMap(customStyles))}
+			style=${ifDefined(
+				styleMap({
+					...customStyles,
+				})
+			)}
 			role="presentation"
 			id=${ifDefined(id)}
-			data-testid=${ifDefined(testId)}
+			data-testid=${ifDefined(testId ?? id)}
 		>
-			${content.map((c) => (typeof c === "function" ? c({}) : c))}
+			${content.map((c) => (typeof c === "function" ? c(globals) : c))}
 			${withTip
 				? position && ["top", "bottom"].some((e) => position.startsWith(e))
 					? html`<svg class="${rootClass}-tip" viewBox="0 -0.5 16 9" width="10"><path class="${rootClass}-tip-triangle" d="M-1,-1 8,8 17,-1"></svg>`
