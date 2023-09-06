@@ -16,6 +16,8 @@ export const Template = ({
 	customClasses = [],
 	...globals
 }) => {
+	const [, updateArgs] = useArgs();
+
 	const { express } = globals;
 
 	try {
@@ -65,7 +67,7 @@ export const Template = ({
 					...globals,
 					size: "m",
 					staticColor: "white",
-					onclick,
+					onclick: () => updateArgs({ isOpen: false }),
 				})}
 			</div>
 		</div>

@@ -1,4 +1,4 @@
-import { within, userEvent } from '@storybook/testing-library';
+import { within, userEvent } from "@storybook/testing-library";
 import { html } from "lit";
 
 // Import the component markup template
@@ -14,12 +14,13 @@ export default {
 	component: "Popover",
 	argTypes: {
 		trigger: { table: { disable: true } },
+		triggerId: { table: { disable: true } },
 		content: { table: { disable: true } },
 		isOpen: {
 			name: "Open",
 			type: { name: "boolean" },
 			table: {
-				disable: true,
+				// disable: true,
 				type: { summary: "boolean" },
 				category: "State",
 			},
@@ -60,12 +61,45 @@ export default {
 	},
 	args: {
 		rootClass: "spectrum-Popover",
-		isOpen: false,
+		isOpen: true,
 		withTip: false,
 		position: "top",
+		testId: "popover",
+		id: "popover",
+		triggerId: "trigger",
+		trigger: ActionButton.bind(null, {
+			label: "Hop on pop(over)",
+			id: "trigger",
+			hasPopup: true,
+		}),
+		content: [
+			Menu.bind(null, {
+				items: [
+					{
+						iconName: "Edit",
+						label: "Edit",
+					},
+					{
+						iconName: "Copy",
+						label: "Copy",
+					},
+					{
+						iconName: "Move",
+						label: "Move",
+					},
+					{
+						iconName: "Delete",
+						label: "Delete",
+					},
+				],
+			}),
+		],
 	},
 	parameters: {
-		layout: 'centered',
+		layout: "centered",
+		html: {
+			root: "#internal-root",
+		},
 		actions: {
 			handles: [],
 		},
@@ -76,102 +110,29 @@ export default {
 		},
 		chromatic: { delay: 2000 },
 	},
+	decorators: [
+		// provide padding so that Chromatic can capture the full focus indicator
+		(Story) =>
+			html`<div style="padding:1em;position:relative;" id="internal-root">
+				${Story().outerHTML || Story()}
+			</div>`,
+	],
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getAllByRole("button")[0]);
+	},
 };
 
 export const Default = Template.bind({});
-// provide padding so that Chromatic can capture the full focus indicator
-Default.decorators = [(Story) => html`<div style="padding: 1em;">${Story().outerHTML || Story()}</div>`];
-Default.play = async ({ canvasElement }) => {
-	const canvas = within(canvasElement);
-  await userEvent.click(canvas.getByRole('button'));
-};
-Default.args = {
-	testId: 'popover-1',
-	id: 'popover-1',
-	triggerId: 'trigger',
-	trigger: (passthroughs) => ActionButton({
-		label: "Hop on pop(over)",
-		id: 'trigger',
-		...passthroughs,
-	}),
-	content: [
-		() => Menu({
-			items: [
-				{
-					iconName: "Edit",
-					label: "Edit",
-				},
-				{
-					iconName: "Copy",
-					label: "Copy",
-				},
-				{
-					iconName: "Move",
-					label: "Move",
-				},
-				{
-					iconName: "Delete",
-					label: "Delete",
-				},
-			],
-		}),
-	],
-};
+Default.args = {};
 
 export const WithTip = Template.bind({});
-WithTip.args = {
-	withTip: true,
-	id: 'popover-1',
-	triggerId: 'trigger',
-	testId: 'popover-1',
-	trigger: (passthroughs) => ActionButton({
-		label: "Hop on pop(over)",
-		id: 'trigger',
-		...passthroughs,
-	}),
-	content: [
-		() => Menu({
-			items: [
-				{
-					iconName: "Edit",
-					label: "Edit",
-				},
-				{
-					iconName: "Copy",
-					label: "Copy",
-				},
-				{
-					iconName: "Move",
-					label: "Move",
-				},
-				{
-					iconName: "Delete",
-					label: "Delete",
-				},
-			],
-		}),
-	],
-};
-
-WithTip.decorators = [(Story) => html`<div style="padding: 1em;">${Story().outerHTML || Story()}</div>`];
-
-WithTip.play = async ({ canvasElement }) => {
-	const canvas = within(canvasElement);
-  await userEvent.click(canvas.getByRole('button'));
-};
+WithTip.args = { withTip: true };
 
 export const Nested = Template.bind({});
 Nested.args = {
-	testId: 'popover-1',
-	id: 'popover-1',
-	triggerId: 'trigger-1',
-	trigger: (passthroughs) => ActionButton({
-		label: "Hop on pop(over)",
-		id: 'trigger-1',
-		...passthroughs,
-	}),
 	content: [
-		() => Menu({
+		Menu.bind(null, {
 			items: [
 				{
 					iconName: "Edit",
@@ -179,18 +140,15 @@ Nested.args = {
 				},
 			],
 		}),
-		() => Default({
+		Template.bind(null, {
+			//isOpen: false,
 			position: "right",
-			testId: 'popover-2',
-			id: 'popover-2',
-			triggerId: "trigger-2",
-			trigger: (passthroughs) => ActionButton({
-				label: "Hop on pop(over) 2",
-				id: "trigger-2",
-				...passthroughs,
+			trigger: ActionButton.bind(null, {
+				label: "Nested popover",
+				id: "trigger2",
 			}),
 			content: [
-				() => Menu({
+				Menu.bind(null, {
 					items: [
 						{
 							iconName: "Edit",
@@ -213,11 +171,4 @@ Nested.args = {
 			],
 		}),
 	],
-};
-
-Nested.decorators = [(Story) => html`<div style="padding: 1em;">${Story().outerHTML || Story()}</div>`];
-
-Nested.play = async ({ canvasElement }) => {
-	const canvas = within(canvasElement);
-  await userEvent.click(canvas.getAllByRole('button')[0]);
 };
