@@ -79,11 +79,12 @@ governing permissions and limitations under the License.
   --spectrum-well-margin-top: 5px;
   --spectrum-well-min-width: 300px;
 
-  --spectrum-well-border-radius: 5px
+  --spectrum-well-border-radius: 5px;
+  
   --spectrum-dialog-confirm-hero-height: 160px; 
   --spectrum-dialog-confirm-border-radius: 5px;
   --spectrum-dialog-confirm-title-text-size: 19px;
   --spectrum-dialog-confirm-description-text-size: 15px;
+  
   --spectrum-icon-chevron-size-50: 8px;
-
 }
