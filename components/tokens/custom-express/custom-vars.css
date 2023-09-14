@@ -16,6 +16,6 @@ governing permissions and limitations under the License.
   --system: express;
 }
 
-spectrum--express {
+.spectrum--express {
   --spectrum-dialog-confirm-title-text-font-weight: 900;
 }
