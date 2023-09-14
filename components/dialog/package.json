@@ -31,7 +31,7 @@
     "@spectrum-css/button": "^11.0.9",
     "@spectrum-css/buttongroup": "^6.1.7",
     "@spectrum-css/closebutton": "^4.0.8",
-    "@spectrum-css/component-builder": "^4.0.14",
+    "@spectrum-css/component-builder-simple": "^2.0.17",
     "@spectrum-css/divider": "^2.1.26",
     "@spectrum-css/icon": "^4.0.2",
     "@spectrum-css/modal": "^3.0.49",
