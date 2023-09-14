@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 %spectrum-overlay {
+  --spectrum-animation-distance: 6px;
   --spectrum-overlay-animation-distance: var(--spectrum-animation-distance);
   --spectrum-overlay-animation-duration: var(--spectrum-animation-duration-100);
 

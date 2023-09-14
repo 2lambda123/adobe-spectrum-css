@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 %spectrum-overlay {
   --spectrum-overlay-animation-distance: var(--spectrum-animation-distance);
   --spectrum-overlay-animation-duration: var(--spectrum-animation-duration-100);
+  --spectrum-overlay-animation-duration-0: var(--spectrum-animation-duration-0);
 
   visibility: hidden;
 
@@ -28,22 +29,22 @@ governing permissions and limitations under the License.
 %spectrum-overlay--open {
   visibility: visible;
   opacity: 1;
-  transition-delay: var(--mod-animation-duration-0, var(--spectrum-animation-duration-0));
+  transition-delay: var(--mod-overlay-animation-duration-0, var(--spectrum-overlay-animation-duration-0));
   pointer-events: auto;
 }
 
 %spectrum-overlay--bottom--open {
-  transform: translateY(var(--mod-animation-distance, var(--spectrum-overlay-animation-distance)));
+  transform: translateY(var(--mod-overlay-animation-distance, var(--spectrum-overlay-animation-distance)));
 }
 
 %spectrum-overlay--top--open {
-  transform: translateY(calc(-1 * var(--mod-animation-distance, var(--spectrum-overlay-animation-distance))));
+  transform: translateY(calc(-1 * var(--mod-overlay-animation-distance, var(--spectrum-overlay-animation-distance))));
 }
 
 %spectrum-overlay--right--open {
-  transform: translateX(var(--mod-animation-distance, var(--spectrum-overlay-animation-distance)));
+  transform: translateX(var(--mod-overlay-animation-distance, var(--spectrum-overlay-animation-distance)));
 }
 
 %spectrum-overlay--left--open {
-  transform: translateX(calc(-1 * var(--mod-animation-distance, var(--spectrum-overlay-animation-distance))));
+  transform: translateX(calc(-1 * var(--mod-overlay-animation-distance, var(--spectrum-overlay-animation-distance))));
 }
