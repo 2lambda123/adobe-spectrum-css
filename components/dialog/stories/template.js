@@ -11,7 +11,7 @@ import { Template as CloseButton } from "@spectrum-css/closebutton/stories/templ
 import { Template as Button } from '@spectrum-css/button/stories/template.js';
 
 import "../index.css";
-import "../skin.css";
+
 
 export const Template = ({
 	rootClass = "spectrum-Dialog",
