@@ -12,12 +12,12 @@ governing permissions and limitations under the License.
 
 @import "../overlay/index.css";
 
+
+
 .spectrum-Dialog {
   /* The font-size of the fullscreen dialog header */
   --spectrum-dialog-fullscreen-header-text-size: 28px;
   --spectrum-dialog-min-inline-size: 288px;
-  --spectrum-dialog-confirm-description-text-font-weight: 400;
-  --spectrum-dialog-line-height: 1.3;
   --spectrum-dialog-confirm-small-width: 400px;
   --spectrum-dialog-confirm-medium-width: 480px;
   --spectrum-dialog-confirm-large-width: 640px;
@@ -104,7 +104,7 @@ governing permissions and limitations under the License.
 
   font-size: var(--mod-dialog-confirm-title-text-size,var(--spectrum-dialog-confirm-title-text-size));
   font-weight: var(--mod-dialog-confirm-title-text-font-weight,var(-spectrum-dialog-confirm-title-text-font-weight));
-  line-height: var(--mod-dialog-line-height,var(--spectrum-dialog-line-height));
+  line-height: var(--mod-line-height-100,var(--spectrum-line-height-100));
 
   outline: none; /* Hide focus outline */
 
@@ -167,8 +167,8 @@ governing permissions and limitations under the License.
   outline: none; /* Hide focus outline */
 
   font-size: var(--mod-dialog-confirm-description-text-size,var(--spectrum-dialog-confirm-description-text-size));
-  font-weight: var(--mod-dialog-confirm-description-text-font-weight,var(--spectrum-dialog-confirm-description-text-font-weight));
-  line-height: var(--mod-dialog-line-height,var(--spectrum-dialog-line-height));
+  font-weight: var(--mod-regular-font-weight,var(--spectrum-regular-font-weight));
+  line-height: var(--mod-line-height-100,var(--spectrum-line-height-100));
 
   /* this is kinda dumb, but needed for the keyboard focus rings so they don't get clipped. is there a better way to treat this */
   padding: calc(var(--mod-dialog-confirm-description-padding,var(--spectrum-dialog-confirm-description-padding)) * 2);
