@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="5.1.0"></a>
+#5.1.0
+🗓
+2023-09-18 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/menu@5.0.12...@spectrum-css/menu@5.1.0)
+
+### ✨ Features
+
+- **menu:**add multi-select and switch ([#2152](https://github.com/adobe/spectrum-css/issues/2152))([6e95f44](https://github.com/adobe/spectrum-css/commit/6e95f44))
+
+<a name="5.0.12"></a>
+##5.0.12
+🗓
+2023-09-14 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/menu@5.0.11...@spectrum-css/menu@5.0.12)
+
+**Note:** Version bump only for package @spectrum-css/menu
+
 <a name="5.0.11"></a>
 ##5.0.11
 🗓
