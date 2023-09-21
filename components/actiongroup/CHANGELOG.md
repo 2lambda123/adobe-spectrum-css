@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="4.1.2"></a>
+##4.1.2
+🗓
+2023-09-18 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/actiongroup@4.1.1...@spectrum-css/actiongroup@4.1.2)
+
+**Note:** Version bump only for package @spectrum-css/actiongroup
+
+<a name="4.1.1"></a>
+##4.1.1
+🗓
+2023-09-14 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/actiongroup@4.1.0...@spectrum-css/actiongroup@4.1.1)
+
+**Note:** Version bump only for package @spectrum-css/actiongroup
+
+<a name="4.1.0"></a>
+#4.1.0
+🗓
+2023-09-13 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/actiongroup@4.0.7...@spectrum-css/actiongroup@4.1.0)
+
+### ✨ Features
+
+- **actiongroup:**add support for extra small ([#2154](https://github.com/adobe/spectrum-css/issues/2154))([f115fa0](https://github.com/adobe/spectrum-css/commit/f115fa0))
+
 <a name="4.0.7"></a>
 ##4.0.7
 🗓

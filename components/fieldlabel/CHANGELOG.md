@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="7.1.0"></a>
+#7.1.0
+🗓
+2023-09-18 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/fieldlabel@7.0.35...@spectrum-css/fieldlabel@7.1.0)
+
+### ✨ Features
+
+- **fieldlabel:**required asterisk vertical alignment ([#2166](https://github.com/adobe/spectrum-css/issues/2166))([de7599e](https://github.com/adobe/spectrum-css/commit/de7599e))
+
+<a name="7.0.35"></a>
+##7.0.35
+🗓
+2023-09-14 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/fieldlabel@7.0.34...@spectrum-css/fieldlabel@7.0.35)
+
+**Note:** Version bump only for package @spectrum-css/fieldlabel
+
+<a name="7.0.34"></a>
+##7.0.34
+🗓
+2023-09-13 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/fieldlabel@7.0.33...@spectrum-css/fieldlabel@7.0.34)
+
+**Note:** Version bump only for package @spectrum-css/fieldlabel
+
 <a name="7.0.33"></a>
 ##7.0.33
 🗓
