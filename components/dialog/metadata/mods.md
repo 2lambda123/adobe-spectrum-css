@@ -21,5 +21,7 @@
 | `--mod-dialog-confirm-title-text-size`         |
 | `--mod-dialog-fullscreen-header-text-size`     |
 | `--mod-dialog-min-inline-size`                 |
+| `--mod-gray-800`                               |
+| `--mod-gray-900`                               |
 | `--mod-line-height-100`                        |
 | `--mod-regular-font-weight`                    |
