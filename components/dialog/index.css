@@ -102,7 +102,7 @@ governing permissions and limitations under the License.
   margin: 0;
 
   font-size: var(--mod-dialog-confirm-title-text-size,var(--spectrum-dialog-confirm-title-text-size));
-  font-weight: var(--mod-dialog-confirm-title-text-font-weight,var(-spectrum-dialog-confirm-title-text-font-weight));
+  font-weight: var(--mod-dialog-confirm-title-text-font-weight,var(--spectrum-dialog-confirm-title-text-font-weight));
   line-height: var(--mod-line-height-100,var(--spectrum-line-height-100));
   color: var(--mod-gray-900, var(--spectrum-gray-900));
   outline: none; /* Hide focus outline */
