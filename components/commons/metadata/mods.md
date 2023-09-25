@@ -4,5 +4,5 @@
 | `--mod-focus-indicator-gap`    |
 | `--mod-line-height-100`        |
 | `--mod-sans-font-family-stack` |
-| `--mod-overlay-animation-duration-0` |
+| `--mod-overlay-animation-duration-opened` |
 | `--mod-overlay-animation-distance` |

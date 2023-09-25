@@ -10,9 +10,9 @@ governing permissions and limitations under the License.
 */
 
 %spectrum-overlay {
-  --spectrum-animation-distance: 6px;
   --spectrum-overlay-animation-distance: var(--spectrum-animation-distance);
   --spectrum-overlay-animation-duration: var(--spectrum-animation-duration-100);
+  --spectrum-overlay-animation-duration-opened: var(--spectrum-animation-duration-0);
 
   visibility: hidden;
 
@@ -30,7 +30,7 @@ governing permissions and limitations under the License.
 
   opacity: 1;
 
-  transition-delay: var(--spectrum-animation-duration-0);
+  transition-delay: var(--spectrum-animation-duration-opened);
 
   pointer-events: auto;
 }
