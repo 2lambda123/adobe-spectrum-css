@@ -15,7 +15,7 @@
 | `--mod-dialog-confirm-medium-width`            |
 | `--mod-dialog-confirm-padding-200`             |
 | `--mod-dialog-confirm-padding-300`             |
-| `--mod-dialog-confirm-padding-400`             |
+| `--mod-dialog-confirm-padding-grid`             |
 | `--mod-dialog-confirm-small-width`             |
 | `--mod-dialog-confirm-title-text-font-weight`  |
 | `--mod-dialog-confirm-title-text-size`         |
