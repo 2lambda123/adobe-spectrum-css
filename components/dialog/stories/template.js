@@ -12,7 +12,6 @@ import { Template as Button } from '@spectrum-css/button/stories/template.js';
 
 import "../index.css";
 
-
 export const Template = ({
 	rootClass = "spectrum-Dialog",
 	isDismissable = true,
