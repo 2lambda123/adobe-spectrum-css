@@ -69,8 +69,8 @@ governing permissions and limitations under the License.
   grid-area: hero;
   height: var(--mod-dialog-confirm-hero-height,var(--spectrum-dialog-confirm-hero-height));
 
-  border-top-left-radius: var(--mod-dialog-confirm-border-radius,var(--spectrum-dialog-confirm-border-radius));
-  border-top-right-radius: var(--mod-dialog-confirm-border-radius,var(--spectrum-dialog-confirm-border-radius));
+  border-top-left-radius: var(--mod-dialog-confirm-border-radius, var(--spectrum-dialog-confirm-border-radius));
+  border-top-right-radius: var(--mod-dialog-confirm-border-radius, var(--spectrum-dialog-confirm-border-radius));
 
   background-size: cover;
   background-position: center center;
