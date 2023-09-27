@@ -14,7 +14,7 @@
 | `--mod-dialog-confirm-large-width`             |
 | `--mod-dialog-confirm-medium-width`            |
 | `--mod-dialog-confirm-divider-block-spacing-end`             |
-| `--mod-dialog-confirm-divider-block-spacing-start`             |
+| `--mod-dialog-confirm-divider-block-spacing-start`            |
 | `--mod-dialog-confirm-padding-grid`            |
 | `--mod-dialog-confirm-small-width`             |
 | `--mod-dialog-confirm-title-text-font-weight`  |
