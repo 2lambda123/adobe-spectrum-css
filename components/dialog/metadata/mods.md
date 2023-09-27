@@ -13,15 +13,16 @@
 | `--mod-dialog-confirm-hero-height`             |
 | `--mod-dialog-confirm-large-width`             |
 | `--mod-dialog-confirm-medium-width`            |
-| `--mod-dialog-confirm-padding-200`             |
-| `--mod-dialog-confirm-padding-300`             |
-| `--mod-dialog-confirm-padding-grid`             |
+| `--mod-dialog-confirm-divider-block-spacing-end`             |
+| `--mod-dialog-confirm-divider-block-spacing-start`             |
+| `--mod-dialog-confirm-padding-grid`            |
 | `--mod-dialog-confirm-small-width`             |
 | `--mod-dialog-confirm-title-text-font-weight`  |
 | `--mod-dialog-confirm-title-text-size`         |
 | `--mod-dialog-fullscreen-header-text-size`     |
 | `--mod-dialog-min-inline-size`                 |
-| `--mod-gray-800`                               |
-| `--mod-gray-900`                               |
-| `--mod-line-height-100`                        |
+| `--mod-dialog-confirm-description-text-color`  |
+| `--mod-dialog-confirm-title-text-color`        |
+| `--mod-line-dialog-confirm-description-text-line-height`|
+|`--mod-dialog-confirm-title-text-line-height`   |
 | `--mod-regular-font-weight`                    |
