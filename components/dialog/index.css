@@ -29,6 +29,7 @@ governing permissions and limitations under the License.
   --spectrum-dialog-confirm-title-text-color: var(--spectrum-gray-900);
   --spectrum-dialog-confirm-description-text-line-height: var(--spectrum-line-height-100);
   --spectrum-dialog-confirm-title-text-line-height: var(--spectrum-line-height-100);
+  --spectrum-dialog-heading-font-weight: var(--spectrum-heading-sans-serif-font-weight);
 
 
   --spectrum-dialog-confirm-description-padding: var(--spectrum-spacing-50);
@@ -107,7 +108,7 @@ governing permissions and limitations under the License.
   margin: 0;
 
   font-size: var(--mod-dialog-confirm-title-text-size,var(--spectrum-dialog-confirm-title-text-size));
-  font-weight: var(--mod-dialog-confirm-title-text-font-weight,var(--spectrum-dialog-confirm-title-text-font-weight));
+  font-weight: var(--mod-dialog-heading-font-weight,var(--spectrum-dialog-heading-font-weight));
   line-height: var(--mod-dialog-confirm-title-text-line-height,var(--spectrum-dialog-confirm-title-text-line-height));
   color: var(--mod-dialog-confirm-title-text-color, var(--spectrum-dialog-confirm-title-text-color));
   outline: none; /* Hide focus outline */
