@@ -171,10 +171,10 @@ governing permissions and limitations under the License.
 
   outline: none; /* Hide focus outline */
 
-  font-size: var(--mod-dialog-confirm-description-text-size, var(--spectrum-dialog-confirm-description-text-size));
-  font-weight: var(--mod-regular-font-weight, var(--spectrum-regular-font-weight));
-  line-height: var(--mod-dialog-confirm-description-text-line-height, var(--spectrum-dialog-confirm-description-text-line-height));
-  color: var(--mod-dialog-confirm-description-text-color,  var(--spectrum-dialog-confirm-description-text-color));
+  font-size: var(--mod-dialog-confirm-description-text-size,var(--spectrum-dialog-confirm-description-text-size));
+  font-weight: var(--mod-dialog-confirm-description-font-weight, var(--spectrum-regular-font-weight));
+  line-height: var(--mod-dialog-confirm-description-text-line-height,var(--spectrum-dialog-confirm-description-text-line-height));
+  color: var(--mod-dialog-confirm-description-text-color, var(--spectrum-dialog-confirm-description-text-color));
   
 
   /* this is kinda dumb,  but needed for the keyboard focus rings so they don't get clipped. is there a better way to treat this */
