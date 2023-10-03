@@ -4,6 +4,7 @@
 | `--mod-dialog-confirm-buttongroup-padding-top`      |
 | `--mod-dialog-confirm-close-button-padding`         |
 | `--mod-dialog-confirm-close-button-size`            |
+| `--mod-dialog-confirm-description-font-weight`      |
 | `--mod-dialog-confirm-description-margin`           |
 | `--mod-dialog-confirm-description-padding`          |
 | `--mod-dialog-confirm-description-text-color`       |
@@ -25,4 +26,3 @@
 | `--mod-dialog-fullscreen-header-text-size`          |
 | `--mod-dialog-heading-font-weight`                  |
 | `--mod-dialog-min-inline-size`                      |
-| `--mod-regular-font-weight`                         |
