@@ -4,9 +4,9 @@ This file is licensed to you under the Apache License, Version 2.0 (the "License
 you may not use this file except in compliance with the License. You may obtain a copy
 of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing,  software distributed under
-the License is distributed on an "AS IS" BASIS,  WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND,  either express or implied. See the License for the specific language
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
 
@@ -51,7 +51,7 @@ governing permissions and limitations under the License.
 
   /* Be no bigger than max-width,  but also be 90% if the viewport is smaller than max-width */
   inline-size: fit-content;
-  min-inline-size: var(--mod-dialog-min-inline-size,  var(--spectrum-dialog-min-inline-size));
+  min-inline-size: var(--mod-dialog-min-inline-size, var(--spectrum-dialog-min-inline-size));
   max-inline-size: 100%;
 
   max-height: inherit;
@@ -60,7 +60,7 @@ governing permissions and limitations under the License.
 }
 
 .spectrum-Dialog--small {
-  inline-size: var(--mod-dialog-confirm-small-width,  var(--spectrum-dialog-confirm-small-width));
+  inline-size: var(--mod-dialog-confirm-small-width, var(--spectrum-dialog-confirm-small-width));
 }
 
 .spectrum-Dialog--medium {
@@ -75,8 +75,8 @@ governing permissions and limitations under the License.
   grid-area: hero;
   height: var(--mod-dialog-confirm-hero-height, var(--spectrum-dialog-confirm-hero-height));
 
-  border-top-left-radius: var(--mod-dialog-confirm-border-radius,  var(--spectrum-dialog-confirm-border-radius));
-  border-top-right-radius: var(--mod-dialog-confirm-border-radius,  var(--spectrum-dialog-confirm-border-radius));
+  border-top-left-radius: var(--mod-dialog-confirm-border-radius, var(--spectrum-dialog-confirm-border-radius));
+  border-top-right-radius: var(--mod-dialog-confirm-border-radius, var(--spectrum-dialog-confirm-border-radius));
 
   background-size: cover;
   background-position: center center;
@@ -110,7 +110,7 @@ governing permissions and limitations under the License.
   font-size: var(--mod-dialog-confirm-title-text-size, var(--spectrum-dialog-confirm-title-text-size));
   font-weight: var(--mod-dialog-heading-font-weight, var(--spectrum-dialog-heading-font-weight));
   line-height: var(--mod-dialog-confirm-title-text-line-height, var(--spectrum-dialog-confirm-title-text-line-height));
-  color: var(--mod-dialog-confirm-title-text-color,  var(--spectrum-dialog-confirm-title-text-color));
+  color: var(--mod-dialog-confirm-title-text-color, var(--spectrum-dialog-confirm-title-text-color));
   outline: none; /* Hide focus outline */
 
   padding-inline-end: var(--mod-dialog-confirm-gap-size, var(--spectrum-dialog-confirm-gap-size));
@@ -171,9 +171,9 @@ governing permissions and limitations under the License.
 
   outline: none; /* Hide focus outline */
 
-  font-size: var(--mod-dialog-confirm-description-text-size,var(--spectrum-dialog-confirm-description-text-size));
+  font-size: var(--mod-dialog-confirm-description-text-size, var(--spectrum-dialog-confirm-description-text-size));
   font-weight: var(--mod-dialog-confirm-description-font-weight, var(--spectrum-regular-font-weight));
-  line-height: var(--mod-dialog-confirm-description-text-line-height,var(--spectrum-dialog-confirm-description-text-line-height));
+  line-height: var(--mod-dialog-confirm-description-text-line-height, var(--spectrum-dialog-confirm-description-text-line-height));
   color: var(--mod-dialog-confirm-description-text-color, var(--spectrum-dialog-confirm-description-text-color));
   
 
@@ -234,7 +234,7 @@ governing permissions and limitations under the License.
   }
   .spectrum-Dialog-footer {
     grid-area: footer / footer/ buttonGroup / buttonGroup;
-    color: var(--mod-dialog-confirm-description-text-color,  var(--spectrum-dialog-confirm-description-text-color));
+    color: var(--mod-dialog-confirm-description-text-color, var(--spectrum-dialog-confirm-description-text-color));
   }
 }
 
