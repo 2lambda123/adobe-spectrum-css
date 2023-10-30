@@ -5,36 +5,28 @@ import { styleMap } from "lit/directives/style-map.js";
 
 import { Template as Tag } from "@spectrum-css/tag/stories/template.js";
 
-import "../index.css";
+import "@spectrum-css/taggroup";
 
 export const Template = ({
-	rootClass = "spectrum-TagGroup",
-	ariaLabel,
-	items,
-	isRemovable = false,
-	customClasses = [],
-	customStyles = {},
-	...globals
+    rootClass = "spectrum-TagGroup",
+    ariaLabel,
+    items,
+    isRemovable = false,
+    customClasses = [],
+    customStyles = {},
+    size = "m",
 }) => {
-	return html`
-		<div
-			class=${classMap({
-				[rootClass]: true,
-				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-			})}
-			style=${ifDefined(styleMap(customStyles))}
-			role="list"
-			aria-label=${ifDefined(ariaLabel)}
-		>
-			${items.map((i) => {
-				return Tag({
-					...globals,
-					...i,
-					size: globals.size,
-					hasClearButton: isRemovable,
-					customClasses: [`${rootClass}-item`],
-				});
-			})}
-		</div>
-	`;
+    return html`
+        <div
+            class=${classMap({
+                [rootClass]: true,
+                ...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
+            })}
+            style=${ifDefined(styleMap(customStyles))}
+            role="list"
+            aria-label=${ifDefined(ariaLabel)}
+        >
+            ${items.map((i) => Tag({ ...i, size, hasClearButton: isRemovable, customClasses: [`${rootClass}-item`] }))}
+        </div>
+    `;
 };

@@ -1,0 +1,18 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "actionmenu",
+    "tags": ["component"],
+    "targets": {
+        "build": {
+            "options": {
+                "commands": []
+            }
+        },
+        "build:clean": {},
+        "clean": {},
+        "format": {},
+        "lint": {},
+        "profile": {},
+        "test": {}
+    }
+}

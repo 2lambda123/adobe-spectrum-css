@@ -1,0 +1,30 @@
+{
+    "$schema": "https://json.schemastore.org/swcrc",
+    "jsc": {
+        "target": "esnext",
+        "paths": {
+            "@spectrum-css/*": ["./components/*"]
+        },
+        "baseUrl": ".",
+        "parser": {
+            "syntax": "ecmascript",
+            "jsx": false,
+            "dynamicImport": true,
+            "decorators": true,
+            "topLevelAwait": true
+        },
+        "transform": {
+            "decoratorMetadata": true,
+            "legacyDecorator": true
+        },
+        "keepClassNames": true,
+        "externalHelpers": true,
+        "loose": false
+    },
+    "module": {
+      "type": "commonjs"
+    },
+    "sourceMaps": true,
+    "minify": false,
+    "exclude": ["test.js"]
+}

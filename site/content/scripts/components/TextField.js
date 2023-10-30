@@ -1,0 +1,86 @@
+export default class TextField {
+    constructor(el) {
+        if (!el) return;
+
+        this.el = el;
+
+        if (this.input) {
+            this.input.classList.add("spectrum-TextField-input");
+        }
+
+        this.el.addEventListener("focusin", () => {
+            this.focus = true;
+        });
+
+        this.el.addEventListener("focusout", () => {
+            this.focus = false;
+        });
+
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+
+        this.input.addEventListener("keydown", this.handleKeyDown);
+
+        // this.input.addEventListener('keypress', this.handleKeyPress.bind(this));
+        // this.input.addEventListener('focus', (event) => {
+        //   // Immediately hide results, otherwise they show up in the wrong position since we're in the middle of animation
+        //   this.hideResults();
+
+        //   if (typeof options.onFocusCallback === 'function') {
+        //     options.onFocusCallback(event);
+        //   }
+        // });
+    }
+
+    get input() {
+        return this.el.querySelector("input");
+    }
+
+    get icon() {
+        return this.el.querySelector(".spectrum-TextField-icon");
+    }
+
+    get form() {
+        return this.el.closest("form");
+    }
+
+    set focus(state) {
+        if (this.el.classList.contains("focus-ring") || !state) {
+            this.el.classList?.toggle("is-keyboardFocused", state);
+        } else if (!this.el.classList.contains("focus-ring") || !state) {
+            this.el.classList?.toggle("is-focused", state);
+        }
+    }
+
+    get focus() {
+        return (
+            this.el.classList.contains("focus-ring") ||
+            this.el.classList.contains("is-keyboardFocused") ||
+            this.el.classList.contains("is-focused")
+        );
+    }
+
+    get isEmpty() {
+        return !this.input.value || this.input.value === "" || this.input.value.length === 0;
+    }
+
+    reset() {
+        this.input.value = "";
+    }
+
+    handleKeyDown(event) {
+        switch (event.key) {
+            case "ArrowDown":
+            case "Enter":
+                if (!this.form) break;
+                if (this.form.requestSubmit) this.form.requestSubmit();
+                else this.form.submit();
+                break;
+            case "Escape":
+                if (!this.form) break;
+                this.form.reset();
+                break;
+            default:
+                if (event.isComposing) break;
+        }
+    }
+}

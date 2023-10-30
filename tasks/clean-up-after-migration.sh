@@ -14,21 +14,19 @@
 # This script aims to clean up those folders
 
 # Legacy tools folder (included storybook & generator)
-# test -d "tools" && rm -rf tools
-
-test -d "tools/generator" && rm -rf tools/generator
+test -d "tools" && rm -rf tools
 
 # Legacy tokens packages
-# test -d "components/vars" && rm -rf components/vars
-# test -d "components/expressvars" && rm -rf components/expressvars
-# test -d "components/tokens" && rm -rf components/tokens
+test -d "components/vars" && rm -rf components/vars
+test -d "components/expressvars" && rm -rf components/expressvars
+test -d "components/tokens" && rm -rf components/tokens
 
-# test -d "plugins/legacy-postcss-dropdupedvars" && rm -rf plugins/legacy-postcss-dropdupedvars
-# test -d "plugins/legacy-postcss-dropunusedvars" && rm -rf plugins/legacy-postcss-dropunusedvars
-# test -d "plugins/postcss-combininator" && rm -rf plugins/postcss-combininator
-# test -d "plugins/postcss-dropdupedvars" && rm -rf plugins/postcss-dropdupedvars
-# test -d "plugins/postcss-droproot" && rm -rf plugins/postcss-droproot
-# test -d "plugins/postcss-dropunusedvars" && rm -rf plugins/postcss-dropunusedvars
-# test -d "plugins/postcss-remapvars" && rm -rf plugins/postcss-remapvars
-# test -d "plugins/postcss-transformselectors" && rm -rf plugins/postcss-transformselectors
-# test -d "plugins/postcss-varfallback" && rm -rf plugins/postcss-varfallback
+test -d "plugins/legacy-postcss-dropdupedvars" && rm -rf plugins/legacy-postcss-dropdupedvars
+test -d "plugins/legacy-postcss-dropunusedvars" && rm -rf plugins/legacy-postcss-dropunusedvars
+test -d "plugins/postcss-combininator" && rm -rf plugins/postcss-combininator
+test -d "plugins/postcss-dropdupedvars" && rm -rf plugins/postcss-dropdupedvars
+test -d "plugins/postcss-droproot" && rm -rf plugins/postcss-droproot
+test -d "plugins/postcss-dropunusedvars" && rm -rf plugins/postcss-dropunusedvars
+test -d "plugins/postcss-remapvars" && rm -rf plugins/postcss-remapvars
+test -d "plugins/postcss-transformselectors" && rm -rf plugins/postcss-transformselectors
+test -d "plugins/postcss-varfallback" && rm -rf plugins/postcss-varfallback

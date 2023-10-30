@@ -1,0 +1,87 @@
+export default class InputGroup {
+    constructor(el) {
+        this.el = el;
+
+        this.focusinHandler = this.focusinHandler.bind(this);
+        this.focusoutHandler = this.focusoutHandler.bind(this);
+        this.focusHandler = this.focusHandler.bind(this);
+        this.blurHandler = this.blurHandler.bind(this);
+
+        this.el.addEventListener("focusin", this.focusinHandler);
+        this.el.addEventListener("focusout", this.focusoutHandler);
+        this.el.addEventListener("focus", this.focusHandler, true);
+        this.el.addEventListener("blur", this.blurHandler, true);
+    }
+
+    get menu() {
+        return this.el.closest(".spectrum-Menu");
+    }
+
+    get pickerButton() {
+        return this.el.querySelector(".spectrum-PickerButton");
+    }
+
+    get textfields() {
+        return [...this.el.querySelectorAll(".spectrum-Textfield")];
+    }
+
+    get inputs() {
+        return [...this.el.querySelectorAll(".spectrum-InputGroup-input")];
+    }
+
+    set isSelected(state) {
+        this.el.classList.toggle("is-selected", state);
+    }
+
+    get isSelected() {
+        return this.el.classList.contains("is-selected");
+    }
+
+    set focus(state) {
+        if (this.el.classList.contains("focus-ring") || !state) {
+            this.el.classList?.toggle("is-keyboardFocused", state);
+            this.pickerButton?.classList?.toggle("is-keyboardFocused", state);
+            this.textfields?.forEach((textfield) => {
+                textfield.classList?.toggle("is-keyboardFocused", state);
+            });
+        } else if (!this.el.classList.contains("focus-ring") || !state) {
+            this.el.classList?.toggle("is-focused", state);
+            this.pickerButton?.classList?.toggle("is-focused", state);
+            this.textfields?.forEach((textfield) => {
+                textfield.classList?.toggle("is-focused", state);
+            });
+        }
+    }
+
+    get focus() {
+        return (
+            this.el.classList.contains("focus-ring") ||
+            this.el.classList.contains("is-keyboardFocused") ||
+            this.el.classList.contains("is-focused")
+        );
+    }
+
+    focusinHandler(event) {
+        // Don't mess with focus on menuitems
+        if (this.menu || !this) return;
+
+        if (event.target.tagName !== "INPUT") {
+            this.inputs[0]?.focus();
+        }
+
+        this.focus = true;
+    }
+
+    focusoutHandler() {
+        if (!this) return;
+        this.focus = false;
+    }
+
+    focusHandler(event) {
+        this.focus = event.type === "focus";
+    }
+
+    blurHandler(event) {
+        this.focus = event.type === "focus";
+    }
+}

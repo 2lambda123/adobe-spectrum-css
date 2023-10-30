@@ -1,6 +1,11 @@
-components/**/*-generated.css
-components/tokens/*
-components/vars/*
-components/express/*
-components/expressvars/*
-components/site/*
+*-generated.css
+
+tokens/**/*.css
+node_modules/**/*.css
+
+plugins/*/expected/*
+plugins/*/fixtures/*
+dist/*
+
+components/*/dist/*
+components/*/node_modules/*

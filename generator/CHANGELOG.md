@@ -5,60 +5,40 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="2.0.13"></a>
 ##2.0.13
-	🗓
-	2023-08-07	• 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/generator@2.0.12...@spectrum-css/generator@2.0.13)
+🗓
+2023-08-07 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/generator@2.0.12...@spectrum-css/generator@2.0.13)
 
 **Note:** Version bump only for package @spectrum-css/generator
-
-
-
-
 
 <a name="2.0.12"></a>
 ##2.0.12
-	🗓
-	2023-07-31	• 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/generator@2.0.11...@spectrum-css/generator@2.0.12)
+🗓
+2023-07-31 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/generator@2.0.11...@spectrum-css/generator@2.0.12)
 
 **Note:** Version bump only for package @spectrum-css/generator
-
-
-
-
 
 <a name="2.0.11"></a>
 ##2.0.11
-	🗓
-	2023-07-24	• 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/generator@2.0.10...@spectrum-css/generator@2.0.11)
+🗓
+2023-07-24 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/generator@2.0.10...@spectrum-css/generator@2.0.11)
 
 **Note:** Version bump only for package @spectrum-css/generator
-
-
-
-
 
 <a name="2.0.10"></a>
 ##2.0.10
-	🗓
-	2023-06-21	• 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/generator@2.0.9...@spectrum-css/generator@2.0.10)
+🗓
+2023-06-21 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/generator@2.0.9...@spectrum-css/generator@2.0.10)
 
 **Note:** Version bump only for package @spectrum-css/generator
 
-
-
-
-
 <a name="2.0.9"></a>
 ##2.0.9
-	🗓
-	2023-06-15	• 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/generator@2.0.8...@spectrum-css/generator@2.0.9)
+🗓
+2023-06-15 • 📝 [Commits](https://github.com/adobe/spectrum-css/compare/@spectrum-css/generator@2.0.8...@spectrum-css/generator@2.0.9)
 
 ### 🐛 Bug fixes
 
-*
-	**generator:**restore files to pre-formatted state([189ced1](https://github.com/adobe/spectrum-css/commit/189ced1))
-
-
-
+- **generator:**restore files to pre-formatted state([189ced1](https://github.com/adobe/spectrum-css/commit/189ced1))
 
 <a name="2.0.8"></a>
 ##2.0.8

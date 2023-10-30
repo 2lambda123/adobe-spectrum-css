@@ -1,0 +1,24 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "includeScripts": ["build:icons", "update:icons"],
+    "name": "icon",
+    "tags": ["component", "legacy"],
+    "targets": {
+        "build": {
+            "dependsOn": ["^build", "copy"]
+        },
+        "build:clean": {},
+        "clean": {},
+        "copy": {
+            "command": "mkdir -p {projectRoot}/dist/ && test -d ./ui-icons/dist/ && cp -f ./ui-icons/dist/spectrum-css-icons*.svg {projectRoot}/dist/ || exit 0",
+            "dependsOn": ["^build"],
+            "outputs": ["{workspaceRoot}/dist/spectrum-css-icons*.svg"]
+        },
+        "format": {},
+        "lint": {},
+        "profile": {},
+        "test": {
+            "defaultConfiguration": "scoped"
+        }
+    }
+}

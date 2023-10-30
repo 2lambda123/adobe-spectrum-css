@@ -1,29 +1,49 @@
-| Modifiable Custom Properties                           |
+<<<<<<< HEAD
+| Modifiable Custom Properties |
 | ------------------------------------------------------ |
-| `--mod-stepper-animation-duration`                     |
-| `--mod-stepper-border-color`                           |
-| `--mod-stepper-border-color-focus`                     |
-| `--mod-stepper-border-color-focus-hover`               |
-| `--mod-stepper-border-color-focus-hover-invalid`       |
-| `--mod-stepper-border-color-focus-invalid`             |
-| `--mod-stepper-border-color-hover`                     |
-| `--mod-stepper-border-color-hover-invalid`             |
-| `--mod-stepper-border-color-invalid`                   |
-| `--mod-stepper-border-color-keyboard-focus`            |
-| `--mod-stepper-border-color-keyboard-focus-invalid`    |
-| `--mod-stepper-border-radius`                          |
-| `--mod-stepper-border-width`                           |
-| `--mod-stepper-button-background-color-focus`          |
+| `--mod-stepper-animation-duration` |
+| `--mod-stepper-border-color` |
+| `--mod-stepper-border-color-focus` |
+| `--mod-stepper-border-color-focus-hover` |
+| `--mod-stepper-border-color-focus-hover-invalid` |
+| `--mod-stepper-border-color-focus-invalid` |
+| `--mod-stepper-border-color-hover` |
+| `--mod-stepper-border-color-hover-invalid` |
+| `--mod-stepper-border-color-invalid` |
+| `--mod-stepper-border-color-keyboard-focus` |
+| `--mod-stepper-border-color-keyboard-focus-invalid` |
+| `--mod-stepper-border-radius` |
+| `--mod-stepper-border-width` |
+| `--mod-stepper-button-background-color-focus` |
 | `--mod-stepper-button-background-color-keyboard-focus` |
-| `--mod-stepper-button-padding`                         |
-| `--mod-stepper-button-width`                           |
-| `--mod-stepper-button-width-quiet`                     |
-| `--mod-stepper-buttons-background-color`               |
-| `--mod-stepper-buttons-border-style`                   |
-| `--mod-stepper-buttons-border-width`                   |
-| `--mod-stepper-focus-indicator-color`                  |
-| `--mod-stepper-focus-indicator-gap`                    |
-| `--mod-stepper-focus-indicator-width`                  |
-| `--mod-stepper-height`                                 |
-| `--mod-stepper-min-width-multiplier`                   |
-| `--mod-stepper-width`                                  |
+| `--mod-stepper-button-padding` |
+| `--mod-stepper-button-width` |
+| `--mod-stepper-button-width-quiet` |
+| `--mod-stepper-buttons-background-color` |
+| `--mod-stepper-buttons-border-style` |
+| `--mod-stepper-buttons-border-width` |
+| `--mod-stepper-focus-indicator-color` |
+| `--mod-stepper-focus-indicator-gap` |
+| `--mod-stepper-focus-indicator-width` |
+| `--mod-stepper-height` |
+| `--mod-stepper-min-width-multiplier` |
+| `--mod-stepper-width` |
+=======
+| Modifiable custom properties |
+| ------------------------------------- |
+| `--mod-stepper-animation-duration` |
+| `--mod-stepper-border-radius` |
+| `--mod-stepper-border-width` |
+| `--mod-stepper-button-gap` |
+| `--mod-stepper-button-offset` |
+| `--mod-stepper-button-padding` |
+| `--mod-stepper-button-width` |
+| `--mod-stepper-buttons-height` |
+| `--mod-stepper-focus-indicator-gap` |
+| `--mod-stepper-focus-indicator-width` |
+| `--mod-stepper-icon-nudge-start` |
+| `--mod-stepper-quiet-button-width` |
+| `--mod-stepper-quiet-width` |
+| `--mod-stepper-width` |
+
+> > > > > > > 239937754 (build!: rework with nx; site migration to 11ty)

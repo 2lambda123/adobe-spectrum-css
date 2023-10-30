@@ -1,0 +1,10 @@
+{
+    "extends": ["./tsconfig.base.json"],
+    "ts-node": {
+        "swc": true,
+        "transpileOnly": true,
+        "transpiler": "ts-node/transpilers/swc"
+    },
+    "include": ["**/*", ".storybook"],
+    "exclude": ["node_modules"]
+}
