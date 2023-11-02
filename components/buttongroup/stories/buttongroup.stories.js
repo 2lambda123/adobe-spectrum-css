@@ -1,6 +1,6 @@
 import { Template } from "./template";
 
-import { Template as Button } from "@spectrum-css/button/stories/button.stories.js";
+import { default as Button } from "@spectrum-css/button/stories/button.stories.js";
 
 export default {
 	title: "Components/Button group",

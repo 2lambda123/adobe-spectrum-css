@@ -59,7 +59,7 @@ export default {
     size: "m",
     isSelected: false,
     isDisabled: false,
-    rounding: "none",
+    rounding: "regular",
     color: "rgb(174, 216, 230)"
   },
   parameters: {

@@ -31,9 +31,10 @@ export const withContextWrapper = makeDecorator({
 		const scales = ["medium", "large"];
 
 		useEffect(() => {
-			const container = document.querySelector('#root-inner') ?? document.body;
-			container.classList.toggle("spectrum", true);
+			const container = document.getElementById("root-inner") ?? document.getElementById("context-target") ?? document.body;
+			if (!container) return;
 
+			container.classList.toggle("spectrum", true);
 			container.classList.toggle("spectrum--express", isExpress);
 
 			for (const c of colors) {

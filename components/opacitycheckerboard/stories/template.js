@@ -8,55 +8,26 @@ import "../index.css";
 
 export const Template = ({
 	rootClass = "spectrum-OpacityCheckerboard",
-	hasColorOverlay,
-	overlayColor,
 	backgroundPosition,
 	customClasses = [],
-	containerStyles = {
-		"inline-size": "100px",
-		"block-size": "100px",
-	},
-	checkerBoardStyles = {
-		"--mod-opacity-checkerboard-position": backgroundPosition,
-	},
-	colorStyles = {
-		"background-color": overlayColor,
-		"inline-size": "100%",
-		"block-size": "100%",
-		position: "relative",
-		"inset-block": "-100%",
-	},
-	componentOnly,
-	content,
+	customStyles = {},
+	id,
+	items = [],
 	role,
 }) => {
-	// Just the component markup. For use by other component's stories.
-	if (componentOnly){
-		return html`
-			<div
-				class=${classMap({
-					...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-					[rootClass]: true,
-				})}
-				style=${ifDefined(styleMap(checkerBoardStyles))}
-				role=${ifDefined(role)}
-			>${content}</div>`;
-	}
-
-	// Component with wrapper for Storybook display, and a testing overlay.
 	return html`
-		<div style=${ifDefined(styleMap(containerStyles))}>
-			<div
-				class=${classMap({
-					...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-					[rootClass]: true,
-				})}
-				style=${ifDefined(styleMap(checkerBoardStyles))}
-				role=${ifDefined(role)}
-			>${content}</div>
-			${when(hasColorOverlay, () => {
-				return html` <div style=${styleMap(colorStyles)}></div>`;
+		<div
+			class=${classMap({
+				[rootClass]: true,
+				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
-		</div>
-	`;
+			style=${ifDefined(styleMap({
+				"--mod-opacity-checkerboard-position": backgroundPosition,
+				...customStyles,
+			}))}
+			role=${ifDefined(role)}
+			id=${ifDefined(id)}
+		>
+			${items}
+		</div>`;
 };

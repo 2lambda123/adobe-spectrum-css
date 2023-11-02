@@ -1,5 +1,5 @@
-import { html } from "lit";
 import { Template as OpacityCheckerboard } from "@spectrum-css/opacitycheckerboard/stories/template.js";
+import { html } from "lit";
 
 import "../index.css";
 
@@ -13,19 +13,16 @@ export const Template = ({
 	},
 	...globals
 }) => {
-	const checkerboardContent = html `<div class="${rootClass}-inner"></div>`
-
 	return html`
 		${OpacityCheckerboard({
 			...globals,
-			componentOnly: true,
 			customClasses: [
 				`${rootClass}`,
 				...!isDisabled && isFocused ? ["is-focused"] : [],
 				...isDisabled ? ["is-disabled"] : [],
 				...customClasses,
 			],
-			content: checkerboardContent,
-			checkerBoardStyles: colorHandleStyle,
+			customStyles: colorHandleStyle,
+			items: [html `<div class="${rootClass}-inner"></div>`],
 		})}`
 }
