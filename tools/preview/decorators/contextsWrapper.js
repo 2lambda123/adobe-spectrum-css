@@ -31,14 +31,15 @@ export const withContextWrapper = makeDecorator({
 		const scales = argTypes.scale.options;
 
 		useEffect(() => {
-			document.body.classList.toggle("spectrum--express", isExpress);
+			const container = document.querySelector('#root-inner')?.parentElement ?? document.body;
+			container.classList?.toggle("spectrum", true);
 
 			for (const c of colors) {
-				document.body.classList.toggle(`spectrum--${c}`, c === color);
+				container.classList?.toggle(`spectrum--${c}`, c === color);
 			}
 
 			for (const s of scales) {
-				document.body.classList.toggle(`spectrum--${s}`, s === scale);
+				container.classList?.toggle(`spectrum--${s}`, s === scale);
 			}
 		}, [color, scale, isExpress]);
 

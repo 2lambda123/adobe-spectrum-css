@@ -3,6 +3,10 @@ body {
 	font-size: 10px;
 }
 
+#root-inner {
+	inline-size: max-content;
+}
+
 nav .spectrum-Site-logo {
 	margin-inline-end: var(--spectrum-global-dimension-size-200);
 	color: #fa0f00;
