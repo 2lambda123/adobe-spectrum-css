@@ -3,7 +3,7 @@ import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { when } from "lit/directives/when.js";
 
-import { useArgs } from "@storybook/client-api";
+import { useArgs, useGlobals } from "@storybook/client-api";
 
 import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
 
@@ -22,11 +22,10 @@ export const Template = ({
 	id,
 	ariaLabelledby,
 	customClasses = [],
-	...globals
+	testId,
 }) => {
 	const [_, updateArgs] = useArgs();
-
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -62,6 +61,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 		>
 			<input
 				type="checkbox"
@@ -79,13 +79,13 @@ export const Template = ({
 			/>
 			<span class="${rootClass}-box">
 				${Icon({
-					...globals,
+
 					size,
 					iconName: `Checkmark${iconSize}`,
 					customClasses: [`${rootClass}-checkmark`],
 				})}
 				${Icon({
-					...globals,
+
 					size,
 					iconName: `Dash${iconSize}`,
 					customClasses: [`${rootClass}-partialCheckmark`],

@@ -1,4 +1,4 @@
-import { useArgs } from "@storybook/client-api";
+import { useArgs, useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -29,11 +29,10 @@ export const Picker = ({
 	content = [],
 	iconName,
 	id,
-	...globals
+
 }) => {
 	const [_, updateArgs] = useArgs();
-
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
 		else import(/* webpackPrefetch: true */ "../themes/express.css");
@@ -72,14 +71,14 @@ export const Picker = ({
 				: ""}
 			${isInvalid && !isLoading
 				? Icon({
-						...globals,
+
 						size,
 						iconName: "Alert",
 						customClasses: [`${rootClass}-validationIcon`],
 				  })
 				: ""}
 			${Icon({
-				...globals,
+
 				size,
 				iconName: "ChevronDown",
 				customClasses: [`${rootClass}-menuIcon`],
@@ -107,17 +106,8 @@ export const Template = ({
 	customPopoverStyles = {},
 	content = [],
 	id,
-	...globals
+
 }) => {
-
-	const { express } = globals;
-	try {
-		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
-		else import(/* webpackPrefetch: true */ "../themes/express.css");
-	} catch (e) {
-		console.warn(e);
-	}
-
 	let iconName = "ChevronDown200";
 	switch (size) {
 		case "s":
@@ -136,7 +126,7 @@ export const Template = ({
 	return html`
 		${label
 			? FieldLabel({
-					...globals,
+
 					size,
 					label,
 					isDisabled,
@@ -146,7 +136,7 @@ export const Template = ({
 		${labelPosition == "left" ?
 			html`<div style="display: inline-block">
 				${Picker({
-					...globals,
+
 					rootClass,
 					size,
 					placeholder,
@@ -168,7 +158,7 @@ export const Template = ({
 			`
 		:
 			Picker({
-				...globals,
+
 				rootClass,
 				size,
 				placeholder,
@@ -196,7 +186,7 @@ export const Template = ({
 			  })
 			: ""}
 		${Popover({
-			...globals,
+
 			isOpen: isOpen && !isDisabled,
 			withTip: false,
 			position: "bottom",

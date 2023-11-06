@@ -1,8 +1,7 @@
+import { useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-
-import { Template as Modal } from "@spectrum-css/modal/stories/template.js";
 
 import "../index.css";
 
@@ -12,9 +11,9 @@ export const Template = ({
 	content = [],
 	customClasses = ["spectrum-Modal"],
 	id,
-	...globals
+	testId,
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -32,6 +31,7 @@ export const Template = ({
 					...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 				})}
 				id=${ifDefined(id)}
+				data-testid=${ifDefined(testId)}
 			>
 			${content.map((c) => (typeof c === "function" ? c({}) : c))}
 			</div>

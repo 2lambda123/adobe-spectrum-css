@@ -1,6 +1,6 @@
+import { Template as ColorHandle } from "@spectrum-css/colorhandle/stories/template.js";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-import { Template as ColorHandle } from "@spectrum-css/colorhandle/stories/template.js";
 
 import "../index.css";
 
@@ -12,7 +12,7 @@ export const Template = ({
 	colorHandleStyle = {
 		"--spectrum-picked-color": "rgb(255, 0, 0)",
 	},
-	...globals
+
 }) => {
 	return html`
     <div class=${classMap({
@@ -35,7 +35,7 @@ export const Template = ({
         </div>
       </div>
       ${ColorHandle({
-				...globals,
+
 				isDisabled,
 				customClasses: [`${rootClass}-handle`],
 				colorHandleStyle,

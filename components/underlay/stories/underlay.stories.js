@@ -14,9 +14,6 @@ export default {
       },
       control: "boolean",
     },
-    content: {
-      table: { disable: true }
-    },
   },
   args: {
     isOpen: true,

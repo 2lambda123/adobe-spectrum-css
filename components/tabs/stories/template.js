@@ -1,8 +1,8 @@
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-import { styleMap } from "lit/directives/style-map.js";
-import { repeat } from "lit/directives/repeat.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { repeat } from "lit/directives/repeat.js";
+import { styleMap } from "lit/directives/style-map.js";
 
 import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
 
@@ -19,7 +19,7 @@ export const Template = ({
   items,
   selectorStyle = {},
   style = {},
-  ...globals
+
 }) => {
 	return html`
 		<div
@@ -50,7 +50,7 @@ export const Template = ({
 							>
 								${item.icon
 									? Icon({
-											...globals,
+
 											iconName: item.icon,
 											size,
 									  })

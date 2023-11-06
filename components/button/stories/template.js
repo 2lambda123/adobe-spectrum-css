@@ -1,3 +1,4 @@
+import { useGlobals } from '@storybook/client-api';
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -27,9 +28,9 @@ export const Template = ({
   isDisabled = false,
   ariaExpanded,
   ariaControls,
-  ...globals
+  testId,
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 	try {
 		if (express) import(/* webpackPrefetch: true */ "../themes/express.css");
 		else import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -49,6 +50,7 @@ export const Template = ({
         ...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
       })}
       id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
       style=${ifDefined(styleMap(customStyles))}
       ?disabled=${isDisabled}
       @click=${onclick}
@@ -56,11 +58,11 @@ export const Template = ({
       aria-expanded=${ifDefined(ariaExpanded?.toString())}
       aria-controls=${ifDefined(ariaControls)}
     >
-      ${when(iconName && !iconAfterLabel, () => Icon({ ...globals, iconName, size }))}
+      ${when(iconName && !iconAfterLabel, () => Icon({  iconName, size }))}
       ${when(label && !hideLabel,
         () => html`<span class=${`${rootClass}-label`}>${label}</span>`
       )}
-      ${when(iconName && iconAfterLabel, () => Icon({ ...globals, iconName, size }))}
+      ${when(iconName && iconAfterLabel, () => Icon({  iconName, size }))}
     </button>
   `;
 };

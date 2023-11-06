@@ -32,7 +32,7 @@ export const MenuItem = ({
   hasActions,
   selectionMode,
   value,
-  ...globals
+  testId,
 }) => {
   return html`
     <li
@@ -48,13 +48,14 @@ export const MenuItem = ({
         "is-open": isOpen,
       })}
       id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
       role=${ifDefined(role)}
       aria-selected=${isSelected ? "true" : "false"}
       aria-disabled=${isDisabled ? "true" : "false"}
       tabindex=${ifDefined(!isDisabled ? "0" : undefined)}>
       ${isCollapsible
         ? Icon({
-            ...globals,
+
             iconName: "ChevronRight100",
             size,
             customClasses: [
@@ -64,7 +65,7 @@ export const MenuItem = ({
           }) : ''}
       ${iconName
         ? Icon({
-            ...globals,
+
             iconName,
             size,
             customClasses: [
@@ -89,7 +90,7 @@ export const MenuItem = ({
         : ''}
       ${isDrillIn
         ? Icon({
-            ...globals,
+
             iconName: "ChevronRight100",
             size,
             customClasses: [
@@ -100,7 +101,7 @@ export const MenuItem = ({
         : ''}
       ${selectionMode == "multiple"
         ? Checkbox({
-          ...globals,
+
           size,
           isEmphasized: true,
           label: label,
@@ -112,7 +113,7 @@ export const MenuItem = ({
       : ''}
       ${isChecked && selectionMode != "multiple"
         ? Icon({
-            ...globals,
+
             iconName: "Checkmark100",
             size,
             customClasses: [
@@ -127,7 +128,7 @@ export const MenuItem = ({
         ${hasActions
           ? html`<div class="${rootClass}Actions">
           ${Switch({
-              ...globals,
+
               size,
               label: null,
               id: `switch-${idx}`,
@@ -137,7 +138,7 @@ export const MenuItem = ({
             })}
             </div>`
           : ''}
-      ${isCollapsible && items.length > 0 ? Template({ ...globals, items, isOpen, size }) : ''}
+      ${isCollapsible && items.length > 0 ? Template({  items, isOpen, size }) : ''}
     </li>
   `
 };
@@ -151,10 +152,11 @@ export const MenuGroup = ({
   isSelectable = false,
   subrole,
   size,
-  ...globals
+  testId,
 }) => html`
     <li
       id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
       role="presentation">
       ${heading
         ? html`<span
@@ -165,7 +167,7 @@ export const MenuGroup = ({
           >`
         : ""}
       ${Template({
-        ...globals,
+
         role: "group",
         subrole,
         labelledby: id,
@@ -191,7 +193,7 @@ export const Template = ({
   role = "menu",
   subrole = "menuitem",
   id,
-  ...globals
+  testId,
 }) => {
 
   return html`
@@ -205,6 +207,7 @@ export const Template = ({
         ...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
       })}
       id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
       role=${ifDefined(role)}
       aria-labelledby=${ifDefined(labelledby)}
       aria-disabled=${isDisabled ? "true" : "false"}
@@ -213,15 +216,15 @@ export const Template = ({
       ${items.map((i, idx) => {
         if (i.type === "divider")
           return Divider({
-            ...globals,
+
             tag: "li",
             size: "s",
             customClasses: [`${rootClass}-divider`],
           });
-        else if (i.heading) return MenuGroup({ ...i, ...globals, subrole, size, selectionMode });
+        else if (i.heading) return MenuGroup({ ...i,  subrole, size, selectionMode });
         else
           return MenuItem({
-            ...globals,
+
             ...i,
             idx,
             rootClass: `${rootClass}-item`,

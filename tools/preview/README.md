@@ -50,10 +50,10 @@ Storybook leverages webpack for bundling and we have updated it with the followi
 
   ```js
   try {
-  	if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
-  	else import(/* webpackPrefetch: true */ "../themes/express.css");
+   if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
+   else import(/* webpackPrefetch: true */ "../themes/express.css");
   } catch (e) {
-  	console.warn(e);
+   console.warn(e);
   }
   ```
 
@@ -223,8 +223,9 @@ Every component will have access to a few empty, global inputs to provide consis
 
 - `rootClass`: this holds the top-level className of the component and should match the value set in the `args` of the stories.js file.
 - `id`: allows users to pass in a custom ID value and should be added to the top-level wrapper of the component.
+- `testId`: allows users to pass in a custom test ID value and should be added to the top-level wrapper of the component.
 - `customClasses` (array): allows passing in additional classes to be applied to the top-level component. This is necessary for nesting templates inside others while allowing the parent to assign context to the child.
-- `...globals`: this spread variable should not be decomposed on import. Instead, add a desctructuring right after instantiation, i.e., `const { express } = globals`. These values map to the globally provided settings and allow you to make rendering choices based on these values.
+- `customStyles` (object): allows passing in inline styles to be applied to the top-level component. These should be written as camelCase keys and values as strings. i.e., `{ backgroundColor: "red" }` to conform to the styleMap directive.
 
 The rest of the variables provided in the Template function's input object will map to the argTypes you defined in your stories.js file.
 
@@ -249,74 +250,62 @@ import "../index.css";
 
 // More on component templates: https://storybook.js.org/docs/web-components/writing-stories/introduction#using-args
 export const Template = ({
-	rootClass = "spectrum-Tag",
-	size = "m",
-	iconName,
-	avatarUrl,
-	label,
-	isSelected = false,
-	isEmphasized = false,
-	isDisabled = false,
-	isInvalid = false,
-	hasClearButton = false,
-	id,
-	customClasses = [],
-	...globals
-}) => {
-	const { express } = globals;
+ rootClass = "spectrum-Tag",
+ size = "m",
+ iconName,
+ avatarUrl,
+ label,
+ isSelected = false,
+ isEmphasized = false,
+ isDisabled = false,
+ isInvalid = false,
+ hasClearButton = false,
+ id,
+ testId,
+ customClasses = [],
+}) => html`
+  <div
+   class=${classMap({
+    [rootClass]: true,
+    [`${rootClass}--size${size?.toUpperCase()}`]:
+     typeof size !== "undefined",
+    "is-emphasized": isEmphasized,
+    "is-disabled": isDisabled,
+    "is-invalid": isInvalid,
+    "is-selected": isSelected,
+    ...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
+   })}
+   style=${ifDefined(styleMap(customStyles))}
+   id=${ifDefined(id)}
+   data-testid=${ifDefined(testId)}
+   tabindex="0"
+  >
+   ${avatarUrl && !iconName
+    ? Avatar({
+      image: avatarUrl,
+      size: "50",
+      })
+    : ""} ${iconName
+    ? Icon({
+      iconName,
+      customClasses: [`${rootClass}s-itemIcon`],
+      })
+    : ""}
+   <span class="${rootClass}s-itemLabel">${label}</span>
+   ${hasClearButton
+    ? ClearButton({
+      customClasses: [`${rootClass}-clearButton`],
+      onclick: (evt) => {
+       const el = evt.target;
+       if (!el) return;
 
-	try {
-		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
-		else import(/* webpackPrefetch: true */ "../themes/express.css");
-	} catch (e) {
-		console.warn(e);
-	}
-
-	return html`
-		<div
-			class=${classMap({
-				[rootClass]: true,
-				[`${rootClass}--size${size?.toUpperCase()}`]:
-					typeof size !== "undefined",
-				"is-emphasized": isEmphasized,
-				"is-disabled": isDisabled,
-				"is-invalid": isInvalid,
-				"is-selected": isSelected,
-				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-			})}
-			id=${ifDefined(id)}
-			tabindex="0"
-		>
-			${avatarUrl && !iconName
-				? Avatar({
-						...globals,
-						image: avatarUrl,
-						size: "50",
-				  })
-				: ""} ${iconName
-				? Icon({
-						...globals,
-						iconName,
-						customClasses: [`${rootClass}s-itemIcon`],
-				  })
-				: ""}
-			<span class="${rootClass}s-itemLabel">${label}</span>
-			${hasClearButton
-				? ClearButton({
-						...globals,
-						customClasses: [`${rootClass}-clearButton`],
-						onclick: (evt) => {
-							const el = evt.target;
-							if (!el) return;
-
-							const wrapper = el.closest(rootClass);
-							wrapper.parentNode.removeChild(wrapper);
-						},
-				  })
-				: ""}
-		</div>
-	`;
-};
+       const wrapper = el.closest(rootClass);
+       wrapper.parentNode.removeChild(wrapper);
+      },
+      })
+    : ""}
+  </div>
+`;
 ```
 
 ## Testing stories
@@ -339,16 +328,15 @@ Runs will generate a JUnit XML file with build results (`chromatic-build-{buildN
 
 Running without publishing to Chromatic? Add the `--dry-run` flag. Need more information to debug a run? Try the `--diagnostics` flag (writes process context information to `chromatic-diagnostics.json`).
 
-
-
 # Migration to Storybook 7.0(Draft)
 
+## Updates
 
-## Updates:
 ---
 `*` Added support for handler actions with ```withActions``` on each stories which have action handlers.
 
 Example:
+
 ```js
 import globalThis from 'global';
 + import { withActions } from '@storybook/addon-actions/decorator';
@@ -373,6 +361,7 @@ export const Basic = {
 `*` Upgraded to ```Webpack 5``` for improved bundling and performance from ```webpack 4```
 
 `*` @storybook addons dependencies are upgraded to v7 from v6
+
 ```js
 "@storybook/addon-docs": "^7.0.12",
 "@storybook/addon-essentials": "^7.0.12",
@@ -393,9 +382,10 @@ export const Basic = {
 
 `*` Improved the addon ecosystem with new and updated addons.
 
-
 <br></br>
-## Breaking Changes:
+
+## Breaking Changes
+
 ---
 `*` client-api is deperacted and preview-api is introduced
 
@@ -426,6 +416,7 @@ export const Basic = {
 ```
 
 `*` Docs is now added to every component on the sidebar with the below code in Storybook 7
+
 ```js
   docs: {
     autodocs: true,
@@ -446,15 +437,17 @@ export const Basic = {
 +  },
 + };
 ```
-## Deprecations(Addons):
+
+## Deprecations(Addons)
+
 ---
 
 `*` ```"@storybook/client-api"``` is deprecated
 
 `*` ```"@storybook/addons"``` is deprecated
 
+## Bug Fixes
 
-## Bug Fixes:
 ---
 `*` Fixed various issues related to performance, rendering, and compatibility.
 
@@ -462,8 +455,8 @@ export const Basic = {
 
 `*` Fixed bugs in calender storybook
 
+## Improvements
 
-## Improvements:
 ---
 `*` Improved the overall performance and stability of the Storybook development environment.
 

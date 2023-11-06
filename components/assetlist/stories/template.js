@@ -1,7 +1,7 @@
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-import { when } from "lit/directives/when.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { when } from "lit/directives/when.js";
 
 import { useArgs } from "@storybook/client-api";
 
@@ -21,7 +21,7 @@ export const AssetListItem = ({
 	isSelected = false,
 	isBranch = false,
 	onclick = () => {},
-	...globals
+
 }) => {
 	return html` <li
 		class=${classMap({
@@ -36,7 +36,7 @@ export const AssetListItem = ({
 	>
 		${when(isSelectable, () =>
 		Checkbox({
-			...globals,
+
 			size: "m",
 			isChecked: isSelected,
 			customClasses: [`${rootClass}Selector`],
@@ -50,13 +50,13 @@ export const AssetListItem = ({
 			Icon({
 				iconName,
 				customClasses: [`${rootClass}Thumbnail`],
-				...globals,
+
 			})
 		)}
 		${when(label, () => html`<span class="${rootClass}Label">${label}</span>`)}
 		${when(!isSelectable && !isBranch, () =>
 			Checkbox({
-				...globals,
+
 				size: "m",
 				isChecked: isSelected,
 				customClasses: [`${rootClass}Selector`],
@@ -65,7 +65,7 @@ export const AssetListItem = ({
 			Icon({
 				iconName: "ChevronRight100",
 				customClasses: [`${rootClass}ChildIndicator`],
-				...globals,
+
 			})
 		)}
 	</li>`;
@@ -76,7 +76,7 @@ export const Template = ({
 	items = [],
 	customClasses = [],
 	id,
-	...globals
+	testId,
 }) => {
 	if (!items) return html``;
 
@@ -89,6 +89,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 		>
 			${items.map((item, idx) => {
 				return AssetListItem({
@@ -99,7 +100,7 @@ export const Template = ({
 						updateArgs({ items });
 					},
 					...item,
-					...globals,
+
 				});
 			})}
 		</ul>

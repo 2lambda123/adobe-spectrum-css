@@ -1,3 +1,4 @@
+import { useGlobals } from '@storybook/client-api';
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -27,10 +28,10 @@ export const Template = ({
 	customIconClasses = [],
 	onclick,
 	id,
+	testId,
 	role,
-	...globals
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -57,6 +58,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			role=${ifDefined(role)}
 			style=${ifDefined(styleMap(customStyles))}
 			?disabled=${isDisabled}
@@ -64,7 +66,7 @@ export const Template = ({
 		>
 			${when(hasPopup, () =>
 				Icon({
-					...globals,
+
 					size,
 					iconName: "CornerTriangle100",
 					customClasses: [`${rootClass}-hold`],
@@ -72,7 +74,7 @@ export const Template = ({
 			)}
 			${when(iconName, () =>
 				Icon({
-					...globals,
+
 					size,
 					iconName,
 					customClasses: [`${rootClass}-icon`, ...customIconClasses],

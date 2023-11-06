@@ -22,11 +22,10 @@ export const uiIcons = [
 export const fetchIconSVG = ({
 	iconName,
 	setName = "workflow",
-	...globals
+	scale,
 }) => {
 	if (!iconName) return;
 
-	const { scale } = globals;
 	let icon;
 
 	// Check adobe workflow icons first

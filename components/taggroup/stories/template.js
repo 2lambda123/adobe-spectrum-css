@@ -11,10 +11,10 @@ export const Template = ({
 	rootClass = "spectrum-TagGroup",
 	ariaLabel,
 	items,
+	size = "m",
 	isRemovable = false,
 	customClasses = [],
 	customStyles = {},
-	...globals
 }) => {
 	return html`
 		<div
@@ -28,9 +28,8 @@ export const Template = ({
 		>
 			${items.map((i) => {
 				return Tag({
-					...globals,
 					...i,
-					size: globals.size,
+					size,
 					hasClearButton: isRemovable,
 					customClasses: [`${rootClass}-item`],
 				});

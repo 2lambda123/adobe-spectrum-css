@@ -48,4 +48,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		const script = document.getElementsByTagName("script")[0];
 		script.parentNode.insertBefore(tk, script);
 	}
+
+	// Add the spectrum root class
+	document.body.classList.add("spectrum");
 });

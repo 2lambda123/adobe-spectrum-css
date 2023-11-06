@@ -1,3 +1,4 @@
+import { useGlobals } from '@storybook/client-api';
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { when } from "lit/directives/when.js";
@@ -15,9 +16,9 @@ export const Template = ({
   iconName = "Add",
   isDisabled,
   isInvalid,
-  ...globals
+
 }) => {
-  const { express } = globals;
+  const [{ express }] = useGlobals();
 
   try {
     if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -35,14 +36,14 @@ export const Template = ({
         [`${rootClass}--quiet`]: isQuiet,
         "is-invalid": isInvalid,
         ...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-      })} 
+      })}
       ?disabled=${isDisabled}
       aria-haspopup="listbox"
       type="button"
     >
     <div class="${rootClass}-fill">
       ${when(iconName, () => Icon({
-        ...globals,
+
         size,
         iconName,
         customClasses: [`${rootClass}-icon`],

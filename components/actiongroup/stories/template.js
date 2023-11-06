@@ -1,3 +1,4 @@
+import { useGlobals } from '@storybook/client-api';
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 
@@ -16,9 +17,9 @@ export const Template = ({
 	staticColors,
 	content = [],
 	customClasses = [],
-	...globals
+
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -44,7 +45,7 @@ export const Template = ({
 				switch (typeof item) {
 					case "object":
 						return ActionButton({
-							...globals,
+
 							size,
 							iconName: item.iconName,
 							isQuiet: areQuiet || item.isQuiet,
@@ -53,7 +54,7 @@ export const Template = ({
 							customClasses: [`${rootClass}-item`],
 						});
 					case "function":
-						return item({ ...globals, size });
+						return item({  size });
 					default:
 						return item;
 				}

@@ -100,7 +100,7 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("datepicker")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };

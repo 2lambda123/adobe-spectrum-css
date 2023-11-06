@@ -1,3 +1,4 @@
+import { useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -13,11 +14,12 @@ export const Template = ({
 	isChecked,
 	isDisabled,
 	isReadOnly,
-	id,
+	idx = 0,
+	id = `radio-${idx}`,
 	customClasses = [],
-	...globals
+	testId,
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -36,19 +38,19 @@ export const Template = ({
 				"is-readOnly" : isReadOnly,
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
-			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 		>
 			<input
 				type="radio"
 				name=${name}
 				class="${rootClass}-input"
-				id="radio-0"
+				id=${id}
 				readOnly=${isReadOnly ? 'readonly' : ""}
 				?checked=${isChecked}
 				?disabled=${isDisabled}
 			/>
 			<span class="${rootClass}-button ${rootClass}-button--sizeS"></span>
-			<label class="${rootClass}-label ${rootClass}-label--sizeS" for="radio-0"
+			<label class="${rootClass}-label ${rootClass}-label--sizeS" for="${id}"
 				>${label}</label
 			>
 		</div>

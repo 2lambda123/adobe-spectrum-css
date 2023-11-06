@@ -10,8 +10,8 @@ export const Template = ({
 	image,
 	preset,
 	id,
+	testId,
 	customClasses = [],
-	// ...globals
 }) => {
 	let visual;
 	if (preset === "file") {
@@ -40,6 +40,7 @@ export const Template = ({
 			...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 		})}
 		id=${ifDefined(id)}
+		data-testid=${ifDefined(testId)}
 	>
 		${visual}
 	</div>`;

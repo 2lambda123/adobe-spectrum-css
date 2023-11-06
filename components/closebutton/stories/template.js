@@ -1,8 +1,9 @@
+import { useGlobals } from '@storybook/client-api';
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { upperCase, lowerCase, capitalize } from "lodash-es";
+import { capitalize, lowerCase, upperCase } from "lodash-es";
 
 import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
 
@@ -17,9 +18,9 @@ export const Template = ({
 	customClasses = [],
 	id,
 	onclick,
-	...globals
+	testId,
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -39,12 +40,13 @@ export const Template = ({
 			})}
 			aria-label="close"
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			label=${ifDefined(label)}
 			?disabled=${isDisabled}
 			@click=${onclick}
 		>
 			${Icon({
-				...globals,
+
 				size,
 				iconName: "Cross",
 				customClasses: [`${rootClass}-UIIcon`],

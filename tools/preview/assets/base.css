@@ -82,6 +82,16 @@ select:focus,
 	color: rgb(34, 34, 34) !important;
 }
 
+/* top navigation with global story args */
+[role="main"] > div > div > div > div > div > div {
+	gap: 3px;
+}
+
+/* align the migrated & legacy badge to the right */
+[role="main"] > div > div > div > div > div > div > span[title] {
+	order: -1;
+}
+
 [role="main"]
 	> div
 	> div:first-child

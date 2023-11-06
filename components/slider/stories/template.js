@@ -1,9 +1,8 @@
+import { useArgs, useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-import { styleMap } from "lit/directives/style-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-
-import { useArgs, useGlobals } from "@storybook/client-api";
+import { styleMap } from "lit/directives/style-map.js";
 
 import { Template as FieldLabel } from "@spectrum-css/fieldlabel/stories/template.js";
 
@@ -26,9 +25,9 @@ export const Template = ({
 	customClasses = [],
 	style = {},
 	id,
-	...globals
+	testId,
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -135,6 +134,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			style=${styleMap({
 				maxWidth: `var(--spectrum-global-dimension-size-3000)`,
 				["--spectrum-slider-track-color"]: fillColor,
@@ -150,7 +150,7 @@ export const Template = ({
 						role=${ifDefined(values.length > 1 ? "presentation" : undefined)}
 				  >
 						${FieldLabel({
-							...globals,
+
 							size,
 							label,
 							isDisabled,

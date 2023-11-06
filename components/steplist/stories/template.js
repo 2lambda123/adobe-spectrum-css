@@ -1,7 +1,7 @@
 import { html, nothing } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-import { repeat } from "lit/directives/repeat.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { repeat } from "lit/directives/repeat.js";
 
 import { Template as Tooltip } from "@spectrum-css/tooltip/stories/template.js";
 
@@ -18,7 +18,7 @@ export const SteplistItem = ({
 	isComplete = false,
 	isSelected = false,
 	id,
-	...globals
+	testId,
 }) => {
 	const labelMarkup =
 		!isSmall && !withTooltip && typeof label !== "undefined"
@@ -49,6 +49,7 @@ export const SteplistItem = ({
 					withTooltip && !isSmall && typeof label != "undefined",
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			role="listitem"
 			aria-posinset=${ariaPosInSet}
 			aria-setsize=${ariaSetSize}
@@ -81,7 +82,7 @@ export const Template = ({
 	withTooltip = false,
 	id,
 	customClasses = [],
-	...globals
+	testId,
 }) => {
 	if (!items || !items.length) return html``;
 
@@ -94,6 +95,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			role="list"
 		>
 			${repeat(items, (args, idx) =>

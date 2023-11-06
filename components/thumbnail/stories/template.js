@@ -23,8 +23,8 @@ export const Template = ({
 	customClasses = [],
 	customStyles = {},
 	id,
+	testId,
 }) => {
-
 	const image = imageURL ? html`<img class="${rootClass}-image" src=${imageURL} alt=${ifDefined(altText)}/>` : svg ? html`${svg}` : "";
 
 	return html`
@@ -39,10 +39,9 @@ export const Template = ({
 				[`${rootClass}--size${size}`]: typeof size !== "undefined",
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
-		style=${ifDefined(styleMap({
-			...customStyles,
-		}))}
+		style=${ifDefined(styleMap(customStyles))}
 		id=${ifDefined(id)}
+		data-testid=${ifDefined(testId)}
 		@click=${onclick}
 	>
 			${when(backgroundColor, () => html`<div class="${rootClass}-background" style=${ifDefined(styleMap({ backgroundColor }))}></div>`)}

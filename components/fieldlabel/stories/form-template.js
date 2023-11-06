@@ -1,12 +1,12 @@
+import { useGlobals } from '@storybook/client-api';
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-import { styleMap } from "lit/directives/style-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { Template as FieldLabel } from "@spectrum-css/fieldlabel/stories/template.js";
-import { Template as TextField } from "@spectrum-css/textfield/stories/template.js";
 import { Template as Picker } from "@spectrum-css/picker/stories/template.js";
 import { Template as Stepper } from "@spectrum-css/stepper/stories/template.js";
+import { Template as TextField } from "@spectrum-css/textfield/stories/template.js";
 
 import "../index.css";
 
@@ -15,9 +15,9 @@ export const Template = ({
     labelsAbove,
 	customClasses = [],
 	id,
-	...globals
+    testId,
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -34,6 +34,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 		>
             <div class="spectrum-Form-item">
                 ${FieldLabel({
@@ -42,7 +43,7 @@ export const Template = ({
                     alignment: 'left',
                 })}
                 <div class="spectrum-Form-itemField">
-                    ${TextField({  
+                    ${TextField({
                         multiline: true,
                         placeholder: 'Enter your company name',
                         name: 'field',
@@ -57,7 +58,7 @@ export const Template = ({
                     alignment: labelsAbove ? undefined : 'left',
                 })}
                 <div class="spectrum-Form-itemField">
-                    ${TextField({  
+                    ${TextField({
                         placeholder: 'Enter your email address',
                         name: 'email',
                         type: 'email',

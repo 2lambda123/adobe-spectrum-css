@@ -17,7 +17,7 @@ export const Template = ({
 		"--mod-colorarea-height": customHeight,
 		"--mod-colorarea-width": customWidth,
 	},
-	...globals
+
 }) => {
 	return html`
 		<div
@@ -34,7 +34,7 @@ export const Template = ({
 				style="background: linear-gradient(to top, black 0%, rgba(0, 0, 0, 0) 100%), linear-gradient(to right, white 0%, rgba(0, 0, 0, 0) 100%), rgb(255, 0, 0);"
 			></div>
 			${ColorHandle({
-				...globals,
+
 				isDisabled,
 				customClasses: [`${rootClass}-handle`],
 				colorHandleStyle: {

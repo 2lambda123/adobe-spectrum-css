@@ -1,10 +1,11 @@
+import { useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-import { styleMap } from "lit/directives/style-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { styleMap } from "lit/directives/style-map.js";
 
-import { Template as Textfield } from "@spectrum-css/textfield/stories/template.js";
 import { Template as InfieldButton } from "@spectrum-css/infieldbutton/stories/template.js";
+import { Template as Textfield } from "@spectrum-css/textfield/stories/template.js";
 
 import "../index.css";
 
@@ -19,12 +20,12 @@ export const Template = ({
 	hideStepper = false,
 	customClasses = [],
 	id,
-	style = {
+	testId,
+	customStyles = {
 		"--mod-actionbutton-icon-size": "10px",
 	},
-	...globals
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -62,10 +63,10 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
-			style=${ifDefined(styleMap(style))}
+			data-testid=${ifDefined(testId)}
+			style=${ifDefined(styleMap(customStyles))}
 		>
 			${Textfield({
-				...globals,
 				size,
 				type: "number",
 				min: "-2",
@@ -81,7 +82,6 @@ export const Template = ({
 				? ""
 				: html`<span class="${rootClass}-buttons">
 						${InfieldButton({
-							...globals,
 							size,
 							customClasses: [`${rootClass}-button`],
 							iconName: `ChevronUp${iconSize}`,
@@ -90,7 +90,6 @@ export const Template = ({
 							position: "top"
 						})}
 						${InfieldButton({
-							...globals,
 							size,
 							customClasses: [`${rootClass}-button`],
 							iconName: `ChevronDown${iconSize}`,

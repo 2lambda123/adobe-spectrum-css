@@ -1,5 +1,6 @@
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 import { repeat } from "lit/directives/repeat.js";
 
 import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
@@ -22,7 +23,7 @@ export const TreeViewItem = ({
 	thumbnail,
 	items,
 	customClasses = [],
-	...globals
+	testId,
 }) => {
 	if (type === "heading") {
 		return html`
@@ -34,7 +35,8 @@ export const TreeViewItem = ({
 
 	return html`
 		<li
-			id=${id}
+			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			class=${classMap({
 				[`${rootClass}-item`]: true,
 				"is-selected": isSelected,
@@ -60,7 +62,7 @@ export const TreeViewItem = ({
 			>
 				${typeof items !== "undefined"
 					? Icon({
-							...globals,
+
 							size,
 							iconName: "Chevron",
 							customClasses: [`${rootClass}-itemIndicator`],
@@ -68,7 +70,7 @@ export const TreeViewItem = ({
 					: ""}
 				${icon
 					? Icon({
-							...globals,
+
 							size,
 							iconName: icon,
 							customClasses: [`${rootClass}-itemIcon`],
@@ -76,7 +78,7 @@ export const TreeViewItem = ({
 					: ""}
 				${thumbnail
 					? Thumbnail({
-							...globals,
+
 							...thumbnail,
 							size: "300",
 							customClasses: [`${rootClass}-itemThumbnail`],
@@ -86,7 +88,7 @@ export const TreeViewItem = ({
 			</a>
 			${typeof items !== "undefined"
 				? Template({
-						...globals,
+
 						items: items,
 						size,
 						rootClass: "spectrum-TreeView",
@@ -104,7 +106,7 @@ export const Template = ({
 	variant,
 	isQuiet,
 	items,
-	...globals
+
 }) => {
 	return html`
 		<ul
@@ -122,7 +124,7 @@ export const Template = ({
 				(item) => item.id,
 				(item) => {
 					return TreeViewItem({
-						...globals,
+
 						...item,
 					});
 				}

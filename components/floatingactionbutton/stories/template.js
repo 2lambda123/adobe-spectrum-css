@@ -2,8 +2,8 @@ import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import "../index.css";
 import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
+import "../index.css";
 
 // More on component templates: https://storybook.js.org/docs/web-components/writing-stories/introduction#using-args
 export const Template = ({
@@ -12,7 +12,7 @@ export const Template = ({
 	id,
 	iconName,
 	customClasses = [],
-	...globals
+	testId,
 }) => {
 	return html`
 		<button
@@ -22,9 +22,10 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 		>
 			${Icon({
-				...globals,
+
 				iconName,
 				customClasses: [`${rootClass}-icon`],
 			})}

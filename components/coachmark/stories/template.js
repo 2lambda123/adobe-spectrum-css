@@ -11,7 +11,7 @@ export const Template = ({
 	isQuiet = false,
 	withPopover = false,
 	variant,
-	...globals
+
 }) => {
 	return html`
 		<div
@@ -37,7 +37,7 @@ export const Template = ({
 					</div>
 					<div class="${rootClass}Popover-footer">
 						${Button({
-							...globals,
+
 							size: "m",
 							variant: "primary",
 							label: "Okay",

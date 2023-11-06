@@ -17,7 +17,7 @@ export const Template = ({
 	colorHandleStyle = {
 		"--spectrum-picked-color": "rgba(255, 0, 0)",
 	},
-	...globals
+
 }) => {
 	const checkerboardContent = gradientType == "image"
 		? html`
@@ -44,13 +44,13 @@ export const Template = ({
 			})}
 		>
 			${OpacityCheckerboard({
-				...globals,
+
 				customClasses: [`${rootClass}-checkerboard`],
 				content: checkerboardContent,
 				role: 'presentation',
 			})}
 			${ColorHandle({
-				...globals,
+
 				isDisabled,
 				isFocused,
 				customClasses: [`${rootClass}-handle`],

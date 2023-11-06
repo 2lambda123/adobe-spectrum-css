@@ -1,5 +1,7 @@
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
+import { ifDefined } from "lit/directives/if-defined.js";
+import { styleMap } from "lit/directives/style-map.js";
 import { when } from "lit/directives/when.js";
 
 import "../index.css";
@@ -7,14 +9,16 @@ import "../index.css";
 export const Template = ({
 	rootClass = "spectrum-SplitView",
 	customClasses = [],
+	customStyles = {},
 	orientation = "horizontal",
 	isResizable = false,
 	isCollapsible = false,
 	collapsePosition,
 	panelLabels = [],
-	panelStyles = [],
+	panelStyles = {},
 	componentHeight = "200px",
-	// ...globals
+	id,
+	testId,
 }) => {
 	const collapsible = isCollapsible;
 	const collapsibleStart =
@@ -32,14 +36,19 @@ export const Template = ({
 
 	return html`
 		<div
-			style="height: ${componentHeight};"
+			style=${styleMap({
+				height: componentHeight,
+				...customStyles,
+			})},
 			class=${classMap({
 				[rootClass]: true,
 				[`${rootClass}--${orientation}`]: orientation,
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
+			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 		>
-			<div class="spectrum-SplitView-pane" style="${panelStyles[0]}">
+			<div class="spectrum-SplitView-pane" style=${ifDefined(styleMap(panelStyles[0]))}>
 				${panelLabels[0]}
 			</div>
 			<div
@@ -56,7 +65,7 @@ export const Template = ({
 					() => html`<div class="spectrum-SplitView-gripper"></div>`
 				)}
 			</div>
-			<div class="spectrum-SplitView-pane" style="${panelStyles[1]}">
+			<div class="spectrum-SplitView-pane" style="${ifDefined(styleMap(panelStyles[1]))}">
 				${panelLabels[1]}
 			</div>
 		</div>

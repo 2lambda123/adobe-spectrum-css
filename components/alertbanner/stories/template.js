@@ -1,9 +1,10 @@
+import { useGlobals } from '@storybook/client-api';
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 
-import { Template as Divider } from "@spectrum-css/divider/stories/template.js";
 import { Template as Button } from "@spectrum-css/button/stories/template.js";
 import { Template as CloseButton } from "@spectrum-css/closebutton/stories/template.js";
+import { Template as Divider } from "@spectrum-css/divider/stories/template.js";
 import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
 
 import "../index.css";
@@ -14,9 +15,9 @@ export const Template = ({
 	text,
 	variant,
 	customClasses = [],
-	...globals
+
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -40,7 +41,7 @@ export const Template = ({
 				<div class="${rootClass}-content">
 					${iconName
 						? Icon({
-								...globals,
+
 								iconName,
 								customClasses: [`${rootClass}-icon`],
 						  })
@@ -59,10 +60,10 @@ export const Template = ({
 					vertical: true,
 					size: "s",
 					tag: "div",
-					...globals,
+
 				})}
 				${CloseButton({
-					...globals,
+
 					size: "m",
 					staticColor: "white",
 					onclick,

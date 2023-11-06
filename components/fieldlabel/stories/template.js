@@ -1,7 +1,8 @@
+import { useGlobals } from '@storybook/client-api';
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-import { styleMap } from "lit/directives/style-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { styleMap } from "lit/directives/style-map.js";
 
 import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
 
@@ -17,15 +18,15 @@ export const Template = ({
 	alignment,
 	isDisabled,
 	isRequired,
-	style = {},
-	...globals
+	customStyles = {},
+	testId,
 }) => {
 	if (!label) {
 		console.warn("FieldLabel: please provide a label for the field label.");
 		return html``;
 	}
 
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -59,13 +60,14 @@ export const Template = ({
 				"is-disabled": isDisabled,
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
-			style=${ifDefined(styleMap(style))}
+			style=${ifDefined(styleMap(customStyles))}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			for=${ifDefined(forInput)}
 		>
 			${label}${isRequired
 				? Icon({
-						...globals,
+
 						size,
 						iconName,
 						customClasses: [`${rootClass}-UIIcon`, `${rootClass}-requiredIcon`],

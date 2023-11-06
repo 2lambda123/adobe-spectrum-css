@@ -17,7 +17,7 @@ export const Template = ({
 	content = [],
 	id,
 	customClasses = [],
-	...globals
+	testId,
 }) => {
 	if (!content.length) {
 		console.warn("QuickActions: requires content be passed in to render.");
@@ -40,10 +40,11 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}"
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 		>
 			${content.map((c) => {
 				if ((typeof c === "object" && c.iconName) || c.label) {
-					return ActionButton({ ...globals, ...c, isQuiet: true });
+					return ActionButton({  ...c, isQuiet: true });
 				} else return c;
 			})}
 		</div>

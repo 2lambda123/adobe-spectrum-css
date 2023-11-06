@@ -11,8 +11,8 @@ export const Template = ({
 	isDisabled = false,
 	size = "700",
 	id,
+	testId,
 	customClasses = [],
-	// ...globals
 }) => {
 	return html`
 		<div
@@ -23,6 +23,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 		>
 			<img class="${rootClass}-image" src=${image} alt=${ifDefined(altText)} />
 		</div>

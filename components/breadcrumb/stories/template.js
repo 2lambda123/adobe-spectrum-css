@@ -1,9 +1,10 @@
+import { useGlobals } from '@storybook/client-api';
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { when } from "lit/directives/when.js";
 
-import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
 import { Template as ActionButton } from "@spectrum-css/actionbutton/stories/template.js";
+import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
 
 import "../index.css";
 
@@ -12,9 +13,9 @@ export const Template = ({
 	customClasses = [],
 	items = [],
 	variant,
-	...globals
+
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -45,7 +46,7 @@ export const Template = ({
 							iconName,
 							() =>
 								ActionButton({
-									...globals,
+
 									iconName,
 									isDisabled,
 									isQuiet: true,
@@ -71,7 +72,7 @@ export const Template = ({
 						)}
 						${when(idx !== arr.length - 1, () =>
 							Icon({
-								...globals,
+
 								iconName: "ChevronRight100",
 								customClasses: [`${rootClass}-itemSeparator`],
 							})

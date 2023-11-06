@@ -1,3 +1,4 @@
+import { useGlobals } from "@storybook/client-api";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { when } from "lit/directives/when.js";
@@ -170,11 +171,11 @@ export const Template = ({
 	rowItems = [],
 	customClasses = [],
 	id,
-	...globals
+	testId,
 }) => {
 	if (!rowItems || !rowItems.length) return html``;
 
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
 		else import(/* webpackPrefetch: true */ "../themes/express.css");
@@ -207,6 +208,7 @@ export const Template = ({
 			...rootClassMapVariants
 		})}
 		id=${ifDefined(id)}
+		data-testid=${ifDefined(testId)}
 		role=${ifDefined(useCheckboxCell ? "grid" : useDivs ? "table" : undefined)}
 		aria-multiselectable=${ifDefined(useCheckboxCell ? "true" : undefined)}
 		style="max-width: 800px;"

@@ -1,10 +1,11 @@
+import { useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
 import { Template as Avatar } from "@spectrum-css/avatar/stories/template.js";
 import { Template as ClearButton } from "@spectrum-css/clearbutton/stories/template.js";
+import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
 
 import "../index.css";
 
@@ -22,9 +23,9 @@ export const Template = ({
 	hasClearButton = false,
 	id,
 	customClasses = [],
-	...globals
+	testId,
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -46,18 +47,19 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			tabindex=${isDisabled ? '-1' : '0'}
 		>
 			${avatarUrl
 				? Avatar({
-						...globals,
+
 						image: avatarUrl,
 						size: "50",
 				  })
 				: ""}
 			${iconName
 				? Icon({
-						...globals,
+
 						size,
 						iconName,
 						customClasses: [`${rootClass}-itemIcon`],
@@ -66,7 +68,7 @@ export const Template = ({
 			<span class="${rootClass}-itemLabel">${label}</span>
 			${hasClearButton
 				? ClearButton({
-						...globals,
+
 						size,
 						customClasses: [`${rootClass}-clearButton`],
 						onclick: (evt) => {

@@ -1,3 +1,4 @@
+import { useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -22,9 +23,9 @@ export const Template = ({
 		width: customWidth ? customWidth : "",
 	},
 	size = "m",
-	...globals
+
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -63,14 +64,14 @@ export const Template = ({
 				aria-valuemax="100"
 			>
 				${FieldLabel({
-					...globals,
+
 					size,
 					label,
 					alignment: "",
 					customClasses: [`${rootClass}-label`],
 				})}
 				${FieldLabel({
-					...globals,
+
 					size,
 					label: indeterminate ? "" : `${value}%`,
 					alignment: "",

@@ -1,3 +1,4 @@
+import { useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 
@@ -8,9 +9,9 @@ export const Template = ({
 	size = "m",
 	variant = "info",
 	label,
-	...globals
+
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");

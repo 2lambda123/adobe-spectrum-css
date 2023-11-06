@@ -1,4 +1,4 @@
-import { useArgs } from "@storybook/client-api";
+import { useArgs, useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -22,9 +22,9 @@ export const Template = ({
 	customClasses = [],
 	onclick,
 	id,
-	...globals
+	testId,
 }) => {
-	const { scale } = globals;
+	const [{ scale }] = useGlobals();
 	const [_, updateArgs] = useArgs();
 
 	const Dialog = html`
@@ -36,6 +36,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			role="dialog"
 			tabindex="-1"
 			aria-modal="true"
@@ -46,14 +47,14 @@ export const Template = ({
 					Divider({
 						horizontal: true,
 						customClasses: [`${rootClass}-divider`],
-						...globals,
+
 					}),
 				])}
 				<section class="${rootClass}-content">${content.map((c) => (typeof c === "function" ? c({}) : c))}</section>
 				${when(isDismissable, () =>
 					CloseButton({
 						customClasses: [`${rootClass}-closeButton`],
-						...globals,
+
 						onclick: () => {
 							updateArgs({ isOpen: !isOpen });
 						},
@@ -66,11 +67,11 @@ export const Template = ({
 	if (showModal) {
 		return html`
 			${Underlay({
-				...globals,
+
 				isOpen,
 			})}
 			${Button({
-				...globals,
+
 				size: "m",
 				variant: "secondary",
 				label: "Click to open dialog",
@@ -87,7 +88,7 @@ export const Template = ({
 				},
 			})}
 			${Modal({
-				...globals,
+
 				isOpen,
 				content: Dialog,
 			})}

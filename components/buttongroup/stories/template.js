@@ -1,3 +1,4 @@
+import { useGlobals } from '@storybook/client-api';
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 
@@ -11,9 +12,9 @@ export const Template = ({
 	size = "m",
 	items = [],
 	vertical = false,
-	...globals
+
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -34,7 +35,7 @@ export const Template = ({
 		>
 			${items.map((item) =>
 				Button({
-					...globals,
+
 					...item,
 					size,
 					customClasses: [`${rootClass}-item`],

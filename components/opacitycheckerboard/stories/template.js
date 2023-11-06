@@ -2,7 +2,6 @@ import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { when } from "lit/directives/when.js";
 
 import "../index.css";
 
@@ -12,6 +11,7 @@ export const Template = ({
 	customClasses = [],
 	customStyles = {},
 	id,
+	testId,
 	items = [],
 	role,
 }) => {
@@ -27,6 +27,7 @@ export const Template = ({
 			}))}
 			role=${ifDefined(role)}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 		>
 			${items}
 		</div>`;

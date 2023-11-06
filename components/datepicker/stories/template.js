@@ -3,9 +3,9 @@ import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { Template as Calendar } from "@spectrum-css/calendar/stories/template.js";
-import { Template as TextField } from "@spectrum-css/textfield/stories/template.js";
-import { Template as Popover } from "@spectrum-css/popover/stories/template.js";
 import { Template as PickerButton } from "@spectrum-css/pickerbutton/stories/template.js";
+import { Template as Popover } from "@spectrum-css/popover/stories/template.js";
+import { Template as TextField } from "@spectrum-css/textfield/stories/template.js";
 
 import { useArgs, useGlobals } from "@storybook/client-api";
 
@@ -15,6 +15,7 @@ import "../skin.css";
 export const Template = ({
 	rootClass = "spectrum-DatePicker",
 	id,
+	testId,
 	content,
 	customClasses = [],
 	isOpen = true,
@@ -24,7 +25,7 @@ export const Template = ({
 	isDisabled = false,
 	isRequired = false,
 	readOnly = false,
-	...globals
+	selectedDay,
 }) => {
 	const [_, updateArgs] = useArgs();
 	const [{ lang }] = useGlobals();
@@ -41,6 +42,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			aria-disabled=${isDisabled ? "true" : "false"}
 			aria-invalid=${ifDefined(isInvalid && !isDisabled ? "false" : undefined)}
 			aria-readonly=${ifDefined(readOnly ? "true" : "false")}
@@ -49,7 +51,6 @@ export const Template = ({
 		>
 			${[
 				TextField({
-					...globals,
 					size: "m",
 					isQuiet,
 					isDisabled,
@@ -59,15 +60,14 @@ export const Template = ({
 					customInputClasses: [`${rootClass}-input`],
 					placeholder: "Choose a date",
 					name: "field",
-					value: globals.selectedDay
-						? new Date(globals.selectedDay).toLocaleDateString(lang)
+					value: selectedDay
+						? new Date(selectedDay).toLocaleDateString(lang)
 						: undefined,
 					onclick: function () {
 						if (!isOpen) updateArgs({ isOpen: true });
 					},
 				}),
 				PickerButton({
-					...globals,
 					customClasses: [`${rootClass}-button`],
 					size: "m",
 					iconType: "workflow",
@@ -84,7 +84,6 @@ export const Template = ({
 					},
 				}),
 				Popover({
-					...globals,
 					isOpen: isOpen && !isDisabled,
 					withTip: false,
 					position: "bottom",
@@ -97,7 +96,9 @@ export const Template = ({
 								width: undefined,
 						  }
 						: {},
-					content: [Calendar(globals)],
+					content: content ?? [
+						Calendar({})
+					],
 				}),
 			]}
 		</div>

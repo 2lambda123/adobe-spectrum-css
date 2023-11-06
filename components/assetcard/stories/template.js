@@ -1,9 +1,9 @@
+import { useArgs, useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { when } from "lit/directives/when.js";
 
-import { useArgs } from "@storybook/client-api";
 import { camelCase } from "lodash-es";
 
 import { Template as Checkbox } from "@spectrum-css/checkbox/stories/template.js";
@@ -23,10 +23,10 @@ export const Template = ({
 	isDropTarget = false,
 	customClasses = [],
 	id,
-	...globals
+	testId,
 }) => {
 	const [_, updateArgs] = useArgs();
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -54,6 +54,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			@click=${() => {
 				updateArgs({ isSelected: !isSelected });
 			}}
@@ -89,7 +90,7 @@ export const Template = ({
 					selection === "checkbox",
 					() =>
 						Checkbox({
-							...globals,
+
 							size: "m",
 							isEmphasized: true,
 							isChecked: isSelected,

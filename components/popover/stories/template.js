@@ -1,10 +1,9 @@
+import { useArgs, useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { when } from "lit/directives/when.js";
-
-import { useArgs } from "@storybook/client-api";
 
 import "@spectrum-css/popover";
 
@@ -25,7 +24,7 @@ export const Template = ({
 	},
 	trigger,
 	content = [],
-	...globals
+
 }) => {
 	const [, updateArgs] = useArgs();
 
@@ -34,7 +33,7 @@ export const Template = ({
 		return html``;
 	}
 
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -45,7 +44,7 @@ export const Template = ({
 
 	return html`
 		${when(typeof trigger === "function", () => trigger({
-			...globals,
+
 			isSelected: isOpen,
 			onclick: () => {
 				setTimeout(() => {

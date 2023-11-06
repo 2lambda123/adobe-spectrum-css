@@ -120,7 +120,7 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("pickerbutton")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
@@ -144,6 +144,6 @@ Quiet.args = {
 };
 
 export const Express = Template.bind({});
-Express.args = {
+Express.globals = {
 	express: true
 };

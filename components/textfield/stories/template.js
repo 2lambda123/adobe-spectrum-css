@@ -1,4 +1,4 @@
-import { useArgs } from "@storybook/client-api";
+import { useArgs, useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -37,10 +37,10 @@ export const Template = ({
 	autocomplete = true,
 	onclick,
 	customStyles = {},
-	...globals
+
 }) => {
 	const [, updateArgs] = useArgs();
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -85,7 +85,7 @@ export const Template = ({
 			}}
 		>
 			${when(iconName, () => Icon({
-				...globals,
+
 				size,
 				iconName,
 				customClasses: [

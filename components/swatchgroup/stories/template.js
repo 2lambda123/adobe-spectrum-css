@@ -12,10 +12,11 @@ export const Template = ({
 	customClasses = [],
 	size = "m",
 	density = "regular",
-	rounding = "regular",
 	items = [],
 	customStyles = {},
 	id,
+	testId,
+	...swatchSettings
 }) => html`
 	<div
 		class=${classMap({
@@ -26,13 +27,14 @@ export const Template = ({
 		})}
 		style=${styleMap({
 			...customStyles,
-			size: `calc(${items.length} / 10 * 32px)`,
+			inlineSize: `calc(5 * (var(--spectrum-swatch-size-${size === "xs" ? "extra-small" : size === "s" ? "small" : size === "l" ? "large" : "medium"}) + var(--spectrum-swatchgroup-spacing-${density})))`,
 		})}
 		id=${ifDefined(id)}
+		data-testid=${ifDefined(testId)}
 	>
 		${items.map((swatch) => Swatch({
+			...swatchSettings,
 			size,
-			rounding,
 			...swatch,
 		}))}
 	</div>

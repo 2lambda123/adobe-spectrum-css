@@ -1,10 +1,9 @@
+import { useArgs, useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { capitalize, lowerCase } from "lodash-es";
-
-import { useArgs } from '@storybook/client-api';
 
 import { Template as OpacityCheckerboard } from "@spectrum-css/opacitycheckerboard/stories/template.js";
 
@@ -17,12 +16,12 @@ export const Template = ({
 	isDisabled = false,
 	rounding = "regular",
 	customClasses = [],
-	color = "rgb(174, 216, 230)",
+	swatchColor = "rgb(174, 216, 230)",
 	customStyles = {},
 	id,
-	...globals
+	testId,
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
   	const [_, updateArgs] = useArgs();
 
 	try {
@@ -47,8 +46,9 @@ export const Template = ({
 			})}
 			?disabled=${isDisabled}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			style=${ifDefined(styleMap({
-				"--spectrum-picked-color": color,
+				"--spectrum-picked-color": swatchColor,
 				...customStyles,
 			}))}
 			tabindex="0"

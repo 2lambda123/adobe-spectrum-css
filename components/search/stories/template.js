@@ -1,3 +1,4 @@
+import { useGlobals } from "@storybook/client-api";
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 
@@ -12,9 +13,9 @@ export const Template = ({
 	isDisabled = false,
 	isQuiet = false,
 	size,
-	...globals
+
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -35,7 +36,7 @@ export const Template = ({
 			})}
 		>
 			${TextField({
-				...globals,
+
 				isDisabled,
 				isQuiet,
 				size,
@@ -49,7 +50,7 @@ export const Template = ({
 				autocomplete: false,
 			})}
 			${ClearButton({
-				...globals,
+
 				isDisabled,
 				size,
 				customClasses: [`${rootClass}-clearButton`],

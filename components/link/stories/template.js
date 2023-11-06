@@ -1,8 +1,9 @@
+import { useGlobals } from '@storybook/client-api';
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { lowerCase, capitalize } from "lodash-es";
+import { capitalize, lowerCase } from "lodash-es";
 
 import "../index.css";
 
@@ -16,9 +17,9 @@ export const Template = ({
 	isQuiet = false,
 	id,
 	customClasses = [],
-	...globals
+	testId,
 }) => {
-	const { express } = globals;
+	const [{ express }] = useGlobals();
 
 	try {
 		if (!express) import(/* webpackPrefetch: true */ "../themes/spectrum.css");
@@ -38,6 +39,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			href=${ifDefined(url)}
 		>
 			${text}

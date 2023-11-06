@@ -16,7 +16,7 @@ export const Template = ({
 	max = 100,
 	customClasses = [],
 	id,
-	// ...globals
+	testId,
 }) => {
 	return html`
 		<div
@@ -27,6 +27,7 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			@mousedown=${() => {
 				if (isDisabled) return;
 				document.body.classList.add("u-isGrabbing");
