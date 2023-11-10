@@ -19,7 +19,7 @@
     "clean": "rimraf dist"
   },
   "peerDependencies": {
-    "@spectrum-css/tokens": ">=13.0.0"
+    "@spectrum-css/tokens": ">=13"
   },
   "devDependencies": {
     "@spectrum-css/component-builder-simple": "^2.0.17",

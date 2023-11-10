@@ -20,7 +20,7 @@
   "peerDependencies": {
     "@spectrum-css/actionbutton": ">=5",
     "@spectrum-css/actiongroup": ">=3",
-    "@spectrum-css/closebutton": ">=3",
+    "@spectrum-css/closebutton": ">=4",
     "@spectrum-css/fieldlabel": ">=7",
     "@spectrum-css/icon": ">=4",
     "@spectrum-css/popover": ">=5 <=6",
