@@ -15,7 +15,7 @@ governing permissions and limitations under the License.
  * .spectrum-Closebutton::after is the Focus ring
  */
 
-@import "../commons/basebutton-coretokens.css";
+@import "@spectrum-css/commons/basebutton-coretokens.css";
 
 .spectrum-CloseButton {
   /* Hardcoded tokens */

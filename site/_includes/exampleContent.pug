@@ -14,4 +14,4 @@ if example.markup
         a.js-markup-toggle.spectrum-CSSExample-markupToggle.spectrum-Link(href="#") Show markup
       bdo(dir="ltr")
         pre.spectrum-Code.spectrum-Code--sizeXS
-          code.language-markup!= util.Prism.highlight(example.markup, util.Prism.languages.markup, 'markup')
+          code.language-markup!= :md(example.markup)

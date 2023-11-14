@@ -10,15 +10,16 @@
       li.spectrum-SideNav-item
         a.spectrum-SideNav-itemLink(href='#')
           span.spectrum-SideNav-link-text Components
-        ul.spectrum-SideNav.spectrum-SideNav--multiLevel
-          each component in nav
-            unless component.hide
-              li.spectrum-SideNav-item(class=pageURL === component.href ? 'is-selected' : '')
-                a(class={
-                  'spectrum-SideNav-itemLink': true,
-                  'js-fastLoad': component.fastLoad != false
-                }, href=component.href)
-                  span.spectrum-SideNav-link-text #{component.name}
+        if nav
+          ul.spectrum-SideNav.spectrum-SideNav--multiLevel
+            each component in nav
+              unless component.hide
+                li.spectrum-SideNav-item(class=pageURL === component.href ? 'is-selected' : '')
+                  a(class={
+                    'spectrum-SideNav-itemLink': true,
+                    'js-fastLoad': component.fastLoad != false
+                  }, href=component.href)
+                    span.spectrum-SideNav-link-text #{component.name}
   nav.spectrum-Site-bottomNav
     ul.spectrum-SideNav
       li.spectrum-SideNav-item

@@ -4,7 +4,7 @@ html(lang='en-US' dir="ltr").spectrum.spectrum--light.spectrum--medium
     title Wrapping - Spectrum CSS
 
     -
-      var exampleDependencies = [
+      const exampleDependencies = [
         'link',
         'toast',
         'tooltip',
@@ -28,17 +28,17 @@ html(lang='en-US' dir="ltr").spectrum.spectrum--light.spectrum--medium
 
       dependencyOrder = dependencyOrder.concat(exampleDependencies.filter(dep => dependencyOrder.indexOf(dep) === -1))
 
-    include includes/dependencies.pug
+    include ../_includes/dependencies.pug
 
   body
 
     .spectrum-Site
 
-      include includes/header.pug
+      include ../_includes/header.pug
 
       .spectrum-Site-content
 
-        include includes/sidebar.pug
+        include ../_includes/sidebar.pug
 
         .spectrum-Site-mainContent
 
@@ -408,6 +408,6 @@ html(lang='en-US' dir="ltr").spectrum.spectrum--light.spectrum--medium
                     <div class="spectrum-StatusLight spectrum-StatusLight--sizeM spectrum-StatusLight--positive">Lorem ipsum dolor sit amet, consectetur adipiscing elit</div>
                     <div class="spectrum-StatusLight spectrum-StatusLight--sizeM spectrum-StatusLight--positive" style="width: 157px">Lorem ipsum dolor sit amet, consectetur adipiscing elit</div>
 
-          include includes/footer.pug
+          include ../_includes/footer.pug
 
-    include includes/pageBottom.pug
+    include ../_includes/pageBottom.pug

@@ -32,6 +32,10 @@ function getProcessors(splitinatorOptions = {}) {
 		require("postcss-discard-empty"),
 		require("postcss-discard-comments")({ removeAllButFirst: true }),
 		require("autoprefixer")({}),
+		require("postcss-reporter")({
+			clearReportedMessages: true,
+			plugins: ['!autoprefixer']
+		}),
 	].filter(Boolean);
 }
 

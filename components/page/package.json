@@ -17,8 +17,8 @@
   "scripts": {
     "build": "gulp"
   },
-  "dependencies": {
-    "@spectrum-css/tokens": "^13.0.3"
+  "peerDependencies": {
+    "@spectrum-css/tokens": ">=13"
   },
   "devDependencies": {
     "@spectrum-css/component-builder-simple": "^2.0.18",

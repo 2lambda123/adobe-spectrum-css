@@ -3,10 +3,10 @@ html(lang='en-US' dir="ltr").spectrum.spectrum--medium
   head
     title Halo Focus - Spectrum CSS
 
-    include includes/dependencies.pug
+    include ../_includes/dependencies.pug
 
     -
-      var exampleDependencies = [
+      const exampleDependencies = [
         'link',
         'toast',
         'tooltip',
@@ -26,7 +26,7 @@ html(lang='en-US' dir="ltr").spectrum.spectrum--medium
         'tags'
       ];
 
-    each dep in exampleDependencies.filter(dep => dependencyOrder.indexOf(dep) === -1)
+    each dep in exampleDependencies
       link(rel='stylesheet', type='text/css', href='components/' + dep + '/index-vars.css', data-dependency=dep)
 
     style(type="text/css").
@@ -69,25 +69,25 @@ html(lang='en-US' dir="ltr").spectrum.spectrum--medium
 
     div.a-container
       div.a-overlay.spectrum.spectrum--dark
-        include templates/halo-focus.pug
+        include ../_includes/layouts/halo-focus.pug
 
       div.a-overlay.a-overlay--dark.spectrum--dark
-        include templates/halo-focus.pug
+        include ../_includes/layouts/halo-focus.pug
 
       div.a-overlay.a-overlay--mid.spectrum--dark
-        include templates/halo-focus.pug
+        include ../_includes/layouts/halo-focus.pug
 
       div.a-overlay.spectrum--dark
-        include templates/halo-focus.pug
+        include ../_includes/layouts/halo-focus.pug
 
       div.a-overlay.spectrum--light
-        include templates/halo-focus.pug
+        include ../_includes/layouts/halo-focus.pug
 
       div.a-overlay.a-overlay--mid.spectrum--light
-        include templates/halo-focus.pug
+        include ../_includes/layouts/halo-focus.pug
 
       div.a-overlay.a-overlay--light.spectrum--light
-        include templates/halo-focus.pug
+        include ../_includes/layouts/halo-focus.pug
 
       div.a-overlay.spectrum.spectrum--light
-        include templates/halo-focus.pug
+        include ../_includes/layouts/halo-focus.pug

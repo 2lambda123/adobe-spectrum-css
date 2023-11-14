@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-@import "../commons/basebutton-coretokens.css";
+@import "@spectrum-css/commons/basebutton-coretokens.css";
 
 .spectrum-LogicButton {
   --spectrum-logic-button-height: 24px;

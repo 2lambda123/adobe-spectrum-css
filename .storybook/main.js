@@ -64,10 +64,8 @@ module.exports = {
 				: [];
 		return {
 			...config,
-			stats: {
-				/* Suppress autoprefixer warnings from storybook build */
-				warningsFilter: [/autoprefixer: /],
-			},
+			/* Suppress autoprefixer warnings from storybook build */
+			ignoreWarnings: [/autoprefixer: /],
 			/* Add support for root node_modules imports */
 			resolve: {
 				...(config.resolve ? config.resolve : {}),

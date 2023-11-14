@@ -24,6 +24,7 @@
     "@spectrum-css/tokens": ">=13"
   },
   "devDependencies": {
+    "@spectrum-css/commons": "^9.0.0",
     "@spectrum-css/component-builder-simple": "^2.0.18",
     "@spectrum-css/helptext": "^4.0.61",
     "@spectrum-css/icon": "^4.0.4",

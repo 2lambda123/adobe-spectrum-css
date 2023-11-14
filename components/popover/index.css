@@ -10,14 +10,15 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-@import "../commons/overlay-coretokens.css";
+@import "@spectrum-css/commons/overlay-coretokens.css";
 
 .spectrum-Popover {
-  /* Used in positioning popover for storybook */
+  /* stylelint-disable custom-property-pattern - Used in positioning popover for storybook */
   --flow-direction: 1;
   [dir="rtl"] & {
     --flow-direction: -1;
   }
+  /* stylelint-enable custom-property-pattern */
 
   /* change to offset from source */
   --spectrum-popover-offset: 0px;
@@ -333,7 +334,7 @@ governing permissions and limitations under the License.
       }
     }
 
-  
+
     /* popover with tip at top */
     &.spectrum-Popover--right-top,
     &.spectrum-Popover--left-top,
