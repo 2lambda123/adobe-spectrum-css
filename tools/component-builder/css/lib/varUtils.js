@@ -10,19 +10,20 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const fsp = require("fs").promises;
+const path = require("path");
+
 const gulp = require("gulp");
 const postcss = require("postcss");
 const concat = require("gulp-concat");
 const through = require("through2");
-const fsp = require("fs").promises;
 const logger = require("gulplog");
-const path = require("path");
 
 function getVarsFromCSS(css) {
 	let variableList = [];
 	let root = postcss.parse(css);
 
-	root.walkRules((rule, ruleIndex) => {
+	root.walkRules((rule) => {
 		rule.walkDecls((decl) => {
 			let matches = decl.value.match(/var\(.*?\)/g);
 			if (matches) {
@@ -42,7 +43,7 @@ function getVarsDefinedInCSS(css) {
 	let variableList = [];
 	let root = postcss.parse(css);
 
-	root.walkRules((rule, ruleIndex) => {
+	root.walkRules((rule) => {
 		rule.walkDecls((decl) => {
 			if (decl.prop.startsWith("--")) {
 				let varName = decl.prop;
@@ -59,7 +60,7 @@ function getVarValues(css) {
 	let root = postcss.parse(css);
 	let variables = {};
 
-	root.walkRules((rule, ruleIndex) => {
+	root.walkRules((rule) => {
 		rule.walkDecls((decl) => {
 			variables[decl.prop] = decl.value;
 		});
@@ -78,11 +79,8 @@ function getClassNames(contents, pkgName) {
 		}
 	}
 
-	let result = root.walkRules((rule, ruleIndex) => {
-		let selector = rule.selectors[0];
-
+	root.walkRules((rule) => {
 		if (pkgName === "page") {
-			className = "";
 			return "false";
 		}
 
@@ -116,27 +114,26 @@ function getClassNames(contents, pkgName) {
 	return classNames;
 }
 
-function resolveValue(value, vars) {
-	if (value) {
-		let match = value.match(/var\((.+),?.*?\)/);
-		if (match) {
-			return match[1];
-		}
-		return value;
-	}
+function resolveValue(value) {
+	if (!value) return;
+
+	let match = value.match(/var\((.+),?.*?\)/);
+	if (!match || !match[1]) value;
+
+	return match[1];
 }
 
 const varDir = path.join(
 	path.dirname(
 		require.resolve("@spectrum-css/vars", {
-			paths: [process.cwd(), path.join(process.cwd(), "../../")],
+			paths: [
+				process.cwd(),
+				path.join(process.cwd(), "../../")
+			],
 		})
 	),
 	".."
 );
-const coreTokensFile = require.resolve("@spectrum-css/tokens", {
-	paths: [process.cwd(), path.join(process.cwd(), "../../")],
-});
 
 async function readDNAVariables(file) {
 	let css = await fsp.readFile(path.join(varDir, "css", file));
@@ -158,6 +155,20 @@ ${varNames.map((varName) => `  ${varName}: ${vars[varName]};`).join("\n")}
 }
 
 function getAllVars() {
+
+	let coreTokensFile;
+	try {
+		// Note: core tokens is optional for component-builder
+		coreTokensFile = require.resolve("@spectrum-css/tokens", {
+			paths: [
+				process.cwd(),
+				path.join(process.cwd(), "../../")
+			],
+	});
+	} catch (e) {}
+
+	console.log({coreTokensFile});
+
 	return new Promise((resolve, reject) => {
 		let variableList;
 

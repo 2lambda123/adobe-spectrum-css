@@ -1,0 +1,64 @@
+{
+    "name": "storybook",
+    "tags": ["tooling"],
+    "implicitDependencies": ["tag:component"],
+    "namedInputs": {
+        "core": [
+            "{workspaceRoot}/assets",
+            "{projectRoot}/*.js",
+            "{projectRoot}/*.html",
+            "{workspaceRoot}/components/*/stories",
+            "{workspaceRoot}/components/*/dist"
+        ],
+        "tools": []
+    },
+    "targets": {
+        "build": {
+            "dependsOn": ["^build", "clean"],
+            "envFile": ".env.prod",
+            "executor": "@nx/storybook:build",
+            "inputs": ["core", { "externalDependencies": ["storybook"] }],
+            "options": {
+                "configDir": "{projectRoot}",
+                "outputDir": "{projectRoot}/dist"
+            },
+            "outputs": ["{options.outputPath}"]
+        },
+        "clean": {},
+        "format": {
+            "inputs": ["core", { "externalDependencies": ["stylelint", "eslint", "prettier"] }],
+            "options": {
+                "commands": [
+                    "stylelint {projectRoot}/storybook-*.css --fix",
+                    "eslint --no-error-on-unmatched-pattern {projectRoot}/*.js {projectRoot}/{package,project}.json ./components/*/stories/*.js --fix",
+                    "prettier --no-error-on-unmatched-pattern --write {projectRoot}/**/*.{js,json,yml,md} {projectRoot}/*.{js,json,yml,md}"
+                ]
+            }
+        },
+        "lint": {
+            "inputs": ["core", { "externalDependencies": ["stylelint", "eslint"] }],
+            "options": {
+                "commands": [
+                    "stylelint {projectRoot}/assets/*.css",
+                    "eslint --no-error-on-unmatched-pattern {projectRoot}/*.js {projectRoot}/{package,project}.json ./components/*/stories/*.js"
+                ]
+            }
+        },
+        "start": {
+            "dependsOn": ["^build"],
+            "executor": "@nx/storybook:storybook",
+            "inputs": ["core", { "externalDependencies": ["storybook"] }],
+            "options": {
+                "configDir": "{projectRoot}",
+                "open": true
+            },
+            "outputs": []
+        },
+        "test": {
+            "executor": "nx:run-commands",
+            "options": {
+                "commands": ["chromatic --build-script-name build:storybook --untraced .github/actions/*/package.json --untraced site/package.json --untraced generator/package.json --only-changed"]
+            }
+        }
+    }
+}

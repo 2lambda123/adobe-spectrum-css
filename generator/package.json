@@ -15,10 +15,6 @@
   },
   "type": "module",
   "main": "plopfile.js",
-  "scripts": {
-    "new": "plop",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.12",
     "fuzzy": "^0.1.3",

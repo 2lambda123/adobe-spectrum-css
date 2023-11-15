@@ -1,36 +1,28 @@
 {
-  "name": "@spectrum-css/tabs",
-  "version": "4.0.24",
-  "description": "The Spectrum CSS tabs component",
-  "license": "Apache-2.0",
-  "author": "Adobe",
-  "homepage": "https://opensource.adobe.com/spectrum-css/tabs",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/adobe/spectrum-css.git",
-    "directory": "components/tabs"
-  },
-  "bugs": {
-    "url": "https://github.com/adobe/spectrum-css/issues"
-  },
-  "main": "dist/index-vars.css",
-  "scripts": {
-    "build": "gulp"
-  },
-  "peerDependencies": {
-    "@spectrum-css/menu": ">=5",
-    "@spectrum-css/picker": ">=6",
-    "@spectrum-css/tokens": ">=13"
-  },
-  "devDependencies": {
-    "@spectrum-css/component-builder-simple": "^2.0.18",
-    "@spectrum-css/icon": "^4.0.4",
-    "@spectrum-css/menu": "^5.1.4",
-    "@spectrum-css/picker": "^7.0.15",
-    "@spectrum-css/tokens": "^13.0.3",
-    "gulp": "^4.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+    "name": "@spectrum-css/tabs",
+    "version": "4.0.24",
+    "description": "The Spectrum CSS tabs component",
+    "license": "Apache-2.0",
+    "author": "Adobe",
+    "homepage": "https://opensource.adobe.com/spectrum-css/tabs",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/adobe/spectrum-css.git",
+        "directory": "components/tabs"
+    },
+    "bugs": {
+        "url": "https://github.com/adobe/spectrum-css/issues"
+    },
+    "main": "dist/index-vars.css",
+    "peerDependencies": {
+        "@spectrum-css/menu": ">=5",
+        "@spectrum-css/picker": ">=6",
+        "@spectrum-css/tokens": ">=13"
+    },
+    "devDependencies": {
+        "@spectrum-css/component-builder-simple": "^2.0.18"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
 }

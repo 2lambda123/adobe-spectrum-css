@@ -9,6 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+
 const gulp = require("gulp");
 const rename = require("gulp-rename");
 const path = require("path");
@@ -17,11 +18,11 @@ const replace = require("gulp-replace");
 const sort = require("gulp-sort");
 const svgcombiner = require("gulp-svgcombiner");
 const svgstore = require("gulp-svgstore");
-const del = require("del");
+const rimraf = require("rimraf");
 const vinylPaths = require("vinyl-paths");
 
-function clean() {
-	return del(["combined/**"]);
+async function clean() {
+	return rimraf("combined/**");
 }
 
 function sanitizeIcons() {
@@ -74,9 +75,6 @@ function generateCombinedIcons() {
 		.pipe(gulp.dest("combined/"));
 }
 
-// Only ran by Adobe
-const updateIcons = gulp.series(clean, sanitizeIcons, generateCombinedIcons);
-
 const tasks = require("@spectrum-css/component-builder");
 
 function generateSVGSprite() {
@@ -117,21 +115,10 @@ function getSVGSpriteTask(size) {
 	};
 }
 
-const generateSVGSpriteMedium = getSVGSpriteTask("medium");
-const generateSVGSpriteLarge = getSVGSpriteTask("large");
-
-const buildIcons = gulp.parallel(
-	generateSVGSpriteMedium,
-	generateSVGSpriteLarge,
-	generateSVGSprite
+exports.updateIcons = gulp.series(clean, sanitizeIcons, generateCombinedIcons);
+exports.default = exports.build = gulp.parallel(
+	getSVGSpriteTask("medium"),
+	getSVGSpriteTask("large"),
+	generateSVGSprite,
+	tasks.build
 );
-
-const build = gulp.parallel(buildIcons, tasks.buildCSS);
-
-exports.updateIcons = updateIcons;
-exports.build =
-	exports.buildLite =
-	exports.buildHeavy =
-	exports.buildMedium =
-		build;
-exports.default = build;

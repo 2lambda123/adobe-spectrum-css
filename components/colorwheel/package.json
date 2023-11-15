@@ -1,34 +1,27 @@
 {
-  "name": "@spectrum-css/colorwheel",
-  "version": "3.0.48",
-  "description": "The Spectrum CSS Color Area component",
-  "license": "Apache-2.0",
-  "author": "Adobe",
-  "homepage": "https://opensource.adobe.com/spectrum-css/colorwheel",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/adobe/spectrum-css.git",
-    "directory": "components/colorwheel"
-  },
-  "bugs": {
-    "url": "https://github.com/adobe/spectrum-css/issues"
-  },
-  "main": "dist/index-vars.css",
-  "scripts": {
-    "build": "gulp"
-  },
-  "peerDependencies": {
-    "@spectrum-css/colorhandle": ">=5",
-    "@spectrum-css/tokens": ">=13"
-  },
-  "devDependencies": {
-    "@spectrum-css/colorarea": "^4.0.48",
-    "@spectrum-css/colorhandle": "^7.0.14",
-    "@spectrum-css/component-builder-simple": "^2.0.18",
-    "@spectrum-css/tokens": "^13.0.3",
-    "gulp": "^4.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+    "name": "@spectrum-css/colorwheel",
+    "version": "3.0.48",
+    "description": "The Spectrum CSS Color Area component",
+    "license": "Apache-2.0",
+    "author": "Adobe",
+    "homepage": "https://opensource.adobe.com/spectrum-css/colorwheel",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/adobe/spectrum-css.git",
+        "directory": "components/colorwheel"
+    },
+    "bugs": {
+        "url": "https://github.com/adobe/spectrum-css/issues"
+    },
+    "main": "dist/index-vars.css",
+    "peerDependencies": {
+        "@spectrum-css/colorhandle": ">=5",
+        "@spectrum-css/tokens": ">=13"
+    },
+    "devDependencies": {
+        "@spectrum-css/component-builder-simple": "^2.0.18"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
 }

@@ -1,0 +1,17 @@
+{
+    "$schema": "../node_modules/nx/schemas/project-schema.json",
+    "name": "site",
+    "tags": ["tooling"],
+    "implicitDependencies": ["tag:component", "storybook"],
+    "targets": {
+        "build": {},
+        "start": {
+            "executor": "@nx/web:file-server",
+            "options": {
+                "buildTarget": "site:build",
+                "port": 3000,
+                "staticFilePath": "{workspaceRoot}/dist"
+            }
+        }
+    }
+}

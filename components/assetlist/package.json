@@ -1,35 +1,28 @@
 {
-  "name": "@spectrum-css/assetlist",
-  "version": "5.0.1",
-  "description": "The Spectrum CSS assetlist component",
-  "license": "Apache-2.0",
-  "author": "Adobe",
-  "homepage": "https://opensource.adobe.com/spectrum-css/assetlist",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/adobe/spectrum-css.git",
-    "directory": "components/assetlist"
-  },
-  "bugs": {
-    "url": "https://github.com/adobe/spectrum-css/issues"
-  },
-  "main": "dist/index-vars.css",
-  "scripts": {
-    "build": "gulp"
-  },
-  "peerDependencies": {
-    "@spectrum-css/checkbox": ">=7.0.0",
-    "@spectrum-css/icon": ">=4",
-    "@spectrum-css/vars": ">=9"
-  },
-  "devDependencies": {
-    "@spectrum-css/checkbox": "^8.0.1",
-    "@spectrum-css/component-builder-simple": "^2.0.18",
-    "@spectrum-css/icon": "^4.0.4",
-    "@spectrum-css/tokens": "^13.0.3",
-    "gulp": "^4.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+    "name": "@spectrum-css/assetlist",
+    "version": "5.0.1",
+    "description": "The Spectrum CSS assetlist component",
+    "license": "Apache-2.0",
+    "author": "Adobe",
+    "homepage": "https://opensource.adobe.com/spectrum-css/assetlist",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/adobe/spectrum-css.git",
+        "directory": "components/assetlist"
+    },
+    "bugs": {
+        "url": "https://github.com/adobe/spectrum-css/issues"
+    },
+    "main": "dist/index-vars.css",
+    "peerDependencies": {
+        "@spectrum-css/checkbox": ">=7.0.0",
+        "@spectrum-css/icon": ">=4",
+        "@spectrum-css/vars": ">=9"
+    },
+    "devDependencies": {
+        "@spectrum-css/component-builder-simple": "^2.0.18"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
 }

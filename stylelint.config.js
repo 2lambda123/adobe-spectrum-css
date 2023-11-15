@@ -1,13 +1,19 @@
+const { join } = require("path");
+
 module.exports = {
     allowEmptyInput: true,
     cache: true,
     defaultSeverity: "warning",
-    extends: ["stylelint-config-standard"],
+    extends: ["stylelint-config-standard", "stylelint-config-clean-order", "stylelint-config-prettier"],
     plugins: [
+        "stylelint-header",
+        "stylelint-selector-bem-pattern",
         "stylelint-use-logical",
-		"stylelint-no-missing-parenthesis",
-		"stylelint-no-missing-var",
-		"stylelint-suit-naming-pattern"
+        "@spectrum-tools/stylelint-no-missing-parenthesis",
+        "@spectrum-tools/stylelint-no-missing-var",
+        "@spectrum-tools/stylelint-no-unused-custom-properties",
+        "@spectrum-tools/stylelint-no-unknown-custom-properties",
+        "stylelint-high-performance-animation",
     ],
     rules: {
         "at-rule-empty-line-before": [
@@ -90,8 +96,74 @@ module.exports = {
             },
         ],
         "selector-not-notation": "complex",
+        "header/header": [
+            join(__dirname, "COPYRIGHT"),
+            {
+                nonMatchingTolerance: 1,
+            },
+            {
+                fix: true,
+            },
+        ],
         "csstools/use-logical": true,
+        /** Performance */
+        "plugin/no-low-performance-animation-properties": [true, { severity: "warning" }],
+        "plugin/selector-bem-pattern": [
+            {
+                preset: "suit",
+                presetOptions: { namespace: "spectrum" },
+                utilitySelectors: /^\.(is|u)-[A-z0-9]+$/,
+                componentName: /^[A-Z][A-z0-9]+$/,
+            },
+            {
+                severity: "warning",
+            },
+        ],
         /** Local/custom plugins */
-        "custom-rule/no-missing-parenthesis": true,
+        "spectrum-tools/no-missing-parenthesis": true,
+        "spectrum-tools/no-missing-var": true,
+        /** @note this enables reporting of unused variables in a file */
+        "spectrum-tools/no-unused-custom-properties": [
+            true,
+            {
+                ignore: [/^--mod-/, /^--highcontrast-/, /^--system-/],
+                disableFix: true,
+                severity: "warning",
+            },
+        ],
+        "spectrum-tools/no-unknown-custom-properties": [
+            true,
+            {
+                /** @note this is a list of custom properties that are allowed to be unknown */
+                ignore: [
+                    /^--mod-/,
+                    /^--highcontrast-/,
+                    /^--system-/,
+                    /^--spectrum-(global|alias|component)-/,
+                    /^--spectrum-animation-/,
+                ],
+                checkDependencies: true,
+                disableFix: true,
+                severity: "warning",
+            },
+        ],
     },
+    overrides: [
+        {
+            files: ["components/*/themes/*.css", "tokens/**/*.css"],
+            rules: {
+                "spectrum-tools/no-unused-custom-properties": null,
+                "spectrum-tools/no-unknown-custom-properties": null,
+            },
+        },
+        {
+            files: ["site/**/*.css", "storybook/assets/*.css"],
+            rules: {
+                "custom-property-pattern": null,
+                "spectrum-tools/no-unused-custom-properties": null,
+                "spectrum-tools/no-unknown-custom-properties": null,
+                "color-function-notation": null,
+            },
+        },
+    ],
 };

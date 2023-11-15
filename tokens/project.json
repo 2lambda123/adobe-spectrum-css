@@ -1,0 +1,72 @@
+{
+    "name": "tokens",
+    "tag": ["tokens"],
+    "namedInputs": {
+        "core": ["{projectRoot}/custom-express/*.css", "{projectRoot}/custom-spectrum/*.css"],
+        "scripts": ["{projectRoot}/utilities/*.js"],
+        "tools": ["{projectRoot}/postcss.config.js"]
+    },
+    "targets": {
+        "build": {
+            "dependsOn": ["style-dictionary"],
+            "inputs": ["core", "tools", { "externalDependencies": ["postcss"] }],
+            "options": {
+                "commands": [
+                    "postcss ./dist/css/*.css ./dist/css/spectrum/*.css ./dist/css/express/*.css --replace",
+                    "postcss ./custom-express/*.css --dir ./dist/css/express/",
+                    "postcss ./custom-spectrum/*.css --dir ./dist/css/spectrum/",
+                    "cat ./dist/css/*.css ./dist/css/spectrum/*.css ./dist/css/express/*.css | postcss --output ./dist/index.css"
+                ],
+                "cwd": "{projectRoot}",
+                "parallel": false
+            },
+            "outputs": ["{projectRoot}/dist/css/express", "{projectRoot}/dist/css/spectrum"]
+        },
+        "build:clean": {},
+        "clean": {},
+        "format": {
+            "options": {
+                "commands": [
+                    "stylelint {projectRoot}/custom-express/*.css {projectRoot}/custom-spectrum/*.css --fix",
+                    "eslint --no-error-on-unmatched-pattern {projectRoot}/*.json {projectRoot}/*.js  {projectRoot}/utilities/*.js --fix"
+                ]
+            }
+        },
+        "lint": {
+            "options": {
+                "commands": [
+                    "stylelint {projectRoot}/custom-express/*.css {projectRoot}/custom-spectrum/*.css",
+                    "eslint --no-error-on-unmatched-pattern {projectRoot}/*.json {projectRoot}/*.js {projectRoot}/utilities/*.js"
+                ]
+            }
+        },
+        "profile": {},
+        "style-dictionary": {
+            "executor": "@nxkit/style-dictionary:build",
+            "inputs": [
+                "{projectRoot}/postcss.config.js",
+                "{projectRoot}/style-dictionary.config.js",
+                "{projectRoot}/utilities/style-dictionary.utils.js"
+            ],
+            "options": {
+                "deleteOutputPath": false,
+                "outputPath": "./tokens",
+                "platform": "CSS",
+                "styleDictionaryConfig": "./tokens/style-dictionary.config.js",
+                "tsConfig": "./tsconfig.json"
+            },
+            "outputs": [
+                "{projectRoot}/dist/global-vars.css",
+                "{projectRoot}/dist/light-vars.css",
+                "{projectRoot}/dist/dark-vars.css",
+                "{projectRoot}/dist/darkest-vars.css",
+                "{projectRoot}/dist/medium-vars.css",
+                "{projectRoot}/dist/large-vars.css",
+                "{projectRoot}/dist/specrum/global-vars.css",
+                "{projectRoot}/dist/express/global-vars.css",
+                "{projectRoot}/dist/specrum/medium-vars.css",
+                "{projectRoot}/dist/specrum/large-vars.css"
+            ]
+        }
+    }
+}

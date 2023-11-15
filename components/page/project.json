@@ -1,0 +1,17 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "page",
+    "tags": ["component"],
+    "targets": {
+        "build": {},
+        "build:clean": {},
+        "clean": {},
+        "compare": {},
+        "format": {},
+        "lint": {},
+        "profile": {},
+        "test": {
+            "defaultConfiguration": "scoped"
+        }
+    }
+}

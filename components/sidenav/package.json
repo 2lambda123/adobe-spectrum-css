@@ -1,32 +1,26 @@
 {
-  "name": "@spectrum-css/sidenav",
-  "version": "4.0.16",
-  "description": "The Spectrum CSS sidenav component",
-  "license": "Apache-2.0",
-  "author": "Adobe",
-  "homepage": "https://opensource.adobe.com/spectrum-css/sidenav",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/adobe/spectrum-css.git",
-    "directory": "components/sidenav"
-  },
-  "bugs": {
-    "url": "https://github.com/adobe/spectrum-css/issues"
-  },
-  "main": "dist/index-vars.css",
-  "scripts": {
-    "build": "gulp"
-  },
-  "peerDependencies": {
-    "@spectrum-css/tokens": ">=13"
-  },
-  "devDependencies": {
-    "@spectrum-css/component-builder-simple": "^2.0.18",
-    "@spectrum-css/icon": "^4.0.4",
-    "@spectrum-css/tokens": "^13.0.3",
-    "gulp": "^4.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+    "name": "@spectrum-css/sidenav",
+    "version": "4.0.16",
+    "description": "The Spectrum CSS sidenav component",
+    "license": "Apache-2.0",
+    "author": "Adobe",
+    "homepage": "https://opensource.adobe.com/spectrum-css/sidenav",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/adobe/spectrum-css.git",
+        "directory": "components/sidenav"
+    },
+    "bugs": {
+        "url": "https://github.com/adobe/spectrum-css/issues"
+    },
+    "main": "dist/index-vars.css",
+    "peerDependencies": {
+        "@spectrum-css/tokens": ">=13"
+    },
+    "devDependencies": {
+        "@spectrum-css/component-builder-simple": "^2.0.18"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
 }

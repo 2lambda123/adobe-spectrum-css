@@ -1,38 +1,28 @@
 {
-  "name": "@spectrum-css/combobox",
-  "version": "2.0.44",
-  "description": "The Spectrum CSS combobox component",
-  "license": "Apache-2.0",
-  "author": "Adobe",
-  "homepage": "https://opensource.adobe.com/spectrum-css/",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/adobe/spectrum-css.git",
-    "directory": "components/combobox"
-  },
-  "bugs": {
-    "url": "https://github.com/adobe/spectrum-css/issues"
-  },
-  "main": "dist/index-vars.css",
-  "scripts": {
-    "build": "gulp"
-  },
-  "peerDependencies": {
-    "@spectrum-css/pickerbutton": ">=4",
-    "@spectrum-css/popover": ">=6",
-    "@spectrum-css/tokens": ">=13"
-  },
-  "devDependencies": {
-    "@spectrum-css/component-builder-simple": "^2.0.18",
-    "@spectrum-css/menu": "^5.1.4",
-    "@spectrum-css/pickerbutton": "^4.0.19",
-    "@spectrum-css/popover": "^6.0.81",
-    "@spectrum-css/progresscircle": "^2.0.72",
-    "@spectrum-css/textfield": "^6.0.27",
-    "@spectrum-css/tokens": "^13.0.3",
-    "gulp": "^4.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+    "name": "@spectrum-css/combobox",
+    "version": "2.0.44",
+    "description": "The Spectrum CSS combobox component",
+    "license": "Apache-2.0",
+    "author": "Adobe",
+    "homepage": "https://opensource.adobe.com/spectrum-css/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/adobe/spectrum-css.git",
+        "directory": "components/combobox"
+    },
+    "bugs": {
+        "url": "https://github.com/adobe/spectrum-css/issues"
+    },
+    "main": "dist/index-vars.css",
+    "peerDependencies": {
+        "@spectrum-css/pickerbutton": ">=4",
+        "@spectrum-css/popover": ">=6",
+        "@spectrum-css/tokens": ">=13"
+    },
+    "devDependencies": {
+        "@spectrum-css/component-builder-simple": "^2.0.18"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
 }

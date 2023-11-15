@@ -1,0 +1,24 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "icon",
+    "tags": ["component", "legacy"],
+    "targets": {
+        "build": {},
+        "build:clean": {},
+        "clean": {},
+        "update": {
+            "outputs": ["{workspaceRoot}/dist/spectrum-css-icons*.svg"],
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "{projectRoot}",
+                "commands": ["gulp updateIcons"]
+            }
+        },
+        "format": {},
+        "lint": {},
+        "profile": {},
+        "test": {
+            "defaultConfiguration": "scoped"
+        }
+    }
+}
