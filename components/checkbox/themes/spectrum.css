@@ -1,0 +1,6 @@
+.spectrum {
+  --system-spectrum-checkbox-control-color-default:var(--spectrum-gray-600);
+  --system-spectrum-checkbox-control-color-hover:var(--spectrum-gray-700);
+  --system-spectrum-checkbox-control-color-down:var(--spectrum-gray-800);
+  --system-spectrum-checkbox-control-color-focus:var(--spectrum-gray-700)
+}

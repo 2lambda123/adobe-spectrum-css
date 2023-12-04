@@ -1,0 +1,37 @@
+{
+  "name": "@spectrum-css/toast",
+  "version": "9.1.18",
+  "description": "The Spectrum CSS toast component",
+  "license": "Apache-2.0",
+  "author": "Adobe",
+  "homepage": "https://opensource.adobe.com/spectrum-css/toast",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/spectrum-css.git",
+    "directory": "components/toast"
+  },
+  "bugs": {
+    "url": "https://github.com/adobe/spectrum-css/issues"
+  },
+  "main": "dist/index-vars.css",
+  "scripts": {
+    "build": "gulp"
+  },
+  "peerDependencies": {
+    "@spectrum-css/button": ">=10",
+    "@spectrum-css/closebutton": ">=3",
+    "@spectrum-css/icon": ">=4",
+    "@spectrum-css/tokens": ">=10"
+  },
+  "devDependencies": {
+    "@spectrum-css/button": "^11.0.17",
+    "@spectrum-css/closebutton": "^4.0.16",
+    "@spectrum-css/component-builder-simple": "^3.0.1",
+    "@spectrum-css/icon": "^4.0.5",
+    "@spectrum-css/tokens": "^13.0.5",
+    "gulp": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

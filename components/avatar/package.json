@@ -1,0 +1,31 @@
+{
+  "name": "@spectrum-css/avatar",
+  "version": "6.0.61",
+  "description": "The Spectrum CSS avatar component",
+  "license": "Apache-2.0",
+  "author": "Adobe",
+  "homepage": "https://opensource.adobe.com/spectrum-css/avatar",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/spectrum-css.git",
+    "directory": "components/avatar"
+  },
+  "bugs": {
+    "url": "https://github.com/adobe/spectrum-css/issues"
+  },
+  "main": "dist/index-vars.css",
+  "scripts": {
+    "build": "gulp"
+  },
+  "peerDependencies": {
+    "@spectrum-css/tokens": ">=13"
+  },
+  "devDependencies": {
+    "@spectrum-css/component-builder-simple": "^3.0.1",
+    "@spectrum-css/tokens": "^13.0.5",
+    "gulp": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

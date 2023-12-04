@@ -1,0 +1,43 @@
+{
+  "name": "@spectrum-css/coachmark",
+  "version": "6.0.0",
+  "description": "The Spectrum CSS coachmark component",
+  "license": "Apache-2.0",
+  "author": "Adobe",
+  "homepage": "https://opensource.adobe.com/spectrum-css/coachmark",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/spectrum-css.git",
+    "directory": "components/coachmark"
+  },
+  "bugs": {
+    "url": "https://github.com/adobe/spectrum-css/issues"
+  },
+  "main": "dist/index-vars.css",
+  "scripts": {
+    "build": "gulp"
+  },
+  "peerDependencies": {
+    "@spectrum-css/actionbutton": ">=5",
+    "@spectrum-css/actionmenu": ">=5",
+    "@spectrum-css/button": ">=11",
+    "@spectrum-css/buttongroup": ">=6",
+    "@spectrum-css/menu": ">=5",
+    "@spectrum-css/popover": ">=6",
+    "@spectrum-css/tokens": ">=13"
+  },
+  "devDependencies": {
+    "@spectrum-css/actionbutton": "^5.0.16",
+    "@spectrum-css/actionmenu": "^5.0.9",
+    "@spectrum-css/button": "^11.0.17",
+    "@spectrum-css/buttongroup": "^6.1.15",
+    "@spectrum-css/component-builder-simple": "^3.0.1",
+    "@spectrum-css/menu": "^5.2.0",
+    "@spectrum-css/popover": "^6.0.83",
+    "@spectrum-css/tokens": "^13.0.5",
+    "gulp": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

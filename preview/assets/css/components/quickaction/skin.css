@@ -1,0 +1,7 @@
+.spectrum-QuickActions-overlay{
+  background-color:var(--spectrum-quickactions-overlay-color, var(--spectrum-alias-background-color-quickactions-overlay));
+}
+
+.spectrum-QuickActions{
+  background-color:var(--spectrum-quickactions-background-color, var(--spectrum-alias-background-color-quickactions));
+}

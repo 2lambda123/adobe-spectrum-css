@@ -1,0 +1,12 @@
+.spectrum {
+  --system-spectrum-infieldbutton-spectrum-infield-button-border-width:var(--spectrum-border-width-100);
+  --system-spectrum-infieldbutton-spectrum-infield-button-border-color:inherit;
+  --system-spectrum-infieldbutton-spectrum-infield-button-border-radius:var(--spectrum-corner-radius-100);
+  --system-spectrum-infieldbutton-spectrum-infield-button-border-radius-reset:0;
+  --system-spectrum-infieldbutton-spectrum-infield-button-stacked-top-border-radius-start-start:var(--spectrum-infield-button-border-radius-reset);
+  --system-spectrum-infieldbutton-spectrum-infield-button-stacked-bottom-border-radius-end-start:var(--spectrum-infield-button-border-radius-reset);
+  --system-spectrum-infieldbutton-spectrum-infield-button-background-color:var(--spectrum-gray-75);
+  --system-spectrum-infieldbutton-spectrum-infield-button-background-color-hover:var(--spectrum-gray-200);
+  --system-spectrum-infieldbutton-spectrum-infield-button-background-color-down:var(--spectrum-gray-300);
+  --system-spectrum-infieldbutton-spectrum-infield-button-background-color-key-focus:var(--spectrum-gray-200)
+}

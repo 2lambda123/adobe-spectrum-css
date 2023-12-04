@@ -1,0 +1,7 @@
+.spectrum {
+  --system-spectrum-combobox-border-color-default:var(--spectrum-gray-500);
+  --system-spectrum-combobox-border-color-hover:var(--spectrum-gray-600);
+  --system-spectrum-combobox-border-color-focus:var(--spectrum-gray-500);
+  --system-spectrum-combobox-border-color-focus-hover:var(--spectrum-gray-600);
+  --system-spectrum-combobox-border-color-key-focus:var(--spectrum-gray-600)
+}

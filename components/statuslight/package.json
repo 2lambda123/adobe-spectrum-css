@@ -1,0 +1,31 @@
+{
+  "name": "@spectrum-css/statuslight",
+  "version": "6.0.61",
+  "description": "The Spectrum CSS statuslight component",
+  "license": "Apache-2.0",
+  "author": "Adobe",
+  "homepage": "https://opensource.adobe.com/spectrum-css/statuslight",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/spectrum-css.git",
+    "directory": "components/statuslight"
+  },
+  "bugs": {
+    "url": "https://github.com/adobe/spectrum-css/issues"
+  },
+  "main": "dist/index-vars.css",
+  "scripts": {
+    "build": "gulp"
+  },
+  "peerDependencies": {
+    "@spectrum-css/tokens": ">=13"
+  },
+  "devDependencies": {
+    "@spectrum-css/component-builder": "^4.0.18",
+    "@spectrum-css/tokens": "^13.0.5",
+    "gulp": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

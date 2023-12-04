@@ -1,0 +1,12 @@
+.spectrum-Asset-folderBackground{
+  fill:var(--spectrum-asset-folder-background-color, var(--spectrum-global-color-gray-300));
+}
+
+.spectrum-Asset-fileBackground{
+  fill:var(--spectrum-asset-file-background-color, var(--spectrum-global-color-gray-50));
+}
+
+.spectrum-Asset-folderOutline,
+.spectrum-Asset-fileOutline{
+  fill:var(--spectrum-asset-icon-outline-color, var(--spectrum-global-color-gray-500));
+}
