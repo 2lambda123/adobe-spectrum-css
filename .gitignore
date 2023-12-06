@@ -19,6 +19,7 @@ package-lock.json
 
 # Storybook build output
 .storybook/storybook-static
+storybook-static
 build-storybook.log
 
 # Chromatic
@@ -27,3 +28,6 @@ chromatic-diagnostics*.json
 
 # Custom diff tool
 .diff-output
+
+.eslintcache
+.stylelintcache

@@ -1,3 +1,8 @@
-components/**/*-generated.css
-tokens/*
-components/site/*
+# Static utility assets
+tokens/custom-*/*.css
+generator
+
+# Compiled and generated files
+dist
+.storybook/storybook-static
+*-generated.css

@@ -1,21 +1,151 @@
 {
-	"npmScope": "@spectrum-css",
-	"tasksRunnerOptions": {
-		"default": {
-			"runner": "nx/tasks-runners/default"
+	"$schema": "./node_modules/nx/schemas/nx-schema.json",
+	"cli": {
+		"warnings": {
+			"versionMismatch": true
+		},
+		"packageManager": "yarn",
+		"analytics": false
+	},
+	"pluginsConfig": {
+		"@nx/js": {
+			"analyzeSourceFiles": false
 		}
+	},
+	"namedInputs": {
+		"core": ["{projectRoot}/*.css", "{projectRoot}/themes/*.css"],
+		"scripts": ["{projectRoot}/stories/*.js"],
+		"stylelint": [
+			"{workspaceRoot}/.stylelintignore",
+			"{workspaceRoot}/stylelint.config.js",
+			"{workspaceRoot}/plugins/stylelint-*/index.js"
+		],
+		"eslint": ["{workspaceRoot}/.eslintrc.js"],
+		"prettier": ["{workspaceRoot}/.prettierrc"],
+		"tools": [
+			"{projectRoot}/*.json",
+			"{workspaceRoot}/postcss.config.js",
+			"{workspaceRoot}/plugins/postcss-*/index.js"
+		]
 	},
 	"targetDefaults": {
 		"clean": {
-			"cache": true,
-			"inputs": ["{projectRoot}/dist", { "externalDependencies": ["rimraf"] }]
+            "cache": true,
+			"inputs": [
+				"{projectRoot}/dist/*.{css,json}",
+				"{projectRoot}/dist/*.map",
+				{ "externalDependencies": ["rimraf"] }
+			],
+			"outputs": [],
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": [
+					"rimraf {projectRoot}/dist",
+					"test -d {projectRoot}/dist && echo \"Error: dist directory could not be removed\" && exit 1 || exit 0"
+				],
+				"parallel": false
+			}
 		},
 		"build": {
 			"cache": true,
-			"dependsOn": ["clean", "^build"],
-			"inputs": ["{projectRoot}/*.css", { "externalDependencies": ["gulp"] }],
-			"outputs": ["{projectRoot}/dist"]
+			"dependsOn": ["^build", "clean"],
+			"inputs": [
+				"core",
+				"tools",
+				"!{projectRoot}/stories/*.js",
+				"{workspaceRoot}/tasks/component-builder.js",
+				"{workspaceRoot}/tasks/mod-extractor.js",
+				{ "externalDependencies": ["gulp"] },
+				{ "env": "NODE_ENV" }
+			],
+			"outputs": [
+				"{projectRoot}/dist/*.{css,json}",
+				"{projectRoot}/dist/*.map",
+				"{projectRoot}/metadata/mods.md"
+			],
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": [
+					"gulp --gulpfile {projectRoot}/gulpfile.js",
+					"node ./tasks/mod-extractor.js {projectRoot}"
+				],
+				"forwardAllArgs": true,
+				"parallel": false
+			}
+		},
+		"compare": {
+			"cache": true,
+			"inputs": [
+				"{workspaceRoot}/tasks/compare-compiled-output.js",
+				{ "dependentTasksOutputFiles": "dist/*.css", "transitive": true },
+				{
+					"externalDependencies": [
+						"fast-glob",
+						"tar",
+						"lodash",
+						"nunjucks",
+						"rimraf",
+						"npm-registry-fetch",
+						"yargs",
+						"diff",
+						"diff2html",
+						"colors"
+					]
+				}
+			],
+			"outputs": ["{workspaceRoot}/.diff-output"]
+		},
+		"test": {
+			"cache": true,
+			"dependsOn": [{ "target": "test", "projects": "storybook" }],
+			"configurations": {
+				"scope": {
+					"dependsOn": [
+						{
+							"target": "test",
+							"configuration": "scope",
+							"projects": "storybook"
+						}
+					]
+				}
+			}
+		},
+		"lint": {
+			"cache": true,
+			"inputs": [
+				"core",
+				"scripts",
+				"stylelint",
+				"eslint",
+				"prettier",
+				{ "externalDependencies": ["stylelint", "eslint", "prettier"] }
+			],
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": [
+					"stylelint --cache --allow-empty-input --report-descriptionless-disables --report-invalid-scope-disables --report-needless-disables {projectRoot}/*.css {projectRoot}/**/*.css --ignore-pattern {projectRoot}/dist",
+					"eslint --cache --no-error-on-unmatched-pattern --report-unused-disable-directives {projectRoot}/*.{js,json} {projectRoot}/**/*.{js,json} || exit 0"
+				]
+			}
+		},
+		"format": {
+			"cache": true,
+			"inputs": [
+				"core",
+				"scripts",
+				"stylelint",
+				"eslint",
+				"prettier",
+				{ "externalDependencies": ["stylelint", "eslint", "prettier"] }
+			],
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": [
+					"stylelint --fix --cache --allow-empty-input --quiet {projectRoot}/*.css {projectRoot}/**/*.css --ignore-pattern {projectRoot}/dist",
+					"eslint --fix --cache --no-error-on-unmatched-pattern --quiet {projectRoot}/*.json {projectRoot}/stories/*.js || exit 0",
+					"prettier --write --cache --loglevel error --ignore-unknown --no-error-on-unmatched-pattern {projectRoot}/*.{js,json,yml,md} {projectRoot}/**/*.{js,json,yml,md}"
+				]
+			}
 		}
-	},
-	"includedScripts": ["build"]
+	}
 }
