@@ -5,6 +5,7 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { when } from "lit/directives/when.js";
 
+import { Template as FieldLabel } from "@spectrum-css/fieldlabel/stories/template.js";
 import { Template as Icon } from "@spectrum-css/icon/stories/template.js";
 import { Template as ProgressCircle } from "@spectrum-css/progresscircle/stories/template.js";
 
@@ -38,6 +39,7 @@ export const Template = ({
 	autocomplete = true,
 	onclick,
 	customStyles = {},
+	items = [],
 	...globals
 }) => {
 	const [, updateArgs] = useArgs();
@@ -53,88 +55,99 @@ export const Template = ({
 	if (isInvalid) iconName = "Alert";
 	else if (isValid) iconName = "Checkmark";
 
-	return html`
-		<div
-			class=${classMap({
-				[rootClass]: true,
-				[`${rootClass}--size${size?.toUpperCase()}`]:
-					typeof size !== "undefined",
-				[`${rootClass}--multiline`]: multiline,
-				[`${rootClass}--grows`]: grows,
-				[`${rootClass}--quiet`]: isQuiet,
-				"is-invalid": isInvalid,
-				"is-valid": isValid,
-				"is-focused": isFocused,
-				"is-keyboardFocused": isKeyboardFocused,
-				"is-disabled": isDisabled,
-				"is-readOnly": isReadOnly,
-				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-			})}
-			style=${ifDefined(styleMap(customStyles))}
-			@click=${onclick}
-			@focusin=${(e) => {
-				const focusClass = e.target?.classList?.contains("focus-ring")
-					? { isKeyboardFocused: true }
-					: { isFocused: true };
-				updateArgs(focusClass);
-			}}
-			@focusout=${(e) => {
-				const focusClass = e.target?.classList?.contains("focus-ring")
-					? { isKeyboardFocused: false }
-					: { isFocused: false };
-				updateArgs(focusClass);
-			}}
-			id=${ifDefined(id)}
-		>
-			${when(iconName, () => Icon({
-				...globals,
-				size,
-				iconName,
-				customClasses: [
-					!!(isInvalid || isValid)
-						? `${rootClass}-validationIcon`
-						: `${rootClass}-icon`,
-					...customIconClasses,
-				],
-			}))}
-			${when(multiline, 
-				() => html`<textarea
-					placeholder=${ifDefined(placeholder)}
-					name=${ifDefined(name)}
-					id=${ifDefined(id ? `${id}-input` : undefined)}
-					.value=${ifDefined(value)}
-					autocomplete=${autocomplete ? undefined : "off"}
-					?required=${isRequired}
-					?disabled=${isDisabled}
-					?readonly=${ifDefined(isReadOnly)}
-					pattern=${ifDefined(pattern)}
-					class=${classMap({
-						[`${rootClass}-input`]: true,
-						...customInputClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-					})}
-				/>`, 
-				() => html`<input
-					type=${ifDefined(type)}
-					placeholder=${ifDefined(placeholder)}
-					name=${ifDefined(name)}
-					id=${ifDefined(id ? `${id}-input` : undefined)}
-					.value=${ifDefined(value)}
-					autocomplete=${autocomplete ? undefined : "off"}
-					?required=${isRequired}
-					?disabled=${isDisabled}
-					?readonly=${ifDefined(isReadOnly)}
-					pattern=${ifDefined(pattern)}
-					class=${classMap({
-						[`${rootClass}-input`]: true,
-						...customInputClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-					})}
-				/>`
-			)}
-			${when(isLoading, () => ProgressCircle({
-				isIndeterminate: true,
-				size: "s",
-				customClasses: customProgressCircleClasses,
-			}))}
-		</div>
-	`;
+	return items.map((textfields) => {
+		const { heading, multiline, grows, value, label } = textfields;
+		return html`
+			<p style="text-decoration: underline;">${heading}</p>
+			<div
+				class=${classMap({
+					[rootClass]: true,
+					[`${rootClass}--size${size?.toUpperCase()}`]:
+						typeof size !== "undefined",
+					[`${rootClass}--multiline`]: multiline,
+					[`${rootClass}--grows`]: grows,
+					[`${rootClass}--quiet`]: isQuiet,
+					"is-invalid": isInvalid,
+					"is-valid": isValid,
+					"is-focused": isFocused,
+					"is-keyboardFocused": isKeyboardFocused,
+					"is-disabled": isDisabled,
+					"is-readOnly": isReadOnly,
+					...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
+				})}
+				style=${ifDefined(styleMap(customStyles))}
+				@click=${onclick}
+				@focusin=${(e) => {
+					const focusClass = e.target?.classList?.contains("focus-ring")
+						? { isKeyboardFocused: true }
+						: { isFocused: true };
+					updateArgs(focusClass);
+				}}
+				@focusout=${(e) => {
+					const focusClass = e.target?.classList?.contains("focus-ring")
+						? { isKeyboardFocused: false }
+						: { isFocused: false };
+					updateArgs(focusClass);
+				}}
+				id=${ifDefined(id)}
+			>
+
+				${label && FieldLabel({
+					...globals,
+					label,
+					alignment: "",
+					// customClasses: [`${rootClass}-label`],
+				})}
+				${when(iconName, () => Icon({
+					...globals,
+					size,
+					iconName,
+					customClasses: [
+						!!(isInvalid || isValid)
+							? `${rootClass}-validationIcon`
+							: `${rootClass}-icon`,
+						...customIconClasses,
+					],
+				}))}
+				${when(multiline,
+					() => html`<textarea
+						placeholder=${ifDefined(placeholder)}
+						name=${ifDefined(name)}
+						id=${ifDefined(id ? `${id}-input` : undefined)}
+						.value=${ifDefined(value)}
+						autocomplete=${autocomplete ? undefined : "off"}
+						?required=${isRequired}
+						?disabled=${isDisabled}
+						?readonly=${ifDefined(isReadOnly)}
+						pattern=${ifDefined(pattern)}
+						class=${classMap({
+							[`${rootClass}-input`]: true,
+							...customInputClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
+						})}
+					/>`,
+					() => html`<input
+						type=${ifDefined(type)}
+						placeholder=${ifDefined(placeholder)}
+						name=${ifDefined(name)}
+						id=${ifDefined(id ? `${id}-input` : undefined)}
+						.value=${ifDefined(value)}
+						autocomplete=${autocomplete ? undefined : "off"}
+						?required=${isRequired}
+						?disabled=${isDisabled}
+						?readonly=${ifDefined(isReadOnly)}
+						pattern=${ifDefined(pattern)}
+						class=${classMap({
+							[`${rootClass}-input`]: true,
+							...customInputClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
+						})}
+					/>`
+				)}
+				${when(isLoading, () => ProgressCircle({
+					isIndeterminate: true,
+					size: "s",
+					customClasses: customProgressCircleClasses,
+				}))}
+			</div>
+		`;
+	});
 };

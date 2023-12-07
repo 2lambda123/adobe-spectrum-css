@@ -7,6 +7,7 @@ export default {
 		"Text fields are text boxes that allow users to input custom text entries with a keyboard. Various decorations can be displayed around the field to communicate the entry requirements.",
 	component: "TextField",
 	argTypes: {
+		items: { table: { disable: true } },
 		isValid: {
 			name: "Valid",
 			type: { name: "boolean" },
@@ -164,12 +165,37 @@ export default {
 };
 
 export const Default = Template.bind({});
-Default.args = {};
-
-export const TextArea = Template.bind({});
-TextArea.args = {
-	multiline: true,
-	grows: true,
-	value:
-		"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
+Default.args = {
+	items: [
+		{
+			heading: "Default"
+		},
+		{
+			heading: "Label",
+			label: "Label"
+		},
+		{
+			heading: "Wrapping Label",
+			label: "Label that is so long that it has to wrap to the next line so the user can see it"
+		},
+		{
+			heading: "Truncated text",
+			value: "Truncated text that the user would have entered"
+		},
+		{
+			heading: "TextArea",
+			multiline: true,
+			grows: true,
+			value:
+				"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
+		}
+	]
 };
+
+// export const TextArea = Template.bind({});
+// TextArea.args = {
+// 	multiline: true,
+// 	grows: true,
+// 	value:
+// 		"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
+// };
