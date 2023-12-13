@@ -1,13 +1,15 @@
 {
-	"$schema": "../../node_modules/nx/schemas/project-schema.json",
-	"name": "dropindicator",
-	"tags": ["component"],
-	"targets": {
-		"build": {},
-		"clean": {},
-		"compare": {},
-		"test": {
-			"defaultConfiguration": "scope"
-		}
-	}
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "dropindicator",
+    "tags": ["component", "legacy"],
+    "targets": {
+        "build": {},
+        "clean": {},
+        "compare": {},
+        "format": {},
+        "lint": {},
+        "profile": {},
+        "styles": {},
+        "test": {}
+    }
 }

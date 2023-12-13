@@ -62,7 +62,7 @@ export const Template = ({
 				html`
 				${hasImage ? html
 					`<div class="${rootClass}-image-wrapper">
-					<img class="${rootClass}-image" src="example-card-landscape.png" />
+					<img class="${rootClass}-image" src="images/example-card-landscape.png" />
 				</div>`
 					: ''}
 				<div class="spectrum-CoachMark-header">

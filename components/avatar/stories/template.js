@@ -1,13 +1,13 @@
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { when } from "lit/directives/when.js"
+import { when } from "lit/directives/when.js";
 
 import "../index.css";
 
 export const Template = ({
 	rootClass = "spectrum-Avatar",
-	image = "example-ava.png",
+	image = "images/example-ava.png",
 	altText,
 	isDisabled = false,
 	size = "700",

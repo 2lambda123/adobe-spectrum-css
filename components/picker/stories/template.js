@@ -23,15 +23,11 @@ export const Picker = ({
 	isInvalid = false,
 	isLoading = false,
 	isDisabled = false,
-	isReadOnly = false,
 	customClasses = [],
 	customStyles = {},
-	content = [],
-	iconName,
-	id,
 	...globals
 }) => {
-	const [_, updateArgs] = useArgs();
+	const [, updateArgs] = useArgs();
 
 	const { express } = globals;
 	try {
@@ -59,7 +55,7 @@ export const Picker = ({
 			aria-haspopup="listbox"
 			style=${ifDefined(styleMap(customStyles))}
 			type="button"
-			@click=${(e) => {
+			@click=${() => {
 				updateArgs({ isOpen: !isOpen });
 			}}
 		>
