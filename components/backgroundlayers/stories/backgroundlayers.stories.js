@@ -2,7 +2,7 @@ import { Template } from "./template";
 import { html } from 'lit';
 
 export default {
-  title: "Elements/Background layers",
+  title: "UtilityClasses/Background layers",
   description: "The background layers is a series of classes used to style background layers.",
   component: "BackgroundLayers",
   argTypes: {},
@@ -25,19 +25,19 @@ const EditingContext = ({
 		<div style="display: flex; justify-content: flex-start; position: relative; block-size: 150px;">
 			${Template({
         style: "z-index: 4;",
-				layer: 'elevated',
+				layer: 'edit-elevated',
 			})}
 			${Template({
         style: "z-index: 3; inset-inline-start: 15px; inset-block-start: 15px;",
-				layer: 'layer2',
+				layer: 'edit-layer2',
 			})}
 			${Template({
         style: "z-index: 2; inset-inline-start: 25px; inset-block-start: 25px;",
-				layer: 'layer1',
+				layer: 'edit-layer1',
 			})}
 			${Template({
         style: "z-index: 1; inset-inline-start: 35px; inset-block-start: 35px;",
-				layer: "pasteboard",
+				layer: "edit-pasteboard",
 			})}
 		</div>
 	`;
@@ -49,15 +49,15 @@ const BrowsingContext = ({
 		<div style="display: flex; justify-content: flex-start; position: relative; block-size: 150px;">
 			${Template({
         style: "z-index: 3;",
-				layer: 'elevated',
+				layer: 'browse-elevated',
 			})}
 			${Template({
         style: "z-index: 2; inset-inline-start: 15px; inset-block-start: 15px;",
-				layer: 'layer1',
+				layer: 'browse-layer1',
 			})}
 			${Template({
         style: "z-index: 1; inset-inline-start: 25px; inset-block-start: 25px;",
-				layer: "base",
+				layer: "browse-base",
 			})}
 		</div>
 	`;
