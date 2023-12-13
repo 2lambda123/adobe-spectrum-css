@@ -14,6 +14,9 @@ governing permissions and limitations under the License.
   /* Variables defined here */
   /* --spectrum-{{ folderName }}-... */
 
+  /* Properties defined here */
+  color: var(--highcontrast-{{ folderName }}-content-color-default, var(--mod-{{ folderName }}-content-color-default, var(--spectrum-{{ folderName }}-content-color-default)));
+
   &:lang(ja),
   &:lang(zh),
   &:lang(ko) {
@@ -21,20 +24,10 @@ governing permissions and limitations under the License.
   }
 }
 
-.spectrum-{{ pascalCase name }}--sizeS {}
-.spectrum-{{ pascalCase name }}--sizeM {}
-.spectrum-{{ pascalCase name }}--sizeL {}
-.spectrum-{{ pascalCase name }}--sizeXL {}
-
 @media (forced-colors: active) {
   .spectrum-{{ pascalCase name }} {
     --highcontrast-{{ folderName }}-content-color-default: CanvasText;
 
     forced-color-adjust: none;
   }
-}
-
-.spectrum-{{ pascalCase name }} {
-  /* Properties defined here */
-  color: var(--highcontrast-{{ folderName }}-content-color-default, var(--mod-{{ folderName }}-content-color-default, var(--spectrum-{{ folderName }}-content-color-default)));
 }

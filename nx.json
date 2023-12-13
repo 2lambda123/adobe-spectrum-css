@@ -46,18 +46,26 @@
 				"core",
 				"tools",
 				"!{projectRoot}/stories/*.js",
+				"{workspaceRoot}/tasks/component-builder.js",
 				"{workspaceRoot}/tasks/mod-extractor.js",
-				{ "externalDependencies": ["gulp", "postcss"] },
+				{
+					"externalDependencies": [
+						"fast-glob",
+						"yargs",
+						"colors",
+						"postcss",
+						"postcss-load-config"
+					]
+				},
 				{ "env": "NODE_ENV" }
 			],
 			"outputs": ["{projectRoot}/dist", "{projectRoot}/metadata/mods.md"],
 			"executor": "nx:run-commands",
 			"options": {
 				"commands": [
-					"gulp --gulpfile {projectRoot}/gulpfile.js",
+					"node ./tasks/component-builder.js {projectRoot}",
 					"node ./tasks/mod-extractor.js {projectRoot}"
 				],
-				"forwardAllArgs": true,
 				"parallel": false
 			}
 		},
@@ -66,7 +74,6 @@
 			"dependsOn": ["build"],
 			"inputs": [
 				"{workspaceRoot}/tasks/compare-compiled-output.js",
-				{ "dependentTasksOutputFiles": "dist/*.css", "transitive": true },
 				{
 					"externalDependencies": [
 						"fast-glob",

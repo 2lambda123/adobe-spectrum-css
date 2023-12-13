@@ -16,7 +16,7 @@
   "main": "dist/index-vars.css",
   "peerDependencies": {
     "@spectrum-css/button": ">=11",
-    "@spectrum-css/icon": ">=4",
+    "@spectrum-css/icon": ">=5",
     "@spectrum-css/vars": ">=9"
   },
   "peerDependenciesMeta": {

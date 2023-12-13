@@ -7,32 +7,26 @@
 			"{projectRoot}/*.{js,html}"
 		]
 	},
-	"implicitDependencies": [
-		"@spectrum-css/*",
-		"!@spectrum-css/generator",
-		"!@spectrum-css/bundle-builder",
-		"!@spectrum-css/component-builder",
-		"!@spectrum-css/component-builder-simple"
-	],
+	"implicitDependencies": ["tag:component"],
 	"targets": {
 		"clean": {
-			"cache": true,
 			"inputs": [
 				"{projectRoot}/storybook-static",
 				{ "externalDependencies": ["rimraf"] }
 			],
-			"executor": "nx:run-commands",
 			"options": {
 				"commands": [
 					"rimraf {projectRoot}/storybook-static",
 					"test -d {projectRoot}/storybook-static && echo \"Error: storybook-static directory could not be removed\" && exit 1 || exit 0"
-				],
-				"parallel": false
+				]
 			}
 		},
 		"build": {
-			"cache": true,
-			"dependsOn": ["^build"],
+			"dependsOn": [
+				"^build",
+				"clean",
+				{ "target": "build", "projects": "tag:component" }
+			],
 			"inputs": [
 				"{projectRoot}/assets",
 				"{projectRoot}/decorators",
@@ -42,7 +36,6 @@
 				{ "externalDependencies": ["storybook"] }
 			],
 			"outputs": ["{projectRoot}/storybook-static"],
-			"executor": "nx:run-commands",
 			"options": {
 				"cwd": "{projectRoot}",
 				"commands": [
@@ -75,7 +68,7 @@
 			}
 		},
 		"test": {
-			"cache": true,
+			"dependsOn": [],
 			"inputs": [
 				"{projectRoot}/assets",
 				"{projectRoot}/decorators",

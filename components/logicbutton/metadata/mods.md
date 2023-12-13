@@ -1,7 +1,6 @@
 | Modifiable Custom Properties                             |
 | -------------------------------------------------------- |
 | `--mod-animation-duration-100`                           |
-| `--mod-focus-indicator-gap`                              |
 | `--mod-line-height-100`                                  |
 | `--mod-logic-button-and-background-color`                |
 | `--mod-logic-button-and-background-color-disabled`       |
