@@ -177,8 +177,7 @@ exports.populateDNAInfo = function (component, dnaVars) {
 	try {
 		component.slug = this.getSlug(component.name);
 	} catch (err) {
-		console.error("Could not get slug for:");
-		console.log(component);
+		console.error("Could not get slug for:", component);
 	}
 
 	if (component.examples) {

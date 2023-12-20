@@ -10,33 +10,49 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const gulp = require("gulp");
-const del = require("del");
+const yargs = require("yargs");
+const { hideBin } = require("yargs/helpers");
 
-const css = require("./css");
-const docs = require("./docs");
+const { buildCSS, buildVars, buildIndexVars } = require("./css");
+const { buildDocs } = require("./docs");
 
-function clean() {
-	return del("dist/*");
+async function build() {
+	return Promise.all([
+		buildVars(),
+		buildDocs(),
+	]);
 }
 
-const build = gulp.series(clean, gulp.parallel(css.buildVars, docs.buildDocs));
+async function main(inputs = []) {
+	const cwd = process.cwd();
 
-const buildLite = gulp.series(clean, css.buildIndexVars);
+	await Promise.all(
+		inputs.map(async (folder) => {
+			process.chdir(folder);
+			return build();
+		}),
+	).catch((err) => {
+		console.error(err);
+		process.exit(1);
+	});
 
-const buildMedium = gulp.series(clean, css.buildVars);
+	process.chdir(cwd);
+	return Promise.resolve();
+}
 
-const buildHeavy = gulp.series(clean, css.buildCSS);
+const { _ = [] } = yargs(hideBin(process.argv)).argv;
+main(_).catch((err) => {
+	console.error(err);
+	process.exit(1);
+});
 
-exports.default = build;
 exports.build = build;
-exports.buildLite = buildLite;
-exports.buildMedium = buildMedium;
-exports.buildHeavy = buildHeavy;
-exports.clean = clean;
+exports.buildLite = buildIndexVars;
+exports.buildMedium = buildVars;
+exports.buildHeavy = buildCSS;
 
-exports.buildCSS = css.buildCSS;
-exports.buildVars = css.buildVars;
+exports.buildCSS = buildCSS;
+exports.buildVars = buildVars;
 
-exports.buildDocs = docs.buildDocs;
-exports.buildDocs_html = docs.buildDocs_html;
+exports.buildDocs = buildDocs;
+exports.buildDocs_html = buildDocs;

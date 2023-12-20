@@ -1,6 +1,6 @@
 # postcss-dropunusedvars
 
-> Remove unused variable definitions
+> Remove or warn about unused variable definitions
 
 ## Installation
 
@@ -45,3 +45,9 @@ The variables that are not used in any rule will be removed from the output:
 	height: var(--prefix-component-height);
 }
 ```
+
+## Options
+
+### `fix`
+
+Type: `boolean`<br> Default: `false` (disabled) <br> Description: When enabled, the plugin will remove unused variable definitions. When disabled, the plugin will only warn about unused variable definitions.

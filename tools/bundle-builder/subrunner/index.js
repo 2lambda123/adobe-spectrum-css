@@ -13,15 +13,10 @@ governing permissions and limitations under the License.
 const fs = require("fs");
 const path = require("path");
 
-const colors = require("colors");
-const logger = require("gulplog");
+require("colors");
+
 const dirs = require("../lib/dirs");
 const depUtils = require("../lib/depUtils");
-
-function chdir(dir) {
-	process.chdir(dir);
-	logger.debug(`Working directory changed to ${dir.magenta}`);
-}
 
 /*
   Run the specified gulp task for the given package
@@ -30,48 +25,46 @@ function runComponentTask(packageDir, task, callback) {
 	// Drop org
 	packageName = packageDir.split("/").pop();
 
-	var gulpfile = path.join(packageDir, "gulpfile.js");
+	const taskFile = path.join(packageDir, "index.js");
 
-	if (!fs.existsSync(gulpfile)) {
-		logger.warn(`No gulpfile found for ${packageName.yellow}`);
+	if (!fs.existsSync(taskFile)) {
+		console.warn(`No task definitions found for ${packageName.yellow}`);
 		callback();
 		return;
 	}
 
-	let cwd = process.cwd();
+	const tasks = require(taskFile);
 
-	chdir(packageDir);
-
-	var tasks = require(gulpfile);
-
-	if (tasks[task]) {
-		logger.warn(`Starting '${packageName.yellow}:${task.yellow}'...`);
-
-		tasks[task](function (err) {
-			chdir(cwd);
-
-			if (err) {
-				logger.error(
-					`Error running '${packageName.yellow}:${task.yellow}': ${err}`
-				);
-
-				callback(err);
-			} else {
-				logger.warn(`Finished '${packageName.yellow}:${task.yellow}'`);
-
-				callback();
-			}
-		});
-	} else {
-		var err = new Error(
+	if (!tasks || !tasks[task]) {
+		const err = new Error(
 			`Task '${packageName.yellow}:${task.yellow}' not found!`
 		);
-		logger.error(err);
-
-		chdir(cwd);
+		console.error(err);
 
 		callback(err);
 	}
+
+	let cwd = process.cwd();
+
+	process.chdir(packageDir);
+
+	console.log(`Starting '${packageName.yellow}:${task.yellow}'...`);
+
+	return tasks[task]((err) => {
+		process.chdir(cwd);
+
+		if (err) {
+			console.error(
+				`🔴 Error running '${packageName.yellow}:${task.yellow}': ${err}`
+			);
+
+			callback(err);
+		} else {
+			console.warn(`🟢 Finished '${packageName.yellow}:${task.yellow}'`);
+
+			callback();
+		}
+	});
 }
 
 /*
@@ -113,7 +106,7 @@ function runTaskOnPackages(task, packages) {
 					processPackage();
 				});
 			} else {
-				logger.warn(`${task} ran on ${packageCount} packages!`.bold.green);
+				console.warn(`${task} ran on ${packageCount} packages!`.bold.green);
 				resolve();
 			}
 		}

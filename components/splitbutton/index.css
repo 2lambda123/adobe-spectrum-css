@@ -10,8 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-@import "@spectrum-css/vars/dist/components/spectrum-button.css";
-
 .spectrum-SplitButton {
   --spectrum-splitbutton-trigger-border-left: 0;
   --spectrum-splitbutton-trigger-min-width: 0;
@@ -21,16 +19,11 @@ governing permissions and limitations under the License.
   --spectrum-splitbutton-border-radius-edge: var(
     --spectrum-alias-border-radius-small
   );
-}
 
-.spectrum-SplitButton-trigger {
   --spectrum-splitbutton-trigger-round-edge-padding: var(--spectrum-global-dimension-size-125);
   --spectrum-splitbutton-trigger-flat-edge-padding: var(--spectrum-global-dimension-size-100);
 
   --spectrum-splitbutton-cta-trigger-flat-edge-padding: calc(var(--spectrum-splitbutton-trigger-flat-edge-padding) - var(--spectrum-button-m-primary-outline-texticon-border-size));
-}
-
-.spectrum-SplitButton-action {
   --spectrum-splitbutton-flat-edge-padding: calc(
     var(--spectrum-button-m-primary-outline-texticon-padding-left) -
     var(--spectrum-button-m-primary-outline-texticon-border-size) * 2
@@ -42,6 +35,12 @@ governing permissions and limitations under the License.
     var(--spectrum-button-m-primary-outline-texticon-padding-left) -
     var(--spectrum-button-m-primary-outline-texticon-border-size) * 3
   );
+
+  /* from @spectrum-css/vars/dist/components/spectrum-button.css */
+  --spectrum-button-m-primary-outline-texticon-padding-left: var(--spectrum-global-dimension-size-0);
+  --spectrum-button-m-primary-outline-texticon-padding-right: var(--spectrum-global-dimension-size-200);
+  --spectrum-button-m-primary-outline-texticon-border-size: var(--spectrum-alias-border-size-thick);
+  --spectrum-button-m-primary-outline-texticon-border-radius: var(--spectrum-global-dimension-size-200);
 }
 
 .spectrum-SplitButton {

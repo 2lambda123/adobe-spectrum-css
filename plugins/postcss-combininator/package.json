@@ -1,16 +1,31 @@
 {
-  "private": true,
   "name": "postcss-combininator",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Combines multiple blocks of custom properties",
   "license": "Apache-2.0",
   "author": "Adobe",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/spectrum-css.git",
+    "directory": "plugins/postcss-combininator"
+  },
   "main": "index.js",
+  "files": [
+    "CHANGELOG.md",
+    "index.js",
+    "README.md",
+    "package.json"
+  ],
   "scripts": {
+    "prepublishOnly": "yarn test",
     "test": "ava"
   },
-  "dependencies": {
-    "postcss": "^7.0.32"
+  "peerDependencies": {
+    "postcss": ">=8"
+  },
+  "devDependencies": {
+    "ava": "^3.9.0",
+    "postcss": "^8.4.32"
   },
   "publishConfig": {
     "access": "public"

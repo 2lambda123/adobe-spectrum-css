@@ -131,9 +131,7 @@ module.exports = {
 								loader: "postcss-loader",
 								options: {
 									implementation: require("postcss"),
-									postcssOptions: {
-										config: resolve(__dirname, "postcss.config.js"),
-									},
+									sourceMap: true,
 								},
 							},
 						],
@@ -153,7 +151,6 @@ module.exports = {
 	},
 	framework: {
 		name: "@storybook/web-components-webpack5",
-		options: {},
 	},
 	features: {
 		/* Code splitting flag; load stories on-demand */
@@ -161,13 +158,6 @@ module.exports = {
 		/* Builds stories.json to help with on-demand loading */
 		buildStoriesJson: true,
 	},
-	// refs: {
-	//   'swc': {
-	//     title: 'Spectrum Web Components',
-	//     url: 'https://opensource.adobe.com/spectrum-web-components/storybook/',
-	//     expanded: false,
-	//   },
-	// },
 	docs: {
 		autodocs: true, // see below for alternatives
 		defaultName: "Docs", // set to change the name of generated docs entries

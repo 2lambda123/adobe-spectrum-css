@@ -34,12 +34,12 @@ test -d "components/icon/combined" && rm -rf components/icon/combined
 test -d "components/icon/large" && rm -rf components/icon/large
 test -d "components/icon/medium" && rm -rf components/icon/medium
 
-# test -d "plugins/legacy-postcss-dropdupedvars" && rm -rf plugins/legacy-postcss-dropdupedvars
+test -d "plugins/legacy-postcss-dropdupedvars" && rm -rf plugins/legacy-postcss-dropdupedvars
 # test -d "plugins/legacy-postcss-dropunusedvars" && rm -rf plugins/legacy-postcss-dropunusedvars
 # test -d "plugins/postcss-combininator" && rm -rf plugins/postcss-combininator
 # test -d "plugins/postcss-dropdupedvars" && rm -rf plugins/postcss-dropdupedvars
 # test -d "plugins/postcss-droproot" && rm -rf plugins/postcss-droproot
 # test -d "plugins/postcss-dropunusedvars" && rm -rf plugins/postcss-dropunusedvars
-# test -d "plugins/postcss-remapvars" && rm -rf plugins/postcss-remapvars
+test -d "plugins/postcss-remapvars" && rm -rf plugins/postcss-remapvars
 # test -d "plugins/postcss-transformselectors" && rm -rf plugins/postcss-transformselectors
 # test -d "plugins/postcss-varfallback" && rm -rf plugins/postcss-varfallback

@@ -10,31 +10,44 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const gulp = require("gulp");
-const rename = require("gulp-rename");
-const del = require("del");
-const css = require("./css");
+const fs = require("fs");
+const path = require("path");
 
-function clean() {
-	return del("dist/*");
+const yargs = require("yargs");
+const { hideBin } = require("yargs/helpers");
+
+const { buildCSS } = require("./css");
+
+async function main(inputs = []) {
+	const cwd = process.cwd();
+
+	await Promise.all(
+		inputs.map(async (folder) => {
+			process.chdir(folder);
+
+			await buildCSS().then(() => {
+				if (!fs.existsSync(path.join(process.cwd(), "dist/index.css"))) return;
+				// Copy index.vars as index.css to maintain backwards compat
+				fs.copyFileSync(path.join(process.cwd(), "dist/index.css"), path.join(process.cwd(), "dist/index-vars.css"));
+			});
+		}),
+	).catch((err) => {
+		console.error(err);
+		process.exit(1);
+	});
+
+	process.chdir(cwd);
+	return Promise.resolve();
 }
 
-const build = gulp.series(clean, css.buildCSS, function copyIndex() {
-	// Just copy index.vars as index.css to maintain backwards compat
-	return gulp
-		.src("dist/index.css")
-		.pipe(
-			rename((file) => {
-				file.basename = "index-vars";
-			})
-		)
-		.pipe(gulp.dest("dist/"));
+const { _ = [] } = yargs(hideBin(process.argv)).argv;
+main(_).catch((err) => {
+	console.error(err);
+	process.exit(1);
 });
 
-exports.default = build;
-exports.build = build;
-exports.buildLite = build;
-exports.buildMedium = build;
-exports.buildHeavy = build;
-exports.clean = clean;
-exports.buildCSS = build;
+exports.build = main;
+exports.buildLite = main;
+exports.buildMedium = main;
+exports.buildHeavy = main;
+exports.buildCSS = main;

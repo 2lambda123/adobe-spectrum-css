@@ -1,13 +1,13 @@
 {
-  "name": "postcss-dropdupedvars",
-  "version": "1.1.2",
-  "description": "Drop duplicate custom property definitions",
+  "name": "postcss-notnested",
+  "version": "1.0.0",
+  "description": "PostCSS plugin to remove nested rulesets",
   "license": "Apache-2.0",
   "author": "Adobe",
   "repository": {
     "type": "git",
     "url": "https://github.com/adobe/spectrum-css.git",
-    "directory": "plugins/postcss-dropdupedvars"
+    "directory": "plugins/postcss-notnested"
   },
   "main": "index.js",
   "files": [
@@ -16,16 +16,8 @@
     "README.md",
     "package.json"
   ],
-  "scripts": {
-    "prepublishOnly": "yarn test",
-    "test": "ava"
-  },
   "peerDependencies": {
     "postcss": ">=8"
-  },
-  "devDependencies": {
-    "ava": "^3.9.0",
-    "postcss": "^8.4.32"
   },
   "publishConfig": {
     "access": "public"

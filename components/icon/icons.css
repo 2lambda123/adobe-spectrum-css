@@ -12,6 +12,17 @@ governing permissions and limitations under the License.
 
 .spectrum-Icon,
 .spectrum-UIIcon {
+  --spectrum-alias-workflow-icon-size-s: var(--spectrum-global-dimension-size-200);
+  --spectrum-alias-workflow-icon-size-m: var(--spectrum-global-dimension-size-225);
+  --spectrum-alias-workflow-icon-size-xl: var(--spectrum-global-dimension-size-275);
+  --spectrum-alias-ui-icon-triplegripper-size-100-height: var(--spectrum-global-dimension-size-100);
+  --spectrum-alias-ui-icon-doublegripper-size-100-width: var(--spectrum-global-dimension-size-200);
+  --spectrum-alias-ui-icon-singlegripper-size-100-width: var(--spectrum-global-dimension-size-300);
+  --spectrum-alias-ui-icon-cornertriangle-size-75: var(--spectrum-global-dimension-size-65);
+  --spectrum-alias-ui-icon-cornertriangle-size-200: var(--spectrum-global-dimension-size-75);
+  --spectrum-alias-ui-icon-asterisk-size-75: var(--spectrum-global-dimension-static-size-100);
+  --spectrum-alias-ui-icon-asterisk-size-100: var(--spectrum-global-dimension-size-100);
+
   display: inline-block;
 
   /* Use custom pass through or inherit the text color */
@@ -28,6 +39,7 @@ governing permissions and limitations under the License.
   /* Don't catch clicks or hover, otherwise they may not escape the SVG */
   pointer-events: none;
 }
+
 @media (forced-colors: active) {
   .spectrum-Icon,
   .spectrum-UIIcon {

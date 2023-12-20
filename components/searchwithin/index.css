@@ -15,7 +15,8 @@ governing permissions and limitations under the License.
 
   /* Force override */
   --spectrum-searchwithin-border-radius: 0;
-  --spectrum-searchwithin-picker-min-width: 0;
+
+  --spectrum-textfield-m-texticon-border-size: var(--spectrum-alias-input-border-size);
 }
 
 .spectrum-SearchWithin {

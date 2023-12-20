@@ -1,13 +1,13 @@
 {
-  "name": "postcss-dropunusedvars",
-  "version": "3.0.0",
-  "description": "A PostCSS plugin to remove or warn unused variable definitions",
+  "name": "postcss-custom-properties-mapping",
+  "version": "1.0.0",
+  "description": "PostCSS plugin to map custom properties to Spectrum CSS variables",
   "license": "Apache-2.0",
   "author": "Adobe",
   "repository": {
     "type": "git",
     "url": "https://github.com/adobe/spectrum-css.git",
-    "directory": "plugins/postcss-dropdupedvars"
+    "directory": "plugins/postcss-custom-properties-mapping"
   },
   "main": "index.js",
   "files": [
@@ -16,19 +16,11 @@
     "README.md",
     "package.json"
   ],
-  "scripts": {
-    "prepublishOnly": "yarn test",
-    "test": "ava"
-  },
   "dependencies": {
     "postcss-value-parser": "^4.2.0"
   },
   "peerDependencies": {
     "postcss": ">=8"
-  },
-  "devDependencies": {
-    "ava": "^3.9.0",
-    "postcss": "^8.4.32"
   },
   "publishConfig": {
     "access": "public"

@@ -2,8 +2,8 @@ const { resolve, basename } = require("path");
 const { existsSync } = require("fs");
 const warnCleaner = require("postcss-warn-cleaner");
 
-const simpleBuilder = require("@spectrum-css/component-builder-simple/css/processors.js");
-const legacyBuilder = require("@spectrum-css/component-builder/css/processors.js");
+const simpleBuilder = require("@spectrum-css/component-builder-simple/css/postcss.plugins.js");
+const legacyBuilder = require("@spectrum-css/component-builder/css/postcss.plugins.js");
 
 /**
  * Determines the package name from a file path
@@ -76,12 +76,12 @@ module.exports = (ctx) => {
 		if (
 			deps.includes("@spectrum-css/vars")
 		) {
-			plugins.push(...legacyBuilder.processors);
+			plugins.push(...legacyBuilder.plugins);
 		} else {
 			if (ctx.file.split("/").includes("themes")) {
-				plugins.push(...simpleBuilder.getProcessors({ noSelectors: false }));
+				plugins.push(...simpleBuilder.getPlugins({ noSelectors: false }));
 			} else {
-				plugins.push(...simpleBuilder.getProcessors());
+				plugins.push(...simpleBuilder.plugins);
 			}
 		}
 	}
