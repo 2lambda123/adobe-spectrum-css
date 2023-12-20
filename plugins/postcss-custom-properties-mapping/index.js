@@ -10,15 +10,19 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const processed = Symbol("processed");
 const valueParser = require("postcss-value-parser");
 
 module.exports = function ({
-	staticVars = {},
-	allVars = {},
+	staticVars = new Map(),
+	allVars = new Map(),
 }) {
 	return {
 		postcssPlugin: "postcss-custom-properties-mapping",
 		Declaration(decl) {
+			if (decl[processed]) return;
+			decl[processed] = true;
+
 			// match custom property inclusions
 			if (!/(^|[^\w-])var\([\W\w]+\)/.test(decl.value)) {
 				return;
@@ -32,33 +36,35 @@ module.exports = function ({
 				return;
 			}
 
-			value.walk((node, index, nodes) => {
+			value.walk((node) => {
 				if (node.type !== "function" || node.value !== "var") {
 					return;
 				}
 
+				// Already has a fallback? Skip.
+				if (node.nodes.length > 2) return;
+
 				const v = node.nodes[0].value;
+				let foundValue;
 
 				// If the value is static, replace the variable with the value.
 				// Otherwise, change the variable name to the mapped name.
-				if (staticVars[v]) {
-					nodes.splice(
-						index,
-						1,
-						...valueParser(`var(${v}, ${staticVars[v]})`).nodes
-					);
+				if (staticVars.has(v)) {
+					foundValue = staticVars.get(v);
+					if (Array.isArray(foundValue)) foundValue = foundValue[0];
+				}
 
+				if (!foundValue && allVars.has(v)) {
+					foundValue = allVars.get(v);
+					if (Array.isArray(foundValue)) foundValue = foundValue[0];
+				}
+
+				if (foundValue) {
+					const newResult = valueParser(`var(${v}, ${foundValue})`);
+					node.nodes.splice(0, 1, ...newResult.nodes?.[0].nodes);
 					return;
 				}
-
-				if (allVars[v]) {
-					nodes.splice(
-						index,
-						1,
-						...valueParser(`var(${v}, ${allVars[v]})`).nodes
-					);
-				}
-			});
+			}, true);
 
 			decl.assign({
 				value: valueParser.stringify(value),

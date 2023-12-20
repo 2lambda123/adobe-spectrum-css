@@ -25,6 +25,9 @@
       "optional": true
     }
   },
+  "devDependencies": {
+    "@spectrum-css/component-builder-simple": "^3.0.2"
+  },
   "publishConfig": {
     "access": "public"
   }

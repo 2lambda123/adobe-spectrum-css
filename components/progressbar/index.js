@@ -1,1 +1,3 @@
-module.exports = require("@spectrum-css/component-builder-simple");
+const builder = require("@spectrum-css/component-builder-simple");
+
+builder(__dirname);

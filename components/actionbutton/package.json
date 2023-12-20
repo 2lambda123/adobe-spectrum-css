@@ -24,7 +24,8 @@
     }
   },
   "devDependencies": {
-    "@spectrum-css/commons": "^9.0.1"
+    "@spectrum-css/commons": "^9.0.1",
+    "@spectrum-css/component-builder-simple": "^3.0.2"
   },
   "publishConfig": {
     "access": "public"

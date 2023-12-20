@@ -18,8 +18,8 @@ postcss -u postcss-custom-properties-mapping -o dist/index.css src/index.css
 
 ### `staticVars`
 
-Type: `Object`<br> Default: `{}` <br> Example: `{ '--color-red': '#f00' }` <br> Description: A map of static variables to substitute in the CSS (e.g. `var(--color-red)` will be replaced with `#f00`). These are the most likely to be used for things like colors, font sizes, etc. and consistitute a shorter list of variables that are most likely to be used in the CSS.
+Type: `Map<string, string[]>`<br> Default: `new Map()` <br> Example: `[ ['--color-red', ['#f00'] ]` <br> Description: A map of static variables to substitute in the CSS (e.g. `var(--color-red)` will be replaced with `#f00`). These are the most likely to be used for things like colors, font sizes, etc. and consistitute a shorter list of variables that are most likely to be used in the CSS.
 
 ### `allVars`
 
-Type: `Object`<br> Default: `{}` <br> Example: `{ '--color-red': '#f00' }` <br> Description: A map of all possible variables to substitute in the CSS (e.g. `var(--color-red)` will be replaced with `#f00`). This is a comprehensive list of all possible variables that could be used in the CSS and is used to ensure that all variables are substituted.
+Type: `Map<string, string[]>`<br> Default: `new Map()` <br> Example: `[ ['--color-red', ['#f00'] ]` <br> Description: A map of all possible variables to substitute in the CSS (e.g. `var(--color-red)` will be replaced with `#f00`). This is a comprehensive list of all possible variables that could be used in the CSS and is used to ensure that all variables are substituted.

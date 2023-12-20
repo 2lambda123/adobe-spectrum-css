@@ -11,9 +11,11 @@
   "bugs": {
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
+  "main": "index.js",
   "dependencies": {
     "@spectrum-css/tokens": "^13.0.6",
     "autoprefixer": "^10.4.16",
+    "colors": "^1.4.0",
     "fast-glob": "^3.3.2",
     "postcss": "^8.4.32",
     "postcss-combininator": "^1.1.0",

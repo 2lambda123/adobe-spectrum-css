@@ -55,27 +55,12 @@ governing permissions and limitations under the License.
 
   --spectrum-cssexample-padding-x: var(--spectrum-global-dimension-size-500);
   --spectrum-cssexample-padding-y: var(--spectrum-global-dimension-size-400);
+}
 
-  /* .spectrum-Site */
-  --spectrum-site-background-color: var(--spectrum-global-color-gray-75);
-  --spectrum-site-content-background-color: var(--spectrum-global-color-gray-50);
-  --spectrum-site-header-border-color: var(--spectrum-global-color-gray-300);
-  --spectrum-site-header-background-color: var(--spectrum-site-content-background-color);
-  --spectrum-site-sidebar-background-color: var(--spectrum-site-background-color);
-  --spectrum-site-scrollbar-track-color: var(--spectrum-site-background-color);
-  --spectrum-site-scrollbar-thumb-color: var(--spectrum-global-color-gray-400);
-
-  /* .spectrum-Site-overlay */
-  --spectrum-site-overlay-underlay-background-color: rgba(0, 0, 0, 0.2);
-
-  /* .spectrum-CSSExample */
-  --spectrum-cssexample-markup-background-color: var(--spectrum-global-color-gray-75);
-  --spectrum-cssexample-border-color: var(--spectrum-global-color-gray-100);
-
+.spectrum-Site {
   block-size: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--spectrum-site-content-background-color);
 }
 
 .spectrum-Site-content {
@@ -116,14 +101,14 @@ governing permissions and limitations under the License.
   padding: var(--spectrum-global-dimension-size-350) var(--spectrum-global-dimension-size-300);
 
   text-decoration: none;
+}
 
-  &:focus {
-    outline: none;
+.spectrum-Site-sideBarHeader:focus {
+  outline: none;
+}
 
-    h2 {
-      text-decoration: underline;
-    }
-  }
+.spectrum-Site-sideBarHeader:focus h2 {
+  text-decoration: underline;
 }
 
 .spectrum-Site-search {
@@ -147,12 +132,16 @@ governing permissions and limitations under the License.
 .spectrum-Site-logo {
   margin-inline-end: var(--spectrum-global-dimension-size-200);
   color: #FA0F00;
+}
 
-  .spectrum--medium & {
+.spectrum--medium {
+  .spectrum-Site-logo {
     block-size: 32px;
   }
+}
 
-  .spectrum--large & {
+.spectrum--large {
+  .spectrum-Site-logo {
     block-size: 40px;
   }
 }
@@ -181,10 +170,9 @@ governing permissions and limitations under the License.
 
 .spectrum-Site-heroHeading {
   margin-block-end: 16px;
-
-  .spectrum-Heading {
-    margin-top: 0 !important;
-  }
+}
+.spectrum-Site-heroHeading .spectrum-Heading {
+  margin-top: 0 !important;
 }
 
 .spectrum-Site-heroImage {
@@ -227,6 +215,68 @@ governing permissions and limitations under the License.
   z-index: 99;
 
   overflow: hidden;
+}
+
+@media screen and (max-width: 960px) {
+  .spectrum-Site-content {
+    /* fix: header scrolls off */
+    max-height: calc(100% - 48px);
+  }
+
+  .spectrum-Site-overlay {
+    display: block;
+
+    /* Exit animations */
+    transition: opacity var(--spectrum-site-overlay-background-exit-animation-duration) var(--spectrum-site-overlay-background-exit-animation-easing) var(--spectrum-site-overlay-background-exit-animation-delay),
+                visibility 0ms linear calc(var(--spectrum-site-overlay-background-exit-animation-delay) + var(--spectrum-site-overlay-background-exit-animation-duration));
+  }
+
+  .spectrum-Site-overlay.is-open {
+    visibility: visible;
+
+    opacity: 1;
+
+    pointer-events: auto;
+
+    /* Entry animations */
+    transition: opacity var(--spectrum-site-overlay-background-entry-animation-duration) var(--spectrum-site-overlay-background-entry-animation-easing) var(--spectrum-site-overlay-background-entry-animation-delay);
+  }
+
+  .spectrum-Site-overlay {
+    visibility: visible;
+  }
+
+  .spectrum-Site-sideBar {
+    position: fixed;
+    inset-block-start: 0;
+    inset-block-end: 0;
+    inset-inline-end: 100%;
+    z-index: 100;
+
+    transform: translateX(0);
+    transition: transform var(--spectrum-global-animation-duration-200) ease-in-out;
+  }
+
+  .spectrum-Site-sideBar.is-open {
+    transform: translateX(100%);
+  }
+
+  .spectrum-Site-header {
+    display: block;
+  }
+
+  .spectrum-Site-page {
+    padding-inline-start: var(--spectrum-global-dimension-size-300);
+    padding-inline-end: var(--spectrum-global-dimension-size-300);
+  }
+
+  .spectrum-Site-hero {
+    max-inline-size: 100%;
+  }
+
+  .spectrum-Site-heroHeading h1.spectrum-Heading1--display {
+    font-size: var(--spectrum-global-dimension-font-size-900);
+  }
 }
 
 /* CSS Component */
@@ -320,10 +370,12 @@ governing permissions and limitations under the License.
   margin-block-end: var(--spectrum-global-dimension-size-300);
 }
 
-.spectrum--dark .spectrum-CSSComponent-resource--github,
-.spectrum--darkest .spectrum-CSSComponent-resource--github {
-  background-color: rgba(245, 245, 245, 0.1) !important;
-  color: rgb(245, 245, 245);
+.spectrum--dark,
+.spectrum--darkest {
+  .spectrum-CSSComponent-resource--github {
+    background-color: rgba(245, 245, 245, 0.1) !important;
+    color: rgb(245, 245, 245);
+  }
 }
 
 .spectrum-CSSComponent-resource--npm {
@@ -375,6 +427,13 @@ governing permissions and limitations under the License.
 .spectrum-CSSExample-example {
   flex: 1 0 auto;
 
+  /*
+  // this breaks layout for some examples, we'll need to fix later
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  */
+
   min-block-size: var(--spectrum-cssexample-min-height);
 
   padding: var(--spectrum-cssexample-padding-y) var(--spectrum-cssexample-padding-x);
@@ -390,6 +449,7 @@ governing permissions and limitations under the License.
     border-color: var(--spectrum-docs-static-black-background-color);
   }
 }
+
 
 .spectrum-CSSExample-markup {
   position: relative;
@@ -447,10 +507,14 @@ governing permissions and limitations under the License.
   gap: 6px;
   flex-wrap: wrap;
 }
-
 .spectrum-Examples--vertical {
   flex-direction: column;
 }
+
+/* .spectrum-Examples-item {
+  margin-bottom: var(--spectrum-global-dimension-size-200);
+}
+*/
 
 .spectrum-Examples-item .spectrum-Examples-itemHeading {
   margin-bottom: var(--spectrum-global-dimension-size-100);
@@ -487,6 +551,38 @@ governing permissions and limitations under the License.
 
   font-size: var(--spectrum-global-dimension-font-size-150);
   text-align: left
+}
+
+@media screen and (max-width: 960px) {
+  .spectrum-CSSComponent {
+    padding: 0 var(--spectrum-global-dimension-size-250);
+    margin: var(--spectrum-global-dimension-size-100) auto;
+  }
+
+  .spectrum-CSSComponent-description {
+    margin-block-end: var(--spectrum-global-dimension-size-150);
+    /*--spectrum-body-2-text-size: var(--spectrum-global-dimension-font-size-100);*/
+  }
+
+  .spectrum-CSSExample {
+    margin-block-end: var(--spectrum-global-dimension-size-200);
+  }
+
+  .spectrum-CSSExample-example {
+    padding: var(--spectrum-global-dimension-size-200) var(--spectrum-global-dimension-size-200);
+  }
+
+  .spectrum-CSSComponent-header {
+    margin-block-end: var(--spectrum-global-dimension-size-150);
+  }
+
+  .spectrum-CSSComponent-statusContainer,
+  .spectrum-CSSComponent-version {
+    display: none;
+  }
+  .spectrum-CSSComponent-title {
+    font-size: var(--spectrum-global-dimension-font-size-700);
+  }
 }
 
 .spectrum-CenteredImage {
@@ -550,172 +646,4 @@ governing permissions and limitations under the License.
   block-size: 8px;
   border-block: 2px solid rgba(0, 0, 0, 0);
   background-clip: padding-box;
-}
-
-.spectrum-Site-header {
-  border-block-end-color: var(--spectrum-site-header-border-color);
-  background-color: var(--spectrum-site-header-background-color);
-}
-
-.spectrum-Site-sideBar {
-  background-color: var(--spectrum-site-sidebar-background-color);
-}
-
-.spectrum-Site-mainContainer {
-  background: var(--spectrum-site-content-background-color);
-}
-
-.spectrum-Site-overlay {
-  background: var(--spectrum-site-overlay-underlay-background-color);
-}
-
-.spectrum-CSSComponent-resource--github {
-  background-color: rgba(0, 0, 0, 0.1) !important;
-  color: black;
-}
-
-.spectrum-CSSComponent-resource--adobe {
-  color: #FA0F00 !important;
-  background-color: var(--spectrum-global-color-gray-100) !important;
-}
-
-/* Scrollable */
-.u-scrollable::-webkit-scrollbar-track,
-.u-scrollable::-webkit-scrollbar-track-piece {
-  background: var(--spectrum-site-scrollbar-track-color);
-}
-
-.u-scrollable::-webkit-scrollbar-thumb {
-  background-color: var(--spectrum-site-scrollbar-track-color);
-}
-
-.u-scrollable:hover::-webkit-scrollbar-thumb {
-  background-color: var(--spectrum-site-scrollbar-thumb-color);
-}
-
-/* CSS Example */
-.spectrum-CSSExample-example {
-  background-color: var(--spectrum-alias-background-color-default, var(--spectrum-global-color-gray-100));
-}
-
-.spectrum-CSSExample-markup {
-  border-block-start: 1px solid var(--spectrum-cssexample-border-color);
-
-  background: var(--spectrum-cssexample-markup-background-color);
-}
-
-.spectrum-CSSExample-markupToggle {
-  z-index: 1;
-
-  background: var(--spectrum-cssexample-markup-background-color);
-}
-
-.spectrum-CSSExample-markup.is-open .spectrum-CSSExample-markupToggle {
-  background-color: transparent;
-}
-
-.spectrum-CSSExample-example--overlay {
-  background: rgba(0,0,0,0.4);
-  color: rgba(0,0,0,0.4);
-}
-
-.spectrum-CSSExample-oldAPI {
-  color: var(--spectrum-semantic-negative-text-color-small);
-}
-
-.spectrum-CodeBlock {
-  border-color: var(--spectrum-global-color-gray-400);
-  background-color: var(--spectrum-global-color-gray-75);
-}
-
-@media screen and (max-width: 960px) {
-  .spectrum-CSSComponent {
-    padding: 0 var(--spectrum-global-dimension-size-250);
-    margin: var(--spectrum-global-dimension-size-100) auto;
-  }
-
-  .spectrum-CSSComponent-description {
-    margin-block-end: var(--spectrum-global-dimension-size-150);
-    /*--spectrum-body-2-text-size: var(--spectrum-global-dimension-font-size-100);*/
-  }
-
-  .spectrum-CSSExample {
-    margin-block-end: var(--spectrum-global-dimension-size-200);
-  }
-
-  .spectrum-CSSExample-example {
-    padding: var(--spectrum-global-dimension-size-200) var(--spectrum-global-dimension-size-200);
-  }
-
-  .spectrum-CSSComponent-header {
-    margin-block-end: var(--spectrum-global-dimension-size-150);
-  }
-
-  .spectrum-CSSComponent-statusContainer,
-  .spectrum-CSSComponent-version {
-    display: none;
-  }
-  .spectrum-CSSComponent-title {
-    font-size: var(--spectrum-global-dimension-font-size-700);
-  }
-
-  .spectrum-Site-content {
-    /* fix: header scrolls off */
-    max-height: calc(100% - 48px);
-  }
-
-  .spectrum-Site-overlay {
-    display: block;
-
-    /* Exit animations */
-    transition: opacity var(--spectrum-site-overlay-background-exit-animation-duration) var(--spectrum-site-overlay-background-exit-animation-easing) var(--spectrum-site-overlay-background-exit-animation-delay),
-                visibility 0ms linear calc(var(--spectrum-site-overlay-background-exit-animation-delay) + var(--spectrum-site-overlay-background-exit-animation-duration));
-  }
-
-  .spectrum-Site-overlay.is-open {
-    visibility: visible;
-
-    opacity: 1;
-
-    pointer-events: auto;
-
-    /* Entry animations */
-    transition: opacity var(--spectrum-site-overlay-background-entry-animation-duration) var(--spectrum-site-overlay-background-entry-animation-easing) var(--spectrum-site-overlay-background-entry-animation-delay);
-  }
-
-  .spectrum-Site-overlay {
-    visibility: visible;
-  }
-
-  .spectrum-Site-sideBar {
-    position: fixed;
-    inset-block-start: 0;
-    inset-block-end: 0;
-    inset-inline-end: 100%;
-    z-index: 100;
-
-    transform: translateX(0);
-    transition: transform var(--spectrum-global-animation-duration-200) ease-in-out;
-  }
-
-  .spectrum-Site-sideBar.is-open {
-    transform: translateX(100%);
-  }
-
-  .spectrum-Site-header {
-    display: block;
-  }
-
-  .spectrum-Site-page {
-    padding-inline-start: var(--spectrum-global-dimension-size-300);
-    padding-inline-end: var(--spectrum-global-dimension-size-300);
-  }
-
-  .spectrum-Site-hero {
-    max-inline-size: 100%;
-  }
-
-  .spectrum-Site-heroHeading h1.spectrum-Heading1--display {
-    font-size: var(--spectrum-global-dimension-font-size-900);
-  }
 }

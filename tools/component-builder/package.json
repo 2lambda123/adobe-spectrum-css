@@ -11,9 +11,11 @@
   "bugs": {
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
+  "main": "index.js",
   "dependencies": {
     "@spectrum-css/vars": "^9.0.8",
     "autoprefixer": "^10.4.16",
+    "colors": "^1.4.0",
     "fast-glob": "^3.3.2",
     "js-yaml": "^4.1.0",
     "postcss": "^8.4.32",
@@ -34,6 +36,7 @@
     "postcss-selector-parser": "^6.0.13",
     "postcss-transform-logical": "^1.1.0",
     "postcss-values-parser": "^6.0.2",
+    "postcss-vars-only": "^1.0.0",
     "pug": "^3.0.2",
     "yargs": "^17.7.2"
   },

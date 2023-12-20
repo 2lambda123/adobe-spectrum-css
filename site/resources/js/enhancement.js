@@ -1062,5 +1062,4 @@ window.addEventListener('focusout', onFocusOutHandler, true);
 window.addEventListener('mousedown', onMousedownHandler, true);
 
 animateCircleLoaders();
-window.addEventListener("PageFastLoaded", enhanceAll);
 window.addEventListener("DOMContentLoaded", enhanceAll);

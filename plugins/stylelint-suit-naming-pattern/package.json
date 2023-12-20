@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "ava": "^3.9.0",
-    "postcss-selector-parser": "^6.0.2",
+    "postcss-selector-parser": "^6.0.13",
     "stylelint": "^15.10.2"
   }
 }

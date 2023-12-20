@@ -1,16 +1,9 @@
 # @spectrum-css/component-builder-simple
 
-> Simplified build system for Spectrum CSS components
+> Build system for Spectrum CSS components
 
-This package uses gulp to compile CSS for Spectrum CSS components.
-
-## CLI
-
-The following tasks are available:
-
-- `gulp clean` - Clean everything
-- `gulp build` - Build everything
+This package uses a node script and postcss to compile CSS for Spectrum CSS components
 
 ## Accessing PostCSS preprocessors
 
-You can pull the list of preprocessors with `require('@spectrum-css/component-builder-simple/css/processors')`.
+You can access the postcss config by including `module.exports = require("@spectrum-css/component-builder-simple/postcss.config.js");` in your `postcss.config.js` file.

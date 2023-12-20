@@ -48,14 +48,15 @@
 				"!{projectRoot}/stories/*.js",
 				"{projectRoot}/index.js",
 				"{workspaceRoot}/tasks/mod-extractor.js",
-				{ "externalDependencies": ["fast-glob", "postcss"] },
-				{ "env": "NODE_ENV" }
+				{ "env": "NODE_ENV" },
+				{ "env": "VERBOSE" },
+				{ "env": "QUIET" }
 			],
 			"outputs": ["{projectRoot}/dist", "{projectRoot}/metadata/mods.md"],
 			"executor": "nx:run-commands",
 			"options": {
 				"commands": [
-					"node ./{projectRoot}/index.js {projectRoot}",
+					"node {projectRoot}/index.js {projectRoot}",
 					"node ./tasks/mod-extractor.js {projectRoot}"
 				],
 				"forwardAllArgs": true,

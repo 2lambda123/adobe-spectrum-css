@@ -13,40 +13,37 @@ governing permissions and limitations under the License.
 const { join } = require("path");
 
 module.exports = ({
-	cwd,
+	cwd = process.cwd(),
 	splitinatorOptions = {},
 	additionalPlugins = [],
 	...options
-}) => {
-	if (!cwd) cwd = process.cwd();
-	return {
-		...options,
-		plugins: [
-			require("postcss-import")({
-				root: cwd,
-				addModulesDirectories: [join(cwd, "node_modules"), join(__dirname, "node_modules")],
-			}),
-			require("postcss-nested")(),
-			require("postcss-splitinator")({
-				processIdentifier: (identifier) => {
-					if (identifier === "express") {
-						return "spectrum--express";
-					}
-					return identifier;
-				},
-				...splitinatorOptions,
-			}),
-			require("postcss-inherit")(),
-			require("postcss-transform-logical")(),
-			...additionalPlugins,
-			require("postcss-dropunusedvars")({ fix: false }),
-			require("postcss-dropdupedvars")({ fix: false }),
-			require("postcss-discard-empty")(),
-			require("postcss-discard-comments")({ removeAllButFirst: true }),
-			require("autoprefixer")({}),
-			require("postcss-reporter")({
-				clearReportedMessages: true,
-			}),
-		],
-	};
-};
+} = {}) => ({
+	...options,
+	plugins: [
+		require("postcss-import")({
+			root: cwd,
+			addModulesDirectories: [join(cwd, "node_modules"), join(__dirname, "node_modules")],
+		}),
+		require("postcss-nested"),
+		require("postcss-splitinator")({
+			processIdentifier: (identifier) => {
+				if (identifier === "express") {
+					return "spectrum--express";
+				}
+				return identifier;
+			},
+			...splitinatorOptions,
+		}),
+		require("postcss-inherit")(),
+		require("postcss-transform-logical")(),
+		...additionalPlugins,
+		require("postcss-dropunusedvars")({ fix: false }),
+		require("postcss-dropdupedvars")({ fix: false }),
+		require("postcss-discard-empty")(),
+		require("postcss-discard-comments")({ removeAllButFirst: true }),
+		require("autoprefixer")({}),
+		require("postcss-reporter")({
+			clearReportedMessages: true,
+		}),
+	],
+});

@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-module.exports = function ({ fix } = { fix: true }) {
+module.exports = function ({ fix } = { fix: false }) {
 	return {
 		postcssPlugin: "postcss-dropdupedvars",
 		Rule(rule) {

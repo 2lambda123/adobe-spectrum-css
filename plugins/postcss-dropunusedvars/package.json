@@ -21,7 +21,7 @@
     "test": "ava"
   },
   "dependencies": {
-    "postcss-value-parser": "^4.2.0"
+    "postcss-values-parser": "^6.0.2"
   },
   "peerDependencies": {
     "postcss": ">=8"

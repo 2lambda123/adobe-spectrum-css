@@ -10,8 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const logger = require("gulplog");
-
 const md = require("markdown-it")({
 	html: true,
 	linkify: false,
@@ -121,16 +119,7 @@ exports.getDNAStatus = function (dnaComponentId, dnaStatus, cssStatus) {
 		dnaStatus = "Deprecated";
 	}
 
-	if (cssStatus === "Verified") {
-		if (dnaStatusTranslation[dnaStatus] !== "Canon") {
-			logger.debug(
-				`${dnaComponentId} is ${cssStatus} in CSS, but ${dnaStatus} in DNA`
-			);
-		}
-	}
-
 	if (!dnaStatus) {
-		logger.debug(`${dnaComponentId} has no DNA status`);
 		dnaStatus = "Contribution";
 	}
 
@@ -157,8 +146,6 @@ exports.populateDNAInfo = function (component, dnaVars) {
 
 	// Get info based on component variation first, then component name second
 	var dnaComponentTitle = dnaVars["spectrum-" + dnaComponentId + "-name"];
-
-	var dnaDescription = dnaVars["spectrum-" + dnaComponentId + "-description"];
 
 	var cssStatus = this.getCSSStatus(dnaComponentId, component.status);
 	var dnaStatus = this.getDNAStatus(

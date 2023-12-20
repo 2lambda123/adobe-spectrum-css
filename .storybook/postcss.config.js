@@ -1,9 +1,5 @@
 const { resolve, basename } = require("path");
 const { existsSync } = require("fs");
-const warnCleaner = require("postcss-warn-cleaner");
-
-const simpleBuilder = require("@spectrum-css/component-builder-simple/css/postcss.plugins.js");
-const legacyBuilder = require("@spectrum-css/component-builder/css/postcss.plugins.js");
 
 /**
  * Determines the package name from a file path
@@ -15,11 +11,16 @@ function getPackageFromPath(filePath) {
 }
 
 module.exports = (ctx) => {
-	let plugins = [];
-	const componentPath = resolve(__dirname, "../components");
-    /** @todo put together a more robust fallback determination */
+	const cwd = ctx.cwd ?? process.cwd();
+	const plugins = [
+		require("postcss-import")({
+			root: cwd,
+			addModulesDirectories: [join(cwd, "node_modules"), join(__dirname, "node_modules")],
+		})
+	];
+
+ /** @todo put together a more robust fallback determination */
 	const folderName = getPackageFromPath(ctx.file) ?? "tokens";
-	const pkgPath = resolve(componentPath, folderName, "package.json");
 
 	/**
 	 * For our token libraries, include a little extra parsing to allow duplicate
@@ -33,8 +34,7 @@ module.exports = (ctx) => {
 					.replace("global", "")
 			: "";
 
-		plugins = [
-			require("postcss-import")(),
+		plugins.push(
 			require("postcss-selector-replace")({
 				before: [":root"],
 				after: [
@@ -43,8 +43,10 @@ module.exports = (ctx) => {
 					}${!isExpress && !modifier ? ".spectrum" : ""}`,
 				],
 			}),
-			...(isExpress
-				? [
+			);
+
+			if (isExpress) {
+				plugins.push(
 						require("postcss-prefix-selector")({
 							prefix: ".spectrum--express",
 							transform(_prefix, selector, prefixedSelector) {
@@ -53,36 +55,7 @@ module.exports = (ctx) => {
 								return prefixedSelector.replace(" ", "");
 							},
 						}),
-				  ]
-				: []),
-		];
-	} else if (existsSync(pkgPath)) {
-		/**
-		 * If a path has a package.json, we can assume it's a component and
-		 * we want to leverage the correct plugins for it.
-		 */
-		const {
-			peerDependencies = {},
-			devDependencies = {},
-			dependencies = {}
-		} = require(pkgPath);
-
-		const deps = [...new Set([
-			...Object.keys(peerDependencies),
-			...Object.keys(dependencies),
-			...Object.keys(devDependencies),
-		])];
-
-		if (
-			deps.includes("@spectrum-css/vars")
-		) {
-			plugins.push(...legacyBuilder.plugins);
-		} else {
-			if (ctx.file.split("/").includes("themes")) {
-				plugins.push(...simpleBuilder.getPlugins({ noSelectors: false }));
-			} else {
-				plugins.push(...simpleBuilder.plugins);
-			}
+				);
 		}
 	}
 
@@ -90,7 +63,7 @@ module.exports = (ctx) => {
 	 * For storybook, add a tool to suppress unnecessary warnings
 	 */
 	plugins.push(
-		warnCleaner({
+		require("postcss-warn-cleaner")({
 			ignoreFiles: "**/*.css",
 		})
 	);

@@ -18,36 +18,34 @@ function getUsedVars(root) {
 	const usedInProps = [];
 	const variableRelationships = {};
 
-	root.walkRules((rule) => {
-		rule.walkDecls((decl) => {
-			const usedInDecl = [];
-			const isVar = decl.prop.startsWith("--");
-			const matches = decl.value.match(/var\(.*?\)/g);
-			if (matches) {
-				// Parse value and get a list of variables used
-				const parsed = valueParser(decl.value);
-				parsed.walk((node) => {
-					if (node.type === "function" && node.value === "var") {
-						if (node.nodes.length) {
-							const varName = node.nodes[0].value;
-							usedInDecl.push(varName);
-							usedAnywhere.push(varName);
-							if (!isVar) {
-								usedInProps.push(varName);
-							}
+	root.walkDecls((decl) => {
+		const usedInDecl = [];
+		const isVar = decl.prop.startsWith("--");
+		const matches = decl.value.match(/var\(.*?\)/g);
+		if (matches) {
+			// Parse value and get a list of variables used
+			const parsed = valueParser(decl.value);
+			parsed.walk((node) => {
+				if (node.type === "function" && node.value === "var") {
+					if (node.nodes.length) {
+						const varName = node.nodes[0].value;
+						usedInDecl.push(varName);
+						usedAnywhere.push(varName);
+						if (!isVar) {
+							usedInProps.push(varName);
 						}
 					}
-				});
-			}
-
-			// Store every variable referenced by this var
-			if (isVar && usedInDecl.length) {
-				for (let varName of usedInDecl) {
-					variableRelationships[varName] = variableRelationships[varName] || [];
-					variableRelationships[varName].push(decl.prop);
 				}
+			});
+		}
+
+		// Store every variable referenced by this var
+		if (isVar && usedInDecl.length) {
+			for (let varName of usedInDecl) {
+				variableRelationships[varName] = variableRelationships[varName] || [];
+				variableRelationships[varName].push(decl.prop);
 			}
-		});
+		}
 	});
 
 	return {
@@ -57,7 +55,7 @@ function getUsedVars(root) {
 	};
 }
 
-module.exports = function ({ fix } = { fix: true }) {
+module.exports = function ({ fix } = { fix: false }) {
 	return {
 		postcssPlugin: "postcss-dropunusedvars",
 		OnceExit(root) {

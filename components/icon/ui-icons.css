@@ -10,8 +10,17 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+.spectrum-UIIcon {
+  --spectrum-alias-ui-icon-triplegripper-size-100-height: var(--spectrum-global-dimension-size-100);
+  --spectrum-alias-ui-icon-doublegripper-size-100-width: var(--spectrum-global-dimension-size-200);
+  --spectrum-alias-ui-icon-singlegripper-size-100-width: var(--spectrum-global-dimension-size-300);
+  --spectrum-alias-ui-icon-cornertriangle-size-75: var(--spectrum-global-dimension-size-65);
+  --spectrum-alias-ui-icon-cornertriangle-size-200: var(--spectrum-global-dimension-size-75);
+  --spectrum-alias-ui-icon-asterisk-size-75: var(--spectrum-global-dimension-static-size-100);
+  --spectrum-alias-ui-icon-asterisk-size-100: var(--spectrum-global-dimension-size-100);
+}
+
 /* Hide UI icons on older browsers with SVG 1.1 implementations */
-/* stylelint-disable property-no-unknown declaration-property-value-no-unknown function-no-unknown */
 .spectrum--medium {
   .spectrum-UIIcon--large {
     display: none;
@@ -32,6 +41,7 @@ governing permissions and limitations under the License.
   }
 }
 
+/* stylelint-disable custom-property-pattern -- svg2 icon hack */
 /* Hide UI icons on browsers that implement SVG 2 correctly (Firefox 56+) */
 .spectrum--large {
   --ui-icon-large-display: block;
@@ -50,6 +60,7 @@ governing permissions and limitations under the License.
 .spectrum-UIIcon--medium {
   display: var(--ui-icon-medium-display);
 }
+/* stylelint-enable custom-property-pattern */
 
 %spectrum-UIIcon--rotation90 {
   transform: rotate(90deg);
@@ -578,4 +589,3 @@ governing permissions and limitations under the License.
   inline-size: var(--spectrum-alias-ui-icon-asterisk-size-300);
   block-size: var(--spectrum-alias-ui-icon-asterisk-size-300);
 }
-/* stylelint-enable property-no-unknown declaration-property-value-no-unknown function-no-unknown */
