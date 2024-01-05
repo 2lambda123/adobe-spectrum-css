@@ -1,4 +1,4 @@
-| Modifiable Custom Properties                                      |
+| Modifiable custom properties                                      |
 | ----------------------------------------------------------------- |
 | `--mod-actionbutton-animation-duration`                           |
 | `--mod-actionbutton-background-color-default`                     |
@@ -47,4 +47,8 @@
 | `--mod-actionbutton-icon-size`                                    |
 | `--mod-actionbutton-label-color`                                  |
 | `--mod-actionbutton-min-width`                                    |
+| `--mod-actionbutton-static-content-color`                         |
 | `--mod-actionbutton-text-to-visual`                               |
+| `--mod-animation-duration-100`                                    |
+| `--mod-line-height-100`                                           |
+| `--mod-sans-font-family-stack`                                    |

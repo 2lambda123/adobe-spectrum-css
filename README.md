@@ -149,13 +149,13 @@ For most use cases, you'll want to use `spectrum-css-icons.svg` so you have supp
 ```js
 <script src="node_modules/loadicons/index.js"></script>
 <script>
-  loadIcons('node_modules/@spectrum-css/icon/dist/spectrum-css-icons.svg');
+  loadIcons('node_modules/@spectrum-css/ui-icons/dist/spectrum-css-icons.svg');
 </script>
 ```
 
 Based on which scales you'll be using, you can choose to load different files:
 
-- `@spectrum-css/icon/dist/spectrum-css-icons.svg` - Both medium and large icons for responsive UIs that support both `.spectrum--medium` and `.spectrum--large`
+- `@spectrum-css/ui-icons/dist/spectrum-css-icons.svg` - Both medium and large icons for responsive UIs that support both `.spectrum--medium` and `.spectrum--large`
 - `@spectrum-css/icon/dist/spectrum-css-icons-medium.svg` - Medium icons only, supports `.spectrum--medium` only
 - `@spectrum-css/icon/dist/spectrum-css-icons-large.svg` - Large icons only, supports `.spectrum--large` only
 
@@ -311,7 +311,9 @@ module.exports = {
 
 ## Contributing
 
-Check out the [contributing guidelines](.github/CONTRIBUTING.md) for quick start information, and head over to the [component documentation](components/README.md) for more.
+A very special thank you to all of our [contributors](<https://github.com/adobe/spectrum-css/graphs/contributors>) without whom this project would not be possible.
+
+Want to join the team? Check out the [contributing guidelines](.github/CONTRIBUTING.md) for quick start information.
 
 ### Building
 
@@ -319,22 +321,28 @@ Run the following commands:
 
 ```shell
 yarn install
+```
+
+**Important:** Requires at least Node 18.x.
+
+```shell
 yarn start
 ```
 
-Your `dist/` folder should now have a local copy of the Spectrum CSS docs and minimal CSS files, and your browser should be open with the project's preview site. Editing any of the `.css` or the `.stories.js` files in `components/*` will update the project documentation and live reload in your browser.
+This will spin up the local development environment ([Storybook](https://storybook.js.org/docs/web-components/get-started/introduction)). Editing any of the `.css` or the `.stories.js` files in `components/*` will live reload in your browser.
 
-**Important:** Ensure you have Node.js > 14 installed or the build system will not run. Node.js > 16.x is preferred.
-
-This project is leveraging caching from [Nx](https://nx.dev/) to speed up the build process. If you are seeing unexpected results, you can clear the cache by running `yarn nx clean` or `yarn nx run-many --target clean --all`.
-
-To spin up the local development environment ([Storybook](https://storybook.js.org/docs/web-components/get-started/introduction)) without first building the components, use: `SKIP_BUILD=true yarn start` as `yarn start` alone will start from a clean build.
+This project is leveraging caching from [Nx](https://nx.dev/) to speed up the build process. If you are seeing unexpected results, you can clear the cache by running `yarn cache:clean`.
 
 ### Tasks
 
 This project includes several small scripts to help with common tasks.
 
-- `yarn compare`: This compares the current version of components with the previous versions published to NPM and output a list of all the changes that have been made. This is useful for reviewing changes before a release. The information is provided in the command-line output as well as in a simple web page that is opened in your default browser upon completion.  The web page includes links to the visual diffs for each component when the file sizes have changed. Components with no changes are not included in the output.
+- `yarn compare`: This compares the current version of components with the previous versions published to NPM and output a list of all the changes that have been made. This is useful for reviewing changes before a release. The information is provided in the command-line output as well as in a simple web page that is opened in your default browser upon completion. The web page includes links to the visual diffs for each component when the file sizes have changed.
+  - Components with no changes are not included in the output.
+  - To run comparisons on one or multiple components, `yarn compare` accepts a list of components as arguments. For example, `yarn compare button` will compare the current version of the button component with the previous version published to NPM. `yarn compare button checkbox` will compare the current version of the button and checkbox components with the previous versions published to NPM.
+  - Named components should be space-separated.
+  - Running `yarn compare` with no inputs will automatically run against all packages.
+  - **Note** that you must run `yarn build` before running `yarn compare` to ensure that the latest build is being compared.
 - `yarn refresh:env`: This copies values for the project's `.env` file (an asset never committed to the repo as it contains login secrets) by using the `.env.example` file as a template. This script is useful when you need to update the `.env` file with new values from the `.env.example` file or when you checkout or clean the repo and need to restore the `.env` file.
 - `yarn refresh:directory`: This will remove any deprecated package folders that are no longer in use. The goal is to make migrating to a new project architecture easier for the most number of users.
 - `yarn lint:components`: Provides helpful updates and warnings for a component's package.json file. This helps keep all components in alignment.

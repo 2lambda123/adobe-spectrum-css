@@ -26,8 +26,8 @@ async function run() {
 	try {
 		// --------------- Fetch user input values  ---------------
 		const token = core.getInput("token");
-		const path = core.getInput("path");
-		const diffPath = core.getInput("diff-path");
+		const headPath = core.getInput("head-path");
+		const basePath = core.getInput("base-path");
 		const fileGlobPattern = core.getMultilineInput("file-glob-pattern", {
 			trimWhitespace: true,
 		});
@@ -37,14 +37,14 @@ async function run() {
 
 		// --------------- Evaluate compiled assets  ---------------
 		/** @type Map<string, number> */
-		const pathOutput = await fetchFilesAndSizes(path, fileGlobPattern, {
+		const headOutput = await fetchFilesAndSizes(headPath, fileGlobPattern, {
 			core,
 		});
 		/**
 		 * If a diff path is provided, get the diff files and their sizes
 		 * @type Map<string, number>
 		 **/
-		const diffOutput = await fetchFilesAndSizes(diffPath, fileGlobPattern, {
+		const baseOutput = await fetchFilesAndSizes(basePath, fileGlobPattern, {
 			core,
 		});
 		/**
@@ -52,24 +52,28 @@ async function run() {
 		 * and not just reporting on the overall size of the compiled assets
 		 * @type boolean
 		 */
-		const hasDiff = diffOutput.size > 0;
+		const hasDiff = baseOutput.size > 0;
 		// --------------- End evaluation  ---------------
 
 		/** Split the data by component package */
-		const COMPONENTS = splitDataByComponent(pathOutput, diffOutput);
-		const sections = makeTable(COMPONENTS);
+		const { filePath, PACKAGES } = splitDataByPackage(headOutput, headPath, baseOutput);
+		const sections = makeTable(PACKAGES, filePath, headPath);
 
-		const overallSize = [...pathOutput.values()].reduce(
+		/** Calculate the total size of the pull request's assets */
+		const overallHeadSize = [...headOutput.values()].reduce(
 			(acc, size) => acc + size,
 			0
 		);
 
-		/** Calculate the overall size of the updated assets */
-		const overallDiffSize = hasDiff
-			? [...diffOutput.values()].reduce((acc, size) => acc + size, 0)
+		/** Calculate the overall size of the base branch's assets */
+		const overallBaseSize = hasDiff
+			? [...baseOutput.values()].reduce((acc, size) => acc + size, 0)
 			: undefined;
 
+		const hasChange = overallHeadSize !== overallBaseSize;
+
 		/** If no diff map data provided, we're going to report on the overall size */
+
 		/**
 		 * If the updated assets are the same as the original,
 		 * report no change
@@ -78,100 +82,101 @@ async function run() {
 		const markdown = [];
 		const summary = [
 			"### Summary",
-			`**Total size**: ${bytesToSize(overallDiffSize)}<sup>*</sup>`
+			`**Total size**: ${bytesToSize(overallHeadSize)}<sup>*</sup>`,
 		];
-		const summaryTable = [];
+
+		let summaryTable = [];
 
 		if (sections.length === 0) {
 			summary.push(...["", " 🎉 No changes detected in any packages"]);
 		} else {
-			if (diffOutput.size > 0 && hasDiff) {
-				let changeSummary = `**Total change (Δ)**: ${printChange(
-					overallDiffSize - overallSize
-				)}`;
-
-				if (overallSize === overallDiffSize) changeSummary += " 🎉";
-				else
-					changeSummary += ` (${printPercentChange(
-						(overallDiffSize - overallSize) / overallSize
-					)})`;
-
-				summary.push(...[changeSummary, ""]);
+			/**
+			 * Calculate the change in size
+			 * PR - base / base = change
+			 */
+			let changeSummary = "";
+			if (baseOutput.size > 0 && hasDiff && hasChange) {
+				changeSummary = `**Total change (Δ)**: ${printChange(overallHeadSize, overallBaseSize)} (${printPercentChange(overallHeadSize, overallBaseSize)})`;
+			} else if (baseOutput.size > 0 && hasDiff && !hasChange) {
+				changeSummary = `No change in file sizes`;
 			}
 
-			summaryTable.push(
-				["Package", "Size", ...(hasDiff ? ["Δ"] : [])],
-				["-", "-", ...(hasDiff ? ["-"] : [])]
-			);
+			if (changeSummary !== "") {
+				summary.push(...[
+					changeSummary,
+					"<small><em>Table reports on changes to a package's main file. Other changes can be found in the collapsed \"Details\" below.</em></small>",
+					""
+				]);
+			}
 
 			markdown.push(`<details>`, `<summary><b>Details</b></summary>`, "");
 
-			sections.map(({ name, totalSize, totalDiffSize, fileMap }) => {
-				const md = ["", `#### ${name}`, ""];
-				const data = [name, bytesToSize(totalDiffSize)];
+			sections.map(({ name, filePath, headMainSize, baseMainSize, hasChange, mainFile, fileMap }) => {
+				if (!hasChange) return;
 
+				const data = [];
+
+				/** We only evaluate changes if there is a diff branch being used and this is the main file for the package */
 				if (hasDiff) {
-					// If a diff path was provided and the component folder doesn't exist,
-					// report that the compiled assets were removed
-					if (!existsSync(join(diffPath, "components", name))) {
-						data.push("🚨 package deleted/moved/renamed");
-						summaryTable.push(data);
-						return;
+					/**
+					 * If: the component folder exists in the original branch but not the PR
+					 * Or: the pull request file size is 0 or empty but the original branch has a size
+					 * Then: report that it was removed, moved, or renamed
+					 *
+					 * Else if: the component folder exists in the PR but not the original branch
+					 * Or: the pull request file has size but the original branch does not
+					 * Then: report that it's new
+					 *
+					 * Else if: the difference between the two sizes is not 0 (i.e. there is a change)
+					 * Then: report the change
+					 *
+					 * Else: report that there is no change
+					 */
+					if (
+						(existsSync(join(basePath, filePath, name)) && !existsSync(join(headPath, filePath, name)))
+					) {
+						data.push("🚨 deleted, moved, or renamed");
+					} else if (
+						(existsSync(join(headPath, filePath, name)) && !existsSync(join(basePath, filePath, name)))
+					) {
+						data.push("🎉 new");
+					} else if (
+						((Math.abs(difference(headMainSize, baseMainSize))) / 1000) >= 0.001
+					) {
+						data.push(printChange(headMainSize, baseMainSize));
 					}
 
-					if (totalSize > 0 && totalDiffSize === 0) {
-						data.push("⚠️ assets deleted/moved/renamed");
-						summaryTable.push(data);
-						return;
-					}
-
-					if (totalSize === 0 && totalDiffSize > 0) {
-						data.push("🎉 new package");
-					} else {
-						data.push(printChange(totalDiffSize - totalSize));
+					if (data.length > 0) {
+						summaryTable.push([name, bytesToSize(headMainSize), data]);
 					}
 				}
 
-				summaryTable.push(data);
 
+				const md = ["", `#### ${name}`, ""];
 				md.push(
 					...[
-						["File", "Size", ...(hasDiff ? ["Original size", "Δ", "Δ%"] : [])],
-						[" - ", " - ", ...(hasDiff ? [" - ", " - ", " - "] : [])],
-						[
-							"**Total changes**",
-							bytesToSize(totalSize),
-							...(hasDiff
-								? [
-									bytesToSize(totalDiffSize),
-									printChange(totalDiffSize - totalSize),
-									printPercentChange((totalDiffSize - totalSize) / totalSize),
-								]
-								: []),
-						],
+						["File", "Head", ...(hasDiff ? ["Base", "Δ"] : [])],
+						[" - ", " - ", ...(hasDiff ? [" - ", " - "] : [])],
 					].map((row) => `| ${row.join(" | ")} |`),
 					...[...fileMap.entries()]
 						.reduce(
 							(
-								table,
-								[readableFilename, { byteSize = 0, diffByteSize = 0 }]
+								table, // accumulator
+								[readableFilename, { headByteSize = 0, baseByteSize = 0 }] // deconstructed filemap entry; i.e., Map<key, { ...values }> = [key, { ...values }]
 							) => {
 								// @todo readable filename can be linked to html diff of the file?
 								// https://github.com/adobe/spectrum-css/pull/2093/files#diff-6badd53e481452b5af234953767029ef2e364427dd84cdeed25f5778b6fca2e6
-								const row = [
-									readableFilename,
-									byteSize === 0 ? "**removed**" : bytesToSize(byteSize),
-									diffByteSize === 0 ? "" : bytesToSize(diffByteSize),
+								return [
+									...table,
+									[
+										readableFilename === mainFile ? `**${readableFilename}**` : readableFilename,
+										isRemoved(headByteSize, baseByteSize) ? "**removed**" : isNew(headByteSize, baseByteSize) ? "**new**" : bytesToSize(headByteSize),
+										...(hasDiff ? [
+											bytesToSize(baseByteSize),
+											`${printChange(headByteSize, baseByteSize)}${difference(headByteSize, baseByteSize) !== 0 ? ` (${printPercentChange(headByteSize , baseByteSize)})` : ""}`,
+										] : []),
+									]
 								];
-
-								if (hasDiff && diffByteSize > 0) {
-									if (byteSize === 0) row.push("", "");
-									else {
-										row.push(printChange(diffByteSize - byteSize), "");
-									}
-								}
-
-								return [...table, row];
 							},
 							[]
 						)
@@ -184,11 +189,25 @@ async function run() {
 			markdown.push("", `</details>`);
 		}
 
-		if (summaryTable.length > 1) {
+		if (summaryTable.length > 0) {
+			// Add the headings to the summary table if it contains data
+			summaryTable = [
+				["Package", "Size", ...(hasDiff ? ["Δ"] : [])],
+				["-", "-", ...(hasDiff ? ["-"] : [])],
+				...summaryTable,
+			];
+
 			summary.push(...summaryTable.map((row) => `| ${row.join(" | ")} |`));
 		}
 
-		markdown.push("", `<small><sup>*</sup> <em>An ASCII character in UTF-8 is 8 bits or 1 byte.</em></small>`);
+		markdown.push(
+			"",
+			"<small>",
+			"* <em>Size determined by adding together the size of the main file for all packages in the library.</em><br/>",
+			"* <em>Results are not gzipped or minified.</em><br/>",
+			"* <em>An ASCII character in UTF-8 is 8 bits or 1 byte.</em>",
+			"</small>"
+		);
 
 		// --------------- Start Comment  ---------------
 		if (shouldAddComment) {
@@ -211,22 +230,22 @@ async function run() {
 		core.summary = summary.join("\n");
 
 		// --------------- Set output variables  ---------------
-		if (pathOutput.size > 0) {
-			const totalSize = [...pathOutput.entries()].reduce(
+		if (headOutput.size > 0) {
+			const headMainSize = [...headOutput.entries()].reduce(
 				(acc, [_, size]) => acc + size,
 				0
 			);
-			core.setOutput("total-size", totalSize);
+			core.setOutput("total-size", headMainSize);
 
 			if (hasDiff) {
-				const totalDiffSize = [...diffOutput.entries()].reduce(
+				const baseMainSize = [...baseOutput.entries()].reduce(
 					(acc, [_, size]) => acc + size,
 					0
 				);
 
 				core.setOutput(
 					"has-changed",
-					hasDiff && totalSize !== totalDiffSize ? "true" : "false"
+					hasDiff && headMainSize !== baseMainSize ? "true" : "false"
 				);
 			}
 		} else {
@@ -240,18 +259,23 @@ async function run() {
 
 run();
 
+/** A few helpful utility functions; v1 == PR (change); v0 == base (initial) */
+const difference = (v1, v0) => v1 - v0;
+const isRemoved = (v1, v0) => (!v1 || v1 === 0) && (v0 && v0 > 0);
+const isNew = (v1, v0) => (v1 && v1 > 0) && (!v0 || v0 === 0);
+
 /**
  * Convert the provided difference between file sizes into a human
  * readable representation of the change.
  * @param {number} difference
  * @returns {string}
  */
-const printChange = function (difference) {
-	return difference === 0
-		? `No change 🎉`
-		: `${difference > 0 ? "+" : "-"}${bytesToSize(Math.abs(difference))} ${
-				difference > 0 ? "⬆" : "⬇"
-		  }`;
+const printChange = function (v1, v0) {
+	/** Calculate the change in size: v1 - v0 = change */
+	const d = difference(v1, v0);
+	return d === 0
+		? `-`
+		: `${d > 0 ? "⬆" : "⬇"} ${bytesToSize(Math.abs(d))}`;
 };
 
 /**
@@ -261,38 +285,66 @@ const printChange = function (difference) {
  * @param {number} original
  * @returns {string}
  */
-const printPercentChange = function (delta) {
-	if (delta === 0) return `0%`;
-	const direction = delta > 0 ? "+" : "-";
-	return `${direction}${Math.abs(delta * 100).toFixed(2)}%`;
+const printPercentChange = function (v1, v0) {
+	const delta = ((v1 - v0) / v0) * 100;
+	if (delta === 0) return `no change`;
+	return `${delta.toFixed(2)}%`;
 };
 
 /**
  *
- * @param {Map<string, number>} pathMap
- * @param {Map<string, number>} diffMap
- * @returns {string}
+ * @param {Map<string, Map<string, { headByteSize: number, baseByteSize: number }>>} PACKAGES
+ * @param {string} filePath - The path to the component's dist folder from the root of the repo
+ * @param {string} path - The path from the github workspace to the root of the repo
+ * @returns {Array<{ name: string, filePath: string, headMainSize: number, baseMainSize: number, hasChange: boolean, fileMap: Map<string, { headByteSize: number, baseByteSize: number }>}>}
  */
-const makeTable = function (COMPONENTS) {
+const makeTable = function (PACKAGES, filePath, path) {
 	const sections = [];
 
-	/** Next convert that component data into a comment */
-	COMPONENTS.forEach((fileMap, componentName) => {
-		const totalSize = [...fileMap.values()].reduce(
-			(acc, { byteSize }) => acc + byteSize,
+	/** Next convert that component data into a detailed object for reporting */
+	PACKAGES.forEach((fileMap, packageName) => {
+		// Read in the main asset file from the package.json
+		const packagePath = join(path, filePath, packageName, "package.json");
+
+		let mainFile = "index.css";
+		if (existsSync(packagePath)) {
+			const { main } = require(packagePath) ?? {};
+			if (main) mainFile = main.replace(/^.*\/dist\//, "");
+		}
+
+		const mainFileOnly = [...fileMap.keys()].filter((file) => file.endsWith(mainFile));
+		const headMainSize = mainFileOnly.reduce(
+			(acc, filename) => {
+				const { headByteSize = 0 } = fileMap.get(filename);
+				return acc + headByteSize;
+			},
 			0
 		);
-		const totalDiffSize = [...fileMap.values()].reduce(
-			(acc, { diffByteSize = 0 }) => acc + diffByteSize,
+
+		const baseMainSize = mainFileOnly.reduce(
+			(acc, filename) => {
+				const { baseByteSize = 0 } = fileMap.get(filename);
+				return acc + baseByteSize;
+			},
 			0
 		);
+
+		const hasChange = fileMap.size > 0 && [...fileMap.values()].some(({ headByteSize, baseByteSize }) => headByteSize !== baseByteSize);
 
 		/**
 		 * We don't need to report on components that haven't changed unless they're new or removed
 		 */
-		if (totalSize === totalDiffSize) return;
+		if (headMainSize === baseMainSize) return;
 
-		sections.push({ name: componentName, totalSize, totalDiffSize, fileMap });
+		sections.push({
+			name: packageName,
+			filePath,
+			headMainSize,
+			baseMainSize,
+			hasChange,
+			mainFile: mainFileOnly?.[0],
+			fileMap
+		});
 	});
 
 	return sections;
@@ -301,33 +353,42 @@ const makeTable = function (COMPONENTS) {
 /**
  * Split out the data indexed by filename into groups by component
  * @param {Map<string, number>} dataMap
- * @param {Map<string, number>} diffMap
- * @returns {Map<string, Map<string, { byteSize: number, diffByteSize: number }>>}
+ * @param {string} path
+ * @param {Map<string, number>} baseMap
+ * @returns {{ filePath: string, PACKAGES: Map<string, Map<string, { headByteSize: number, baseByteSize: number }>>}}
  */
-const splitDataByComponent = function (dataMap, diffMap = new Map()) {
-	const COMPONENTS = new Map();
-	[...dataMap.entries()].forEach(([file, byteSize]) => {
+const splitDataByPackage = function (dataMap, path, baseMap = new Map()) {
+	const PACKAGES = new Map();
+
+	let filePath;
+	[...dataMap.entries()].forEach(([file, headByteSize]) => {
 		// Determine the name of the component
 		const parts = file.split(sep);
 		const componentIdx = parts.findIndex((part) => part === "dist") - 1;
-		const componentName = parts[componentIdx];
+		const packageName = parts[componentIdx];
+
+		if (!filePath) {
+			filePath = `${file.replace(path, "")}/${parts.slice(componentIdx + 1, -1).join(sep)}`;
+		}
+
 		const readableFilename = file.replace(/^.*\/dist\//, "");
 
-		const fileMap = COMPONENTS.has(componentName)
-			? COMPONENTS.get(componentName)
+		const fileMap = PACKAGES.has(packageName)
+			? PACKAGES.get(packageName)
 			: new Map();
 
 		if (!fileMap.has(readableFilename)) {
 			fileMap.set(readableFilename, {
-				byteSize,
-				diffByteSize: diffMap.get(file),
+				headByteSize: headByteSize,
+				baseByteSize: baseMap.get(file),
 			});
 		} else {
 			throw new Error(`The file ${file} was found twice in the dataset`);
 		}
 
 		/** Update the component's table data */
-		COMPONENTS.set(componentName, fileMap);
+		PACKAGES.set(packageName, fileMap);
 	});
-	return COMPONENTS;
+
+	return { filePath, PACKAGES };
 };

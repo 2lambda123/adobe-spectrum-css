@@ -4,7 +4,7 @@ import { styleMap } from "lit/directives/style-map.js";
 
 import { Template } from "./template";
 
-import { default as IconStories } from "@spectrum-css/icon";
+import { default as IconStories } from "@spectrum-css/icon/stories/icon.stories.js";
 
 export const argTypes = {
 	size: {
@@ -127,6 +127,12 @@ export const ActionButtons = ({
 				...args,
 				staticColor,
 				hasPopup: true,
+			})}
+			${Template({
+				...args,
+				staticColor,
+				label: "More and this text should truncate",
+				customStyles: { "max-inline-size": "100px"},
 			})}
 		</div>
 	`;

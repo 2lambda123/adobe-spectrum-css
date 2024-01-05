@@ -44,6 +44,8 @@ governing permissions and limitations under the License.
 		--spectrum-neutral-content-color-key-focus
 	);
 
+	--spectrum-infield-button-fill-justify-content: center;
+
 	&:disabled {
 		--mod-infield-button-background-color: var(
 			--mod-infield-button-background-color-disabled,
@@ -174,6 +176,14 @@ governing permissions and limitations under the License.
 			);
 		}
 	}
+
+	&:hover:not(:disabled),
+	&:active:not(:disabled),
+	&:focus-visible:not(:disabled) {
+		@media (forced-colors: active) {
+			--highcontrast-infield-button-border-color: Highlight;
+		}
+	}
 }
 
 .spectrum-InfieldButton {
@@ -214,8 +224,9 @@ governing permissions and limitations under the License.
 		);
 		border-style: solid;
 		border-color: var(
-			--mod-infield-button-border-color,
-			var(--spectrum-infield-button-border-color)
+			--highcontrast-infield-button-border-color,
+			var(--mod-infield-button-border-color,
+			var(--spectrum-infield-button-border-color))
 		);
 		border-end-end-radius: var(
 			--mod-infield-button-border-radius,
@@ -308,6 +319,8 @@ governing permissions and limitations under the License.
 	}
 
 	&:focus-visible {
+		outline: none;
+
 		.spectrum-InfieldButton-fill {
 			background-color: var(
 				--mod-infield-button-background-color-key-focus,
@@ -327,7 +340,10 @@ governing permissions and limitations under the License.
   /* center icon */
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: var(
+		--mod-infield-button-fill-justify-content,
+		var(--spectrum-infield-button-fill-justify-content)
+	);
 
   transition: border-color var(--spectrum-global-animation-duration-100) ease-in-out;
 }
@@ -390,10 +406,16 @@ governing permissions and limitations under the License.
 			--mod-infield-button-stacked-border-radius-reset,
 			var(--spectrum-infield-button-stacked-border-radius-reset)
 		);
+		border-end-end-radius: var(
+			--mod-infield-button-stacked-bottom-border-radius-end-end,
+			var(--mod-infield-button-border-radius, var(--spectrum-infield-button-border-radius))
+		);
+		border-block-end-width: var(
+			--mod-infield-button-stacked-bottom-border-block-end-width,
+			var(--mod-infield-button-border-width, var(--spectrum-infield-button-border-width))
+		);
 	}
 }
-
-
 
 .spectrum-InfieldButton-icon {
 	display: initial;

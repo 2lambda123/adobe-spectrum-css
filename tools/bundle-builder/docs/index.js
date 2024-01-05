@@ -353,8 +353,14 @@ function copySiteWorkflowIcons() {
 			path.join(
 				path.dirname(require.resolve("@adobe/spectrum-css-workflow-icons")),
 				"spectrum-icons.svg"
-			)
+			),
 		)
+		.pipe(gulp.dest("dist/img/"));
+}
+
+function copySiteUIIcons() {
+	return gulp
+		.src(require.resolve("@spectrum-css/ui-icons"))
 		.pipe(gulp.dest("dist/img/"));
 }
 
@@ -368,7 +374,8 @@ let buildDocs = gulp.series(
 		buildSite_generateIndex,
 		buildDocs_individualPackages,
 		buildSite_copyResources,
-		copySiteWorkflowIcons
+		copySiteWorkflowIcons,
+		copySiteUIIcons
 	)
 );
 

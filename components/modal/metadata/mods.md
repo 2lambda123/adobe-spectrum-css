@@ -1,4 +1,4 @@
-| Modifiable Custom Properties                   |
+| Modifiable custom properties                   |
 | ---------------------------------------------- |
 | `--mod-modal-background-color`                 |
 | `--mod-modal-confirm-border-radius`            |
@@ -11,3 +11,4 @@
 | `--mod-modal-max-height`                       |
 | `--mod-modal-max-width`                        |
 | `--mod-modal-transition-animation-duration`    |
+| `--mod-overlay-animation-duration-opened`      |

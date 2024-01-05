@@ -30,7 +30,7 @@
 	},
 	"targetDefaults": {
 		"clean": {
-            "cache": true,
+      "cache": true,
 			"inputs": [
 				"{projectRoot}/dist/*.{css,json}",
 				"{projectRoot}/dist/*.map",
@@ -48,14 +48,17 @@
 		},
 		"build": {
 			"cache": true,
-			"dependsOn": ["^build", "clean"],
+			"dependsOn": [
+				"^build",
+				"clean",
+				{ "target": "build", "projects": "tokens" }
+			],
 			"inputs": [
 				"core",
 				"tools",
 				"!{projectRoot}/stories/*.js",
-				"{workspaceRoot}/tasks/component-builder.js",
 				"{workspaceRoot}/tasks/mod-extractor.js",
-				{ "externalDependencies": ["gulp"] },
+				{ "externalDependencies": ["gulp", "postcss"] },
 				{ "env": "NODE_ENV" }
 			],
 			"outputs": [
@@ -75,6 +78,7 @@
 		},
 		"compare": {
 			"cache": true,
+			"dependsOn": ["build"],
 			"inputs": [
 				"{workspaceRoot}/tasks/compare-compiled-output.js",
 				{ "dependentTasksOutputFiles": "dist/*.css", "transitive": true },
@@ -93,7 +97,13 @@
 					]
 				}
 			],
-			"outputs": ["{workspaceRoot}/.diff-output"]
+			"outputs": ["{workspaceRoot}/.diff-output"],
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": [
+					"node ./tasks/compare-compiled-output.js $NX_TASK_TARGET_PROJECT"
+				]
+			}
 		},
 		"test": {
 			"cache": true,

@@ -1,6 +1,6 @@
 {
   "name": "@spectrum-css/page",
-  "version": "6.0.9",
+  "version": "6.0.10",
   "description": "The Spectrum CSS page component",
   "license": "Apache-2.0",
   "author": "Adobe",
@@ -14,17 +14,8 @@
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
   "main": "dist/index-vars.css",
-  "scripts": {
-    "build": "gulp",
-    "clean": "rimraf dist"
-  },
-  "dependencies": {
-    "@spectrum-css/tokens": "^13.0.5"
-  },
-  "devDependencies": {
-    "@spectrum-css/component-builder-simple": "^3.0.1",
-    "@spectrum-css/tokens": "^13.0.0",
-    "gulp": "^4.0.0"
+  "peerDependencies": {
+    "@spectrum-css/tokens": ">=13"
   },
   "publishConfig": {
     "access": "public"
