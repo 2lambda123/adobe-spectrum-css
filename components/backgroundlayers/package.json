@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@spectrum-css/component-builder-simple": "^2.0.17",
-    "@spectrum-css/tokens": "^13.0.0-beta.5",
+    "@spectrum-css/tokens": "^13.0.0-beta.8",
     "gulp": "^4.0.0",
     "nx": "^17.0.3",
     "rimraf": "^5.0.1"

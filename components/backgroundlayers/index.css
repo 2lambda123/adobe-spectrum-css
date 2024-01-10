@@ -11,17 +11,15 @@ governing permissions and limitations under the License.
 */
 /* for use only in editing contexts */
 .spectrum-BackgroundLayers-edit-elevated {
-	--spectrum-backgroundlayers-background-color: var(--spectrum-gray-25);
 	--spectrum-backgroundlayers-shadow-horizontal: 0;
 	--spectrum-backgroundlayers-shadow-vertical: 0;
 	--spectrum-backgroundlayers-shadow-blur: 5px;
 	--spectrum-backgroundlayers-shadow-color: var(--spectrum-gray-600);
 
 	.spectrum--dark & {
-		--spectrum-backgroundlayers-background-color: var(--spectrum-gray-75);
 		--spectrum-backgroundlayers-shadow-color: var(--spectrum-gray-100);
 	}
-	background-color: var(--spectrum-backgroundlayers-background-color);
+	background-color: var(--spectrum-background-elevated-color);
 	box-shadow:
 		var(--spectrum-backgroundlayers-shadow-horizontal)
 		var(--spectrum-backgroundlayers-shadow-vertical)
@@ -30,42 +28,29 @@ governing permissions and limitations under the License.
 }
 
 .spectrum-BackgroundLayers-edit-layer2 {
-	--spectrum-backgroundlayers-background-color: var(--spectrum-gray-25);
-
-	.spectrum--dark & {
-		--spectrum-backgroundlayers-background-color: var(--spectrum-gray-75);
-	}
-	background-color: var(--spectrum-backgroundlayers-background-color);
+	background-color: var(--spectrum-background-layer-2-color);
 	border: 2px solid rgba(180, 180, 180, 25%);
 }
 
 .spectrum-BackgroundLayers-edit-layer1 {
-	--spectrum-backgroundlayers-background-color: var(--spectrum-gray-50);
-	background-color: var(--spectrum-backgroundlayers-background-color);
+	background-color: var(--spectrum-background-layer-1-color);
 }
 
 .spectrum-BackgroundLayers-edit-pasteboard {
-	--spectrum-backgroundlayers-background-color: var(--spectrum-gray-100);
-
-	.spectrum--dark & {
-		--spectrum-backgroundlayers-background-color: var(--spectrum-gray-25);
-	}
-	background-color: var(--spectrum-backgroundlayers-background-color);
+	background-color: var(--spectrum-background-pasteboard-color);
 }
 
 /* only used in browsing contexts */
 .spectrum-BackgroundLayers-browse-elevated {
-	--spectrum-backgroundlayers-background-color: var(--spectrum-gray-25);
 	--spectrum-backgroundlayers-shadow-horizontal: 0;
 	--spectrum-backgroundlayers-shadow-vertical: 0;
 	--spectrum-backgroundlayers-shadow-blur: 5px;
 	--spectrum-backgroundlayers-shadow-color: var(--spectrum-gray-600);
 
 	.spectrum--dark & {
-		--spectrum-backgroundlayers-background-color: var(--spectrum-gray-75);
 		--spectrum-backgroundlayers-shadow-color: var(--spectrum-gray-100);
 	}
-	background-color: var(--spectrum-backgroundlayers-background-color);
+	background-color: var(--spectrum-background-elevated-color);
 	box-shadow:
 		var(--spectrum-backgroundlayers-shadow-horizontal)
 		var(--spectrum-backgroundlayers-shadow-vertical)
@@ -74,12 +59,10 @@ governing permissions and limitations under the License.
 }
 
 .spectrum-BackgroundLayers-browse-layer1 {
-	--spectrum-backgroundlayers-background-color: var(--spectrum-gray-50);
-	background-color: var(--spectrum-backgroundlayers-background-color);
+	background-color: var(--spectrum-background-layer-1-color);
 }
 
 .spectrum-BackgroundLayers-browse-base {
-	--spectrum-backgroundlayers-background-color: var(--spectrum-gray-25);
 	border: 2px solid rgba(180, 180, 180, 25%);
-	background-color: var(--spectrum-backgroundlayers-background-color);
+	background-color: var(--spectrum-background-base-color);
 }
