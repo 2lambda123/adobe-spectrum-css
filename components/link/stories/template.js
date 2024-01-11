@@ -2,15 +2,14 @@ import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { lowerCase, capitalize } from "lodash-es";
+import { capitalize, lowerCase } from "lodash-es";
 
 import "../index.css";
 
 export const Template = ({
 	rootClass = "spectrum-Link",
-	size = "m",
 	url = "#",
-	text,
+	content,
 	variant,
 	staticColor,
 	isQuiet = false,
@@ -29,8 +28,6 @@ export const Template = ({
 			})}
 			id=${ifDefined(id)}
 			href=${ifDefined(url)}
-		>
-			${text}
-		</a>
+		>${content}</a>
 	`;
 };

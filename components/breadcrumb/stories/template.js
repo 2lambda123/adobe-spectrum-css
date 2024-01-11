@@ -64,7 +64,7 @@ export const Template = ({
 						${when(idx !== arr.length - 1, () =>
 							Icon({
 								...globals,
-								iconName: "ChevronRight100",
+								uiIconName: "ChevronRight",
 								customClasses: [`${rootClass}-itemSeparator`],
 							})
 						)}

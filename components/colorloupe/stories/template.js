@@ -13,8 +13,9 @@ export const Template = ({
 		"inset-block-start": "5px",
 		"inset-inline-start": "5px",
 	},
-	customClasses = [],s
-}) => svg`
+	customClasses = [],
+}) => {
+	return svg`
     <svg
       class=${classMap({
         [rootClass]: true,
