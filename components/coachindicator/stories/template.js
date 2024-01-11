@@ -7,16 +7,18 @@ export const Template = ({
 	rootClass = "spectrum-CoachIndicator",
 	isQuiet = false,
 	variant,
-}) => html`
-	<div
-		class=${classMap({
-			[`${rootClass}`]: true,
-			[`${rootClass}--quiet`]: isQuiet,
-			[`${rootClass}--${variant}`]: variant !== "default",
-		})}
-	>
-		<div class="${rootClass}-ring"></div>
-		<div class="${rootClass}-ring"></div>
-		<div class="${rootClass}-ring"></div>
-	</div>
-`;
+}) => {
+	return html`
+		<div
+			class=${classMap({
+				[`${rootClass}`]: true,
+				[`${rootClass}--quiet`]: isQuiet,
+				[`${rootClass}--${variant}`]: variant !== "default",
+			})}
+		>
+			<div class="${rootClass}-ring"></div>
+			<div class="${rootClass}-ring"></div>
+			<div class="${rootClass}-ring"></div>
+		</div>
+	`;
+};

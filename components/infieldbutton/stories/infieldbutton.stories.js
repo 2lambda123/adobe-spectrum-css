@@ -1,4 +1,7 @@
-// Import the component markup template
+import isChromatic from "chromatic/isChromatic";
+
+import { html } from "lit";
+
 import { Template } from "./template";
 
 import { default as IconStories } from "@spectrum-css/icon/stories/icon.stories.js";
@@ -6,7 +9,7 @@ import { default as IconStories } from "@spectrum-css/icon/stories/icon.stories.
 export default {
   title: "Components/In-field button",
   description: "The In-field button component is a button used inside a textfield",
-  component: "Infieldbutton",
+  component: "InFieldButton",
   argTypes: {
     size: {
       name: "Size",
@@ -64,26 +67,34 @@ export default {
       handles: []
     },
     status: {
-      type: process.env.MIGRATED_PACKAGES.includes('infieldbutton') ? 'migrated' : undefined
+      type: process.env.MIGRATED_PACKAGES.includes('infieldbutton') ? 'migrated' : 'legacy',
     }
   }
 };
 
-export const Default = Template.bind({});
+const Sizes = (args) => html`
+	${isChromatic() ? html`
+		${["s", "m", "l", "xl"].map((size) => {
+			return Template({
+				...args,
+				size,
+			});
+		})}` : Template(args)}`;
+
+export const Default = Sizes.bind({});
 Default.args = {};
 
-export const Right = Template.bind({});
+export const Right = Sizes.bind({});
 Right.args = {
   position: "right"
 };
 
-export const Quiet = Template.bind({});
+export const Quiet = Sizes.bind({});
 Quiet.args = {
   isQuiet: true
 };
 
-export const Disabled = Template.bind({});
+export const Disabled = Sizes.bind({});
 Disabled.args = {
   isDisabled: true
 };
-

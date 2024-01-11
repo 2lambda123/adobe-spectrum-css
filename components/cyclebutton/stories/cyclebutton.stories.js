@@ -1,8 +1,11 @@
-// Import the component markup template
+import isChromatic from "chromatic/isChromatic";
+
+import { html } from "lit";
+
 import { Template } from "./template";
 
-import { default as IconStories } from "@spectrum-css/icon/stories/icon.stories.js";
 import { default as ActionButtonStories } from "@spectrum-css/actionbutton/stories/actionbutton.stories.js";
+import { default as IconStories } from "@spectrum-css/icon/stories/icon.stories.js";
 
 export default {
 	title: "Components/Cycle button",
@@ -38,10 +41,19 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("cyclebutton")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-export const Default = Template.bind({});
+const Sizes = (args) => html`
+	${isChromatic() ? html`
+		${["xs", "s", "m", "l", "xl"].map((size) => {
+			return Template({
+				...args,
+				size,
+			});
+		})}` : Template(args)}`;
+
+export const Default = Sizes.bind({});
 Default.args = {};

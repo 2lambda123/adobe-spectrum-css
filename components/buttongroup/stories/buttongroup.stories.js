@@ -1,10 +1,12 @@
-// Import the component markup template
+import isChromatic from "chromatic/isChromatic";
+
+import { html } from "lit";
+
 import { Template } from "./template";
 
 export default {
 	title: "Components/Button group",
-	description: "The Button group component is...",
-	component: "Buttongroup",
+	component: "ButtonGroup",
 	argTypes: {
 		size: {
 			name: "Size",
@@ -32,6 +34,24 @@ export default {
 		size: "m",
 		iconName: undefined,
 		vertical: false,
+		items: [
+			{
+				variant: "secondary",
+				treatment: "outline",
+				label: "No, thanks",
+			},
+			{
+				variant: "secondary",
+				treatment: "outline",
+				label: "Remind me later",
+
+			},
+			{
+				variant: "primary",
+				treatment: "fill",
+				label: "Rate now",
+			},
+		],
 	},
 	parameters: {
 		actions: {
@@ -40,51 +60,22 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("buttongroup")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-export const Default = Template.bind({});
-Default.args = {
-	items: [
-		{
-			variant: "secondary",
-			treatment: "outline",
-			label: "No, thanks",
-		},
-		{
-			variant: "secondary",
-			treatment: "outline",
-			label: "Remind me later",
+const Sizes = (args) => html`
+	${isChromatic() ? html`
+		${["s", "m", "l", "xl"].map((size) => {
+			return Template({
+				...args,
+				size,
+			});
+		})}` : Template(args)}`;
 
-		},
-		{
-			variant: "primary",
-			treatment: "fill",
-			label: "Rate now",
-		},
-	],
-};
+export const Default = Sizes.bind({});
+Default.args = {};
 
-export const Vertical = Template.bind({});
-Vertical.args = {
-	vertical: true,
-	items: [
-		{
-			variant: "secondary",
-			treatment: "outline",
-			label: "No, thanks",
-		},
-		{
-			variant: "secondary",
-			treatment: "outline",
-			label: "Remind me later",
-		},
-		{
-			variant: "primary",
-			treatment: "fill",
-			label: "Rate now",
-		},
-	],
-};
+export const Vertical = Sizes.bind({});
+Vertical.args = { vertical: true };

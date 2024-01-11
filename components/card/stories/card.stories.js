@@ -1,11 +1,8 @@
-import { html } from "lit";
-
-// Import the component markup template
 import { Template } from "./template";
 
 import { default as ActionButton } from "@spectrum-css/actionbutton/stories/actionbutton.stories.js";
-import { default as QuickAction } from "@spectrum-css/quickaction/stories/quickaction.stories.js";
 import { default as Checkbox } from "@spectrum-css/checkbox/stories/checkbox.stories.js";
+import { default as QuickAction } from "@spectrum-css/quickaction/stories/quickaction.stories.js";
 
 export default {
   title: "Components/Card",
@@ -106,6 +103,10 @@ export default {
     isDropTarget: false,
     hasActions: true,
     hasQuickAction: true,
+    title: "Card title",
+    image: "example-card-portrait.png",
+    description: "Optional description that should be one or two lines",
+    footer: [ "Footer" ],
   },
   parameters: {
     actions: {
@@ -118,28 +119,20 @@ export default {
     status: {
       type: process.env.MIGRATED_PACKAGES.includes("card")
         ? "migrated"
-        : undefined,
+        : "legacy",
     },
   },
 };
 
-const defaultArgs = {
-  title: "Card title",
-  image: "example-card-portrait.png",
-  description: "Optional description that should be one or two lines",
-  footer: [ "Footer" ],
-}
-
 export const Default = Template.bind({});
-Default.args = defaultArgs;
+Default.args = {};
+
 export const Selected = Template.bind({});
 Selected.args = {
-  ...defaultArgs,
   isSelected: true
 }
 export const Focused = Template.bind({});
 Focused.args = {
-  ...defaultArgs,
   isFocused: true,
   title: "Card title that is longer and should wrap",
   customStyles: { "max-inline-size": "205px"},
@@ -152,6 +145,7 @@ Quiet.args = {
   image: "example-ava@2x.png",
   description: "10/15/18",
   isQuiet: true,
+  footer: undefined,
 };
 
 export const QuietFile = Template.bind({});
@@ -160,7 +154,9 @@ QuietFile.args = {
   title: "FileName",
   description: "PDF",
   showAsset: "file",
+  image: undefined,
   isQuiet: true,
+  footer: undefined,
 };
 
 export const Horizontal = Template.bind({});
@@ -176,4 +172,5 @@ Horizontal.args = {
   isHorizontal: true,
   hasActions: false,
   hasQuickAction: false,
+  footer: undefined,
 };

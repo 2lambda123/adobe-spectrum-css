@@ -1,4 +1,3 @@
-// Import the component markup template
 import { Template } from "./template";
 
 import { default as ActionButton } from "@spectrum-css/actionbutton/stories/actionbutton.stories.js";
@@ -54,8 +53,9 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("coachmark")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
+		chromatic: { delay: 2000 },
 	},
 };
 

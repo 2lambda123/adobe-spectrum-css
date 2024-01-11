@@ -32,29 +32,25 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("coachindicator")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
 const CustomCoachIndicator = (args) => {
 	return html`
-	<div
-		style="display: flex;">
-			${Template({
-				...args,
-				variant: "default"
-			})}
-			${Template({
-				...args,
-				variant: "dark"
-			})}
-			${Template({
-				...args,
-				variant: "light"
-			})}
-		<div>
-	`;
+		${Template({
+			...args,
+			variant: "default"
+		})}
+		${Template({
+			...args,
+			variant: "dark"
+		})}
+		${Template({
+			...args,
+			variant: "light"
+		})}`;
 };
 
 
@@ -65,4 +61,3 @@ export const Quiet = CustomCoachIndicator.bind({});
 Quiet.args = {
 	isQuiet: true
 };
-

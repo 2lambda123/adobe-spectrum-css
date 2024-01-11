@@ -1,4 +1,5 @@
-// Import the component markup template
+import isChromatic from "chromatic/isChromatic";
+
 import { html } from "lit";
 import { Template } from "./template";
 
@@ -66,7 +67,7 @@ export default {
 		variant: "neutral",
 		iconName: "Info",
 		label: "Badge",
-		fixed: "none"
+		fixed: "none",
 	},
 	parameters: {
 		actions: {
@@ -75,37 +76,38 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("badge")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-const BadgeGroup = ({
-	customStyles = {},
-	...args
-}) => {
-	return html`
-		<div style="padding: 1rem">
-			${Template({
-				...args,
-				iconName: undefined,
-			})}
-			${Template({
-				...args,
-			})}
-			${Template({
-				...args,
-				label: undefined,
-			})}
-			${Template({
-				...args,
-				label: "24 days left in trial",
-				customStyles: { "max-inline-size": "100px" },
-			})}
-		</div>
-	`;
-};
+const BadgeGroup = (args) => html`
+	${Template({
+		...args,
+		iconName: undefined,
+	})}
+	${Template({
+		...args,
+	})}
+	${Template({
+		...args,
+		label: undefined,
+	})}
+	${Template({
+		...args,
+		label: "24 days left in trial",
+		customStyles: { "max-inline-size": "100px" },
+	})}
+`;
 
-export const Default = BadgeGroup.bind({});
-Default.args = {
-};
+const Sizes = (args) => html`
+	${isChromatic() ? html`
+		${["s", "m", "l", "xl"].map((size) => {
+			return BadgeGroup({
+				...args,
+				size,
+			});
+		})}` : BadgeGroup(args)}`;
+
+export const Default = Sizes.bind({});
+Default.args = {};

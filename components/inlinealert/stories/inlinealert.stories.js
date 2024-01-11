@@ -1,5 +1,7 @@
 import isChromatic from "chromatic/isChromatic";
+
 import { html } from "lit";
+
 import { Template } from "./template";
 
 export default {
@@ -62,39 +64,26 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("inlinealert")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-export const Default = ({
-	...args
-}) => {
-	return html`
-		<div>
-			${Template({
-				...args
-			})}
-
-			${
-				isChromatic() ?
-					Template({
-						...args,
-						headerText: 'in-line alert header announcing something very long and in-line',
-						text: 'this is a very urgent alert with a lot of context, so the text has to wrap',
-						customStyles: {"max-width": "400px"}
-					})
-					&&
-					Template({
-						...args,
-						headerText: 'in-line alert header announcing something very long and in-line',
-						text: 'this is a very urgent alert with a lot of context, so the text has to wrap',
-						customStyles: {"max-width": "400px"},
-						variant: 'notice',
-						isClosable: true,
-					})
-				: null
-			}
-		</div>
-	`;
-};
+export const Default = (args) => html`
+	${Template(args)}
+	${isChromatic() ? html`
+		${Template({
+			...args,
+			headerText: 'in-line alert header announcing something very long and in-line',
+			text: 'this is a very urgent alert with a lot of context, so the text has to wrap',
+			customStyles: {"max-width": "400px"}
+		})}
+		${Template({
+			...args,
+			headerText: 'in-line alert header announcing something very long and in-line',
+			text: 'this is a very urgent alert with a lot of context, so the text has to wrap',
+			customStyles: {"max-width": "400px"},
+			variant: 'notice',
+			isClosable: true,
+		})}` : ""
+	}`;

@@ -21,6 +21,9 @@ export const Template = ({
 	isQuiet = false,
 	isSelected = false,
 	isEmphasized = false,
+	isHovered = false,
+	isFocused = false,
+	isActive = false,
 	isDisabled = false,
 	hasPopup = false,
 	hideLabel = false,
@@ -30,6 +33,7 @@ export const Template = ({
 	customIconClasses = [],
 	onclick,
 	id,
+	testId,
 	role,
 	...globals
 }) => {
@@ -60,16 +64,20 @@ export const Template = ({
 				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
 			})}
 			id=${ifDefined(id)}
+			data-testid=${ifDefined(testId)}
 			role=${ifDefined(role)}
 			style=${ifDefined(styleMap(customStyles))}
 			?disabled=${isDisabled}
+			?is-hovered=${isHovered}
+			?is-focused=${isFocused}
+			?is-active=${isActive}
 			@click=${onclick}
 		>
 			${when(hasPopup, () =>
 				Icon({
 					...globals,
 					size,
-					iconName: "CornerTriangle100",
+					uiIconName: "CornerTriangle",
 					customClasses: [`${rootClass}-hold`],
 				})
 			)}

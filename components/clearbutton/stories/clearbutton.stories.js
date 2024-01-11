@@ -1,3 +1,5 @@
+import isChromatic from "chromatic/isChromatic";
+
 import { html } from "lit";
 
 import { Template } from "./template";
@@ -7,6 +9,7 @@ export default {
 	description: "The clear button component is and in-field button used in Search and Tag",
 	component: "ClearButton",
 	argTypes: {
+		staticColor: { table: { disable: true } },
 		size: {
 			name: "Size",
 			type: { name: "string", required: true },
@@ -40,22 +43,28 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("clearbutton")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-export const Default = Template.bind({});
+const Sizes = (args) => html`
+	${isChromatic() ? html`
+		${["s", "m", "l", "xl"].map((size) => {
+			return Template({
+				...args,
+				size,
+			});
+		})}` : Template(args)}`;
+
+export const Default = Sizes.bind({});
 Default.args = {};
 
-export const OverBackground = Template.bind({});
+export const Express = Sizes.bind({});
+Express.args = { express: true };
+
+export const OverBackground = Sizes.bind({});
 OverBackground.args = {
 	variant: "overBackground",
+	staticColor: "white",
 };
-OverBackground.decorators = [
-	Story => html`
-		<div style="background-color: rgb(15, 121, 125); padding: 15px 20px;">
-			${Story()}
-		</div>
-	`
-];

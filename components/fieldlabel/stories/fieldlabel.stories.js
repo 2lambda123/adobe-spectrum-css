@@ -1,4 +1,7 @@
-// Import the component markup template
+import isChromatic from "chromatic/isChromatic";
+
+import { html } from "lit";
+
 import { Template } from "./template";
 
 export default {
@@ -69,24 +72,33 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("fieldlabel")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-export const Default = Template.bind({});
+const Sizes = (args) => html`
+	${isChromatic() ? html`
+		${["s", "m", "l", "xl"].map((size) => {
+			return Template({
+				...args,
+				size,
+			});
+		})}` : Template(args)}`;
+
+export const Default = Sizes.bind({});
 Default.args = {
 	label: "Label",
 };
 
-export const RightAligned = Template.bind({});
+export const RightAligned = Sizes.bind({});
 RightAligned.args = {
 	label: "Label",
 	alignment: "right",
 	style: { width: "72px" },
 };
 
-export const Required = Template.bind({});
+export const Required = Sizes.bind({});
 Required.args = {
 	label: "Label example",
 	alignment: "left",
@@ -94,7 +106,7 @@ Required.args = {
 	style: { width: "200px" },
 };
 
-export const WrappingAndRequired = Template.bind({});
+export const WrappingAndRequired = Sizes.bind({});
 WrappingAndRequired.args = {
 	label: "Label example with longer text that will wrap to the next line. And with an asterisk that marks it as required.",
 	alignment: "left",

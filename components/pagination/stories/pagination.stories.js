@@ -1,4 +1,3 @@
-// Import the component markup template
 import { Template } from "./template";
 
 import { default as ActionButton } from "@spectrum-css/actionbutton/stories/actionbutton.stories";
@@ -36,7 +35,7 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("pagination")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };

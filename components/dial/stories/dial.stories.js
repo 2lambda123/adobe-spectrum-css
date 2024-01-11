@@ -1,4 +1,7 @@
-// Import the component markup template
+import isChromatic from "chromatic/isChromatic";
+
+import { html } from "lit";
+
 import { Template } from "./template";
 
 export default {
@@ -66,30 +69,29 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("dial")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-export const Default = Template.bind();
+const Sizes = (args) => html`
+	${isChromatic() ? html`
+		${["s", "m"].map((size) => {
+			return Template({
+				...args,
+				size,
+			});
+		})}` : Template(args)}`;
+
+export const Default = Sizes.bind();
 Default.args = {};
 
-export const DefaultExpress = Template.bind();
-DefaultExpress.args = {
-  express: true,
-};
-
-export const Small = Template.bind();
-Small.args = {
-  size: "s",
-}
-
-export const WithLabel = Template.bind();
+export const WithLabel = Sizes.bind();
 WithLabel.args = {
   label: "Volume",
 };
 
-export const Disabled = Template.bind();
+export const Disabled = Sizes.bind();
 Disabled.args = {
-  isDisabled: true,
-}
+	isDisabled: true,
+};

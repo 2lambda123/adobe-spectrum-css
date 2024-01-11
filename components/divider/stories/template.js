@@ -1,5 +1,7 @@
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
+import { ifDefined } from "lit/directives/if-defined.js";
+import { styleMap } from "lit/directives/style-map.js";
 
 import { capitalize, lowerCase, upperCase } from "lodash-es";
 
@@ -13,40 +15,21 @@ export const Template = ({
 	vertical = false,
 	customClasses = [],
 }) => {
-	if (tag === "hr") {
-		return html`
-    <hr
-      class=${classMap({
-				[rootClass]: true,
-				[`${rootClass}--size${upperCase(size)}`]: typeof size !== "undefined",
-				[`${rootClass}--vertical`]: vertical === true,
-				[`${rootClass}--static${capitalize(lowerCase(staticColor))}`]:
-					typeof staticColor !== "undefined",
-				...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-			})}
-      style=${
-				vertical === true
-					? "min-height: 20px; height: auto; align-self: stretch"
-					: ""
-			}
-      role="separator"
-      >
-    </hr>`;
-	}
+	const classes = {
+		[rootClass]: true,
+		[`${rootClass}--size${upperCase(size)}`]: typeof size !== "undefined",
+		[`${rootClass}--vertical`]: vertical === true,
+		[`${rootClass}--static${capitalize(lowerCase(staticColor))}`]:
+			typeof staticColor !== "undefined",
+		...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
+	};
 
-	return html` <div
-		class=${classMap({
-			[rootClass]: true,
-			[`${rootClass}--size${size?.toUpperCase()}`]:
-				typeof size !== "undefined",
-			[`${rootClass}--vertical`]: vertical === true,
-			[`${rootClass}--static${capitalize(lowerCase(staticColor))}`]:
-				typeof staticColor !== "undefined",
-			...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-		})}
-		style=${vertical === true
-			? "min-height: 20px; height: auto; align-self: stretch"
-			: ""}
-		role="separator"
-	></div>`;
+	const styles = vertical === true ? {
+		minHeight: "20px",
+		height: "auto",
+		alignSelf: "stretch"
+	} : {};
+
+	return tag === "hr" ? html`<hr class=${classMap(classes)} style=${ifDefined(styleMap(styles))} role="separator" />` :
+		html`<div class=${classMap(classes)} style=${ifDefined(styleMap(styles))} role="separator"></div>`;
 };

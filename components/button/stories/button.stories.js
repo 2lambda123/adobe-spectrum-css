@@ -1,6 +1,6 @@
+import isChromatic from "chromatic/isChromatic";
+
 import { html } from "lit";
-import { ifDefined } from "lit/directives/if-defined.js";
-import { styleMap } from "lit/directives/style-map.js";
 
 import { Template } from "./template";
 
@@ -95,92 +95,77 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("button")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-const CustomButton = ({
-	iconName,
-	staticColor,
-	customStyles = {},
-	...args
-}) => {
-	return html`
-		<div
-      		style=${ifDefined(styleMap({
-				padding: "1rem",
-				backgroundColor: staticColor === "white" ? "rgb(15, 121, 125)" : staticColor === "black" ? "rgb(181, 209, 211)" : undefined,
-				...customStyles
-			}))}
-		>
-			${Template({
-				...args,
-				staticColor,
-				iconName: undefined,
-			})}
-			${Template({
-				...args,
-				staticColor,
-				iconName: undefined,
-				treatment: "outline",
-			})}
-			${Template({
-				...args,
-				staticColor,
-				iconName: iconName ?? "Edit",
-			})}
-			${Template({
-				...args,
-				staticColor,
-				hideLabel: true,
-				iconName: iconName ?? "Edit",
-			})}
-		</div>
-	`;
-};
+const CustomButton = (args) => html`
+	${Template({
+		...args,
+		iconName: undefined,
+	})}
+	${Template({
+		...args,
+		iconName: undefined,
+		treatment: "outline",
+	})}
+	${Template({
+		...args,
+		iconName: args.iconName ?? "Edit",
+	})}
+	${Template({
+		...args,
+		hideLabel: true,
+		iconName: args.iconName ?? "Edit",
+	})}
+`;
 
-export const Accent = CustomButton.bind({});
+const Sizes = (args) => html`
+	${isChromatic() ? html`
+		${["s", "m", "l", "xl"].map((size) => {
+			return CustomButton({
+				...args,
+				size,
+			});
+		})}` : CustomButton(args)}`;
+
+export const Accent = Sizes.bind({});
 Accent.args = {
 	variant: "accent",
 };
 
-export const Negative = CustomButton.bind({});
+export const Negative = Sizes.bind({});
 Negative.args = {
 	variant: "negative",
 	iconName: "Delete",
 };
 
-export const Primary = CustomButton.bind({});
+export const Primary = Sizes.bind({});
 Primary.args = {
 	variant: "primary",
 };
 
-export const Secondary = CustomButton.bind({});
+export const Secondary = Sizes.bind({});
 Secondary.args = {
 	variant: "secondary",
 };
 
-export const StaticColorWhite = CustomButton.bind({});
+export const StaticColorWhite = Sizes.bind({});
 StaticColorWhite.args = {
 	staticColor: "white",
 };
 
-export const StaticColorBlack = CustomButton.bind({});
+export const StaticColorBlack = Sizes.bind({});
 StaticColorBlack.args = {
 	staticColor: "black",
 };
 
-export const Disabled = CustomButton.bind({});
+export const Disabled = Sizes.bind({});
 Disabled.args = {
 	isDisabled: true,
 	iconName: "Actions",
 };
 
-export const WithForcedColors = CustomButton.bind({});
-WithForcedColors.parameters = {
-  chromatic: { forcedColors: "active" },
-};
-WithForcedColors.args = {
-	iconName: "Actions",
-};
+export const Express = Sizes.bind({});
+Express.args = { express: true };

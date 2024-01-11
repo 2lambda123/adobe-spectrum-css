@@ -1,4 +1,4 @@
-import { Template } from "./form-template";
+import { Template } from "./form.template";
 
 export default {
 	title: "Components/Form",
@@ -26,7 +26,7 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("fieldlabel")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };

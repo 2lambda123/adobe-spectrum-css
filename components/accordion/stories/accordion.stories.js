@@ -1,7 +1,8 @@
-// Import the component markup template
-import { Template } from "./template";
-import { html } from "lit";
 import isChromatic from "chromatic/isChromatic";
+
+import { html } from "lit";
+
+import { Template } from "./template";
 
 export default {
 	title: "Components/Accordion",
@@ -44,6 +45,45 @@ export default {
 		rootClass: "spectrum-Accordion",
 		size: "m",
 		density: "regular",
+		items: new Map([
+			[
+				"Recent",
+				{
+					content: "Item 1",
+					isOpen: true,
+					isDisabled: false,
+				},
+			],
+			[
+				"Architecture",
+				{
+					content: "Item 2",
+					isOpen: false,
+					isDisabled: true,
+				},
+			],
+			[
+				"Nature",
+				{
+					content: "Item 3",
+					isOpen: false,
+					isDisabled: false,
+				},
+			],
+			[
+				"Really long accordion item that should wrap",
+				{
+					content: "Really long content that should wrap when component has a max or fixed width",
+					isOpen: true,
+					isDisabled: false,
+				},
+			],
+		]),
+		customStorybookStyles: {
+			display: "flex",
+			flexWrap: "wrap",
+			gap: "2rem",
+		},
 	},
 	parameters: {
 		actions: {
@@ -52,95 +92,28 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("accordion")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-const AccordianGroup = ({
-	customStyles = {},
-	...args
-}) => {
-	return html`
-		<div style="display: flex; gap: 2rem;">
-			${Template({
-				items: new Map([
-				[
-					"Recent",
-					{
-						content: "Item 1",
-						isOpen: true,
-						isDisabled: false,
-					},
-				],
-				[
-					"Architecture",
-					{
-						content: "Item 2",
-						isOpen: false,
-						isDisabled: true,
-					},
-				],
-				[
-					"Nature",
-					{
-						content: "Item 3",
-						isOpen: false,
-						isDisabled: false,
-					},
-				],
-				[
-					"Really Long Accordion Item that should wrap",
-					{
-						content: "Really long content that should wrap when component has a max or fixed width",
-						isOpen: true,
-						isDisabled: false,
-					},
-				],
-			]),
-			})}
-			${isChromatic() ?
-				Template({
-					customStyles: { "max-inline-size": "300px"},
-					items: new Map([
-					[
-						"Recent",
-						{
-							content: "Item 1",
-							isOpen: true,
-							isDisabled: false,
-						},
-					],
-					[
-						"Architecture",
-						{
-							content: "Item 2",
-							isOpen: false,
-							isDisabled: true,
-						},
-					],
-					[
-						"Nature",
-						{
-							content: "Item 3",
-							isOpen: false,
-							isDisabled: false,
-						},
-					],
-					[
-						"Really Long Accordion Item that should wrap",
-						{
-							content: "Really long content that should wrap when component has a max or fixed width",
-							isOpen: true,
-							isDisabled: false,
-						},
-					],
-				]),
-				})
-				: null }
-		</div>
-	`;
-};
+const Sizes = (args) => html`
+	${isChromatic() ? html`
+		${["s", "m", "l", "xl"].map((size) => {
+			return Template({
+				...args,
+				size,
+			});
+		})}` : Template(args)}`;
 
-export const Default = AccordianGroup.bind({});
+const AccordionGroup = (args) => html`
+	${Sizes({
+		...args,
+		customStyles: isChromatic() ? {
+			...args.customStyles ?? {},
+			maxInlineSize: "300px"
+		} : args.customStyles,
+	})}`;
+
+export const Default = AccordionGroup.bind({});
 Default.args = {};

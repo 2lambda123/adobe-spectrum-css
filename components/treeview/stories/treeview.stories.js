@@ -1,4 +1,3 @@
-// Import the component markup template
 import { Template } from "./template";
 
 export default {
@@ -45,6 +44,63 @@ export default {
 		customStyles: {
 			'max-inline-size': '600px',
 		},
+		items: [
+			{
+				id: "label1",
+				label: "Label 1",
+				link: "#",
+				isSelected: true,
+			},
+			{
+				id: "group1",
+				label: "Group 1",
+				link: "#",
+				isOpen: true,
+				items: [
+					{
+						id: "label2",
+						label: "Label 2",
+						link: "#",
+						isDisabled: true,
+					},
+					{
+						id: "label3",
+						label: "Label 3",
+						link: "#",
+					},
+				],
+			},
+			{
+				id: "group2",
+				label: "Group 2",
+				link: "#",
+				items: [
+					{
+						id: "label3",
+						label: "Label 3",
+						link: "#",
+					},
+					{
+						id: "group3",
+						label: "Group 3",
+						link: "#",
+						items: [
+							{
+								id: "label4",
+								label: "Label 4",
+								link: "#",
+							},
+							{
+								id: "group4",
+								label: "Group 4 (Empty)",
+								link: "#",
+								items: [],
+							},
+						],
+					},
+				],
+			},
+		],
 	},
 	parameters: {
 		actions: {
@@ -53,71 +109,13 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("treeview")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
 export const Default = Template.bind({});
-Default.args = {
-	items: [
-		{
-			id: "label1",
-			label: "Label 1",
-			link: "#",
-			isSelected: true,
-		},
-		{
-			id: "group1",
-			label: "Group 1",
-			link: "#",
-			isOpen: true,
-			items: [
-				{
-					id: "label2",
-					label: "Label 2",
-					link: "#",
-					isDisabled: true,
-				},
-				{
-					id: "label3",
-					label: "Label 3",
-					link: "#",
-				},
-			],
-		},
-		{
-			id: "group2",
-			label: "Group 2",
-			link: "#",
-			items: [
-				{
-					id: "label3",
-					label: "Label 3",
-					link: "#",
-				},
-				{
-					id: "group3",
-					label: "Group 3",
-					link: "#",
-					items: [
-						{
-							id: "label4",
-							label: "Label 4",
-							link: "#",
-						},
-						{
-							id: "group4",
-							label: "Group 4 (Empty)",
-							link: "#",
-							items: [],
-						},
-					],
-				},
-			],
-		},
-	],
-};
+Default.args = {};
 
 export const FoldersAndFiles = Template.bind({});
 FoldersAndFiles.args = {
@@ -284,7 +282,7 @@ WithDropTarget.args = {
 };
 
 export const Flat = Template.bind({});
-Flat.storyName = 'Flat Markup';
+Flat.storyName = 'Flat markup';
 Flat.args = {
 	items: [
 		{

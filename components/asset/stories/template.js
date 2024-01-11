@@ -10,7 +10,6 @@ export const Template = ({
 	preset,
 	id,
 	customClasses = [],
-	// ...globals
 }) => {
 	let visual;
 	if (preset === "file") {

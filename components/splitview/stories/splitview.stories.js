@@ -1,12 +1,10 @@
 import { within } from '@storybook/testing-library';
 
-// Import the component markup template
 import { Template } from "./template";
 
 export default {
 	title: "Components/Split view",
-	description: "The Splitview component is...",
-	component: "Splitview",
+	component: "SplitView",
 	argTypes: {
 		orientation: {
 			name: "Orientation",
@@ -78,7 +76,7 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("splitview")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };

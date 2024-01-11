@@ -1,5 +1,7 @@
-// Import the component markup template
+import isChromatic from "chromatic/isChromatic";
+
 import { html } from "lit";
+
 import { Template } from "./template";
 
 export default {
@@ -92,6 +94,12 @@ export default {
 		isIndeterminate: false,
 		isInvalid: false,
 		isReadOnly: false,
+		id: "default-checkbox",
+		customStorybookStyles: {
+			display: "flex",
+			flexDirection: "column",
+			gap: undefined,
+		}
 	},
 	parameters: {
 		actions: {
@@ -100,44 +108,52 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("checkbox")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-const CheckboxGroup = ({
-	customStyles = {},
-	isChecked = false,
-	...args
-}) => {
-	return html`
-		<div style="display: flex; flex-direction: column; padding: 1rem">
-			${Template({
+const Sizes = (args) => html`
+	${isChromatic() ? html`
+		${["s", "m", "l", "xl"].map((size) => {
+			return CheckboxGroup({
 				...args,
-				iconName: undefined,
-			})}
-			${Template({
-				...args,
-				isChecked: true,
-			})}
-			${Template({
-				...args,
-				isIndeterminate: true,
-			})}
-				${Template({
-				...args,
-				isDisabled: true,
-			})}
-			${Template({
-				...args,
-				label: "Checkbox with wrapping label text",
-				customStyles: { "max-inline-size": "100px" },
-			})}
-		</div>
-	`;
-};
+				size,
+			});
+		})}` : CheckboxGroup(args)}`;
 
-export const Default = CheckboxGroup.bind({});
-Default.args = {
-	id: "default-checkbox",
-};
+const CheckboxGroup = (args) => html`
+	${Template({
+		...args,
+		iconName: undefined,
+		label: "Unchecked",
+	})}
+	${Template({
+		...args,
+		isChecked: true,
+		label: "Checked",
+	})}
+	${Template({
+		...args,
+		isIndeterminate: true,
+		label: "Indeterminate",
+	})}
+		${Template({
+		...args,
+		isDisabled: true,
+		label: "Disabled",
+	})}
+	${Template({
+		...args,
+		label: "Overflow label text",
+		customStyles: {
+			...args.customStyles ?? {},
+			"max-inline-size": "100px",
+		},
+	})}`;
+
+export const Default = Sizes.bind({});
+Default.args = {};
+
+export const Express = Sizes.bind({});
+Express.args = { express: true };

@@ -1,4 +1,3 @@
-// Import the component markup template
 import { Template } from "./template";
 
 export default {
@@ -8,7 +7,6 @@ export default {
 	component: "ProgressBar",
 	argTypes: {
 		customWidth: { table: { disable: true } },
-		staticWhite: { table: { disable: true } },
 		indeterminate: { table: { disable: true } },
 		size: {
 			name: "Size",
@@ -49,6 +47,16 @@ export default {
 			control: { type: "range", min: 0, max: 100,},
 			if: { arg: "indeterminate", truthy: false },
 		},
+		staticColor: {
+			name: "StaticColor",
+			type: { name: "string" },
+			table: {
+				type: { summary: "string" },
+				category: "Advanced",
+			},
+			options: ["white", "black"],
+			control: "select",
+		},
 	},
 	args: {
 		rootClass: "spectrum-ProgressBar",
@@ -64,7 +72,7 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("progressbar")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
@@ -84,7 +92,6 @@ Indeterminate.args = {
 
 export const StaticWhite = Template.bind({});
 StaticWhite.args = {
-	backgroundColor: "rgb(15, 121, 125)",
-	staticWhite: "staticWhite",
+	staticColor: "white",
 	label: "Loading your fonts, images, and icons"
 };

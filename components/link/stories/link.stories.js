@@ -1,4 +1,3 @@
-// Import the component markup template
 import { Template } from "./template";
 
 export default {
@@ -16,7 +15,7 @@ export default {
 			},
 			control: "url",
 		},
-		text: {
+		content: {
 			name: "Text",
 			type: { name: "string", required: true },
 			table: {
@@ -58,7 +57,7 @@ export default {
 	args: {
 		rootClass: "spectrum-Link",
 		url: "https://www.adobe.com",
-		text: "Link using spectrum-Link",
+		content: "Link using spectrum-Link",
 		isQuiet: false,
 	},
 	parameters: {
@@ -68,7 +67,7 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("link")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };

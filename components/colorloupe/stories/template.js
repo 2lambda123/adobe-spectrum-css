@@ -6,21 +6,22 @@ import { styleMap } from "lit/directives/style-map.js";
 import "../index.css";
 
 export const Template = ({
-	rootClass = "spectrum-ColorLoupe",
-	isOpen,
-	customStyles = {
-		"--spectrum-picked-color": "rgba(255, 0, 0, 0.5)",
-		"inset-block-start": "5px",
-		"inset-inline-start": "5px",
-	},
-	customClasses = [],s
-}) => svg`
+  rootClass = "spectrum-ColorLoupe",
+  isOpen,
+  customStyles = {
+    "--spectrum-picked-color": "rgba(255, 0, 0, 0.5)",
+    "inset-block-start": "5px",
+    "inset-inline-start": "5px",
+  },
+  customClasses = [],
+}) => {
+  return svg`
     <svg
       class=${classMap({
-        [rootClass]: true,
-        "is-open": isOpen,
-        ...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
-      })}
+    [rootClass]: true,
+    "is-open": isOpen,
+    ...customClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
+  })}
       style=${ifDefined(styleMap(customStyles))}
     >
       <defs>
@@ -49,3 +50,4 @@ export const Template = ({
       </g>
     </svg>
 `;
+};

@@ -53,11 +53,31 @@ export default {
 		},
 		content: { table: { disable: true } },
 	},
-	// More on args: https://storybook.js.org/docs/web-components/writing-stories/args
 	args: {
 		rootClass: "spectrum-Typography",
 		size: "m",
 		glyph: "sans-serif",
+		content: [
+			{
+				semantics: "heading",
+				rootClass: "spectrum-Heading",
+				content: ["Aliquet Mauris Eu"],
+			},
+			{
+				semantics: "body",
+				rootClass: "spectrum-Body",
+				content: [
+					"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eleifend est mollis ligula lobortis, tempus ultricies sapien lacinia. Nulla ut turpis velit. Sed finibus dapibus diam et sollicitudin. Phasellus in ipsum nec ante elementum congue eget in leo. Morbi eleifend justo non rutrum venenatis. Fusce cursus et lectus eu facilisis. Ut laoreet felis in magna dignissim feugiat.",
+				],
+			},
+			{
+				semantics: "body",
+				rootClass: "spectrum-Body",
+				content: [
+					"Ut et lectus finibus, aliquet mauris eu, tincidunt mi. Donec scelerisque orci sit amet venenatis luctus. Morbi eget lacus est. Duis iaculis magna quis aliquam lacinia. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+				],
+			},
+		],
 	},
 	parameters: {
 		actions: {
@@ -66,35 +86,13 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("typography")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
 export const Default = Template.bind({});
-Default.args = {
-	content: [
-		{
-			semantics: "heading",
-			rootClass: "spectrum-Heading",
-			content: ["Aliquet Mauris Eu"],
-		},
-		{
-			semantics: "body",
-			rootClass: "spectrum-Body",
-			content: [
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eleifend est mollis ligula lobortis, tempus ultricies sapien lacinia. Nulla ut turpis velit. Sed finibus dapibus diam et sollicitudin. Phasellus in ipsum nec ante elementum congue eget in leo. Morbi eleifend justo non rutrum venenatis. Fusce cursus et lectus eu facilisis. Ut laoreet felis in magna dignissim feugiat.",
-			],
-		},
-		{
-			semantics: "body",
-			rootClass: "spectrum-Body",
-			content: [
-				"Ut et lectus finibus, aliquet mauris eu, tincidunt mi. Donec scelerisque orci sit amet venenatis luctus. Morbi eget lacus est. Duis iaculis magna quis aliquam lacinia. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-			],
-		},
-	],
-};
+Default.args = {};
 
 export const Heading = (args) => {
 	return html`${["xxs", "xs", "s", "m", "l", "xl", "xxl", "xxxl"]

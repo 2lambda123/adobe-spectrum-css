@@ -1,11 +1,10 @@
-// Import the component markup template
-import { Template } from "./template";
 import {
-  argTypes, 
-  horizontalProps, 
-  horizontalWithIconsProps,
-  horizontalIconOnlyProps
+  argTypes,
+  horizontalIconOnlyProps,
+  horizontalProps,
+  horizontalWithIconsProps
 } from "./index.js";
+import { Template } from "./template";
 
 export default {
   title: "Components/Tabs/Horizontal/Quiet",
@@ -24,7 +23,7 @@ export default {
       handles: []
     },
     status: {
-      type: process.env.MIGRATED_PACKAGES.includes('tabs') ? 'migrated' : undefined
+      type: process.env.MIGRATED_PACKAGES.includes('tabs') ? 'migrated' : 'legacy'
     }
   }
 };
@@ -43,4 +42,3 @@ QuietEmphasized.args = {
   isEmphasized: true,
   ...horizontalProps
 };
-

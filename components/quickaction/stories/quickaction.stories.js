@@ -1,9 +1,7 @@
-// Import the component markup template
 import { Template } from "./template";
 
 export default {
 	title: "Components/Quick actions",
-	description: "The Quick actions component is...",
 	component: "QuickAction",
 	argTypes: {
 		content: { table: { disable: true } },
@@ -40,6 +38,20 @@ export default {
 		rootClass: "spectrum-QuickActions",
 		isOpen: true,
 		textOnly: false,
+		content: [
+			{
+				label: "Edit",
+				iconName: "Edit",
+			},
+			{
+				label: "Copy",
+				iconName: "Copy",
+			},
+			{
+				label: "Delete",
+				iconName: "Delete",
+			},
+		],
 	},
 	parameters: {
 		actions: {
@@ -48,25 +60,13 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("quickaction")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
 export const Default = Template.bind({});
-Default.args = {
-	content: [
-		{
-			iconName: "Edit",
-		},
-		{
-			iconName: "Copy",
-		},
-		{
-			iconName: "Delete",
-		},
-	],
-};
+Default.args = {};
 
 export const TextOnly = Template.bind({});
 TextOnly.args = {

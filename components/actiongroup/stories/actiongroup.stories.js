@@ -1,4 +1,7 @@
-// Import the component markup template
+import isChromatic from "chromatic/isChromatic";
+
+import { html } from "lit";
+
 import { Template } from "./template";
 
 import { default as ActionButton } from "@spectrum-css/actionbutton/stories/actionbutton.stories.js";
@@ -59,6 +62,21 @@ export default {
 		vertical: false,
 		compact: false,
 		justified: false,
+		content: [
+			{
+				iconName: "Edit",
+				label: "Edit",
+			},
+			{
+				iconName: "Copy",
+				label: "Copy",
+			},
+			{
+				iconName: "Delete",
+				label: "Delete",
+				isSelected: true,
+			},
+		],
 	},
 	parameters: {
 		actions: {
@@ -67,60 +85,45 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("actiongroup")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-const items = [
-	{
-		iconName: "Edit",
-		label: "Edit",
-	},
-	{
-		iconName: "Copy",
-		label: "Copy",
-	},
-	{
-		iconName: "Delete",
-		label: "Delete",
-		isSelected: true,
-	},
-];
+const Sizes = (args) => html`
+	${isChromatic() ? html`
+		${["xs", "s", "m", "l", "xl"].map((size) => {
+			return Template({
+				...args,
+				size,
+			});
+		})}` : Template(args)}`;
 
-export const Default = Template.bind({});
-Default.args = {
-	content: items
-};
+export const Default = Sizes.bind({});
+Default.args = {};
 
-
-export const Compact = Template.bind({});
+export const Compact = Sizes.bind({});
 Compact.args = {
 	compact: true,
-	content: items
 };
 
-export const Vertical = Template.bind({});
+export const Vertical = Sizes.bind({});
 Vertical.args = {
 	vertical: true,
-	content: items
 };
 
-export const VerticalCompact = Template.bind({});
+export const VerticalCompact = Sizes.bind({});
 VerticalCompact.args = {
 	vertical: true,
 	compact: true,
-	content: items
 };
 
-export const Justified = Template.bind({});
+export const Justified = Sizes.bind({});
 Justified.args = {
 	justified: true,
-	content: items
 };
 
-export const Quiet = Template.bind({});
+export const Quiet = Sizes.bind({});
 Quiet.args = {
 	areQuiet: true,
-	content: items
 };

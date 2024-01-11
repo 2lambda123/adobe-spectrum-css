@@ -1,4 +1,3 @@
-// Import the component markup template
 import { Template } from "./template";
 
 export default {
@@ -31,7 +30,7 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("colorloupe")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };

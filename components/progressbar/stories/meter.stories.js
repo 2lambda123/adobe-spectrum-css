@@ -1,5 +1,11 @@
-// Import the component markup template
-import { Template } from "./metertemplate";
+import { html } from "lit";
+import { when } from "lit/directives/when.js";
+
+import isChromatic from "chromatic/isChromatic";
+
+import { Template } from "./meter.template";
+
+import { Template as Typography } from "@spectrum-css/typography/stories/template.js";
 
 export default {
 	title: "Components/Meter",
@@ -25,7 +31,7 @@ export default {
 			},
 			control: { type: "range", min: 0, max: 100,},
 		},
-		meterFill: {
+		fill: {
 			name: "Meter fill color",
 			type: { name: "string" },
 			table: {
@@ -51,6 +57,12 @@ export default {
 		label: "Storage Space",
 		size: "s",
 		value: 50,
+		fill: "default",
+		customStorybookStyles: {
+			display: "flex",
+			flexDirection: "column",
+			alignItems: "flex-start",
+		},
 	},
 	parameters: {
 		actions: {
@@ -59,39 +71,57 @@ export default {
 		status: {
 			type: process.env.MIGRATED_PACKAGES.includes("progressbar")
 				? "migrated"
-				: undefined,
+				: "legacy",
 		},
 	},
 };
 
-export const Default = Template.bind({});
-Default.args = {
-	items: [
-		{
-			heading: "Default",
-			meterFill: "default",
-		},
-		{
-			heading: "Large",
-			meterFill: "default",
-			size: "l",
-		},
-		{
-			heading: "Positive",
-			meterFill: "positive",
-		},
-		{
-			heading: "Negative",
-			meterFill: "negative",
-		},
-		{
-			heading: "Notice",
-			meterFill: "notice",
-		},
-		{
-			heading: "Text Overflow",
-			meterFill: "notice",
-			label: "Storage Space Remaining for XYZ User"
-		}
-	]
+/** @todo This approach below with the array of overrides could be converted into a decorator and used to automatically generate Chromatic groupings */
+const Meters = (args) => {
+	// Extract globals to pass to Typography
+	const { rootClass, customClasses, customStyles, id, label, value, fill, size, ...globals } = args;
+	return html`
+	${isChromatic() ? html`
+		<div>
+			${Typography({
+				...globals,
+				semantics: "heading",
+				content: ["Default"],
+			})}
+			${Template(args)}
+		</div>` : Template(args)}
+	${when(isChromatic(), () => html`${[{
+		heading: "Large",
+		fill: "default",
+		size: "l",
+	}, {
+		heading: "Positive",
+		fill: "positive",
+	}, {
+		heading: "Negative",
+		fill: "negative",
+	}, {
+		heading: "Notice",
+		fill: "notice",
+	}, {
+		heading: "Text overflow",
+		fill: "notice",
+		label: "Storage space remaining for XYZ user"
+	}].map((customArgs) => html`
+		<div>
+			${Typography({
+				...globals,
+				semantics: "heading",
+				content: [customArgs.heading],
+			})}
+			${Template({
+				...args,
+				...customArgs,
+			})}
+		</div>`
+	)}`)}
+`;
 };
+
+export const Default = Meters.bind({});
+Default.args = {};
