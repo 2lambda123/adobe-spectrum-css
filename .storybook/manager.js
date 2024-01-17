@@ -1,18 +1,12 @@
 import { addons } from "@storybook/manager-api";
 import { create } from "@storybook/theming";
 
-import "./assets/index.css";
-
 import logo from "./assets/logo.svg";
 import pkg from "./package.json";
 
-// Load global styles
-import "@spectrum-css/vars/css/globals/index.css";
-import "@spectrum-css/vars/css/components/index.css";
+import "@spectrum-css/tokens";
 
-import "@spectrum-css/vars/css/scales/spectrum-medium.css";
-import "@spectrum-css/vars/css/themes/spectrum-light.css";
-
+import "./assets/storybook-wrapper.css";
 import "./global.js";
 
 addons.setConfig({
@@ -42,7 +36,7 @@ addons.setConfig({
 		// Toolbar default and active colors
 		barTextColor:
 			"rgb(34, 34, 34)" /* --spectrum-neutral-content-color-default */,
-		barSelectedColor: "rgb(2, 101, 220)" /* --spectrum-global-color-blue-900 */,
+		barSelectedColor: "rgb(2, 101, 220)" /* --spectrum-blue-900 */,
 		// barBg: 'rgb(248, 248, 248)', /* --spectrum-alias-background-color-default */
 
 		// Form colors
