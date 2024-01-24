@@ -1,5 +1,4 @@
 .spectrum--medium{
-  /* edge-to-visual-only is used for icon-only buttons */
   --spectrum-edge-to-visual-only-75:4px;
   --spectrum-edge-to-visual-only-100:7px;
   --spectrum-edge-to-visual-only-200:10px;

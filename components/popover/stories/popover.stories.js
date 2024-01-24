@@ -232,6 +232,8 @@ Nested.decorators = [(Story) => html`<div style="padding: 1em;">${Story().outerH
 
 Nested.play = async ({ canvasElement }) => {
 	const canvas = within(canvasElement);
-  await userEvent.click(canvas.getAllByRole('button')[0]);
-	await userEvent.click(canvas.getAllByRole('button')[1]);
+	const buttons = canvas.getAllByRole('button');
+	buttons.forEach(async (button) => {
+		await userEvent.click(button);
+	});
 };

@@ -13,7 +13,6 @@
   "bugs": {
     "url": "https://github.com/adobe/spectrum-css/issues"
   },
-  "main": "dist/index-vars.css",
   "peerDependencies": {
     "@spectrum-css/actionbutton": ">=5",
     "@spectrum-css/icon": ">=4",

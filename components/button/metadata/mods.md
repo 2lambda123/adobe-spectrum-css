@@ -38,7 +38,6 @@
 | `--mod-button-margin-right`                |
 | `--mod-button-min-width`                   |
 | `--mod-button-padding-label-to-icon`       |
-| `--mod-button-static-content-color`        |
 | `--mod-button-top-to-text`                 |
 | `--mod-focus-indicator-gap`                |
 | `--mod-line-height-100`                    |
