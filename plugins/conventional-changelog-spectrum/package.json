@@ -29,6 +29,9 @@
     "compare-func": "^2.0.0",
     "q": "^1.5.1"
   },
+  "devDependencies": {
+    "through2": "^3.0.1"
+  },
   "keywords": [
     "conventional-changelog",
     "preset",

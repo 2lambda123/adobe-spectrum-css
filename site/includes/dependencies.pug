@@ -16,7 +16,7 @@ link(rel='stylesheet', type='text/css', href='dependencies/@spectrum-css/vars/sp
 
 link(rel='stylesheet', type='text/css', href='components/tokens/index.css')
 
-each dep in dependencyOrder.filter((dep) => dep != 'vars' )
+each dep in dependencyOrder.filter((dep) => !["vars", "expressvars", "tokens"].includes() )
   link(rel='stylesheet', type='text/css', href='components/' + dep + '/index-vars.css', data-dependency=dep )
 
 link(rel='stylesheet', type='text/css', href='css/site.css')

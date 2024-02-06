@@ -47,14 +47,14 @@
 				"tools",
 				"!{projectRoot}/stories/*.js",
 				"{workspaceRoot}/tasks/mod-extractor.js",
-				{ "externalDependencies": ["gulp", "postcss"] },
+				{ "externalDependencies": ["postcss"] },
 				{ "env": "NODE_ENV" }
 			],
 			"outputs": ["{projectRoot}/dist", "{projectRoot}/metadata/mods.md"],
 			"executor": "nx:run-commands",
 			"options": {
 				"commands": [
-					"gulp --gulpfile {projectRoot}/gulpfile.js",
+					"node {projectRoot}/index.js",
 					"node ./tasks/mod-extractor.js {projectRoot}"
 				],
 				"forwardAllArgs": true,

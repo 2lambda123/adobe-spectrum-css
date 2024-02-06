@@ -1,10 +1,7 @@
 import { spawn } from 'child_process';
-import { existsSync, readdirSync, readFileSync } from 'fs';
+import { readdirSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { dirname, resolve } from 'path';
-
-import cheerio from 'cheerio';
-import yaml from 'js-yaml';
 
 import fuzzy from 'fuzzy';
 import autocompletePrompt from 'inquirer-autocomplete-prompt';
@@ -39,26 +36,6 @@ export default async (plop) => {
 		const array = str.split(sep);
 		return array.slice(start, end).join(sep);
 	});
-
-	function getExistingMarkupExample(metadataPath, name, plop) {
-		if (existsSync(`${metadataPath}/${name}.yml`) === false) return;
-
-		const r = readFileSync(`${metadataPath}/${name}.yml`, { encoding: 'utf8' });
-		const result = yaml.load(r);
-		if (!result) return;
-
-		const examples = result.examples || [];
-		if (examples.length === 0 || !examples[0].markup) return;
-
-		const $ = cheerio.load(examples[0].markup);
-
-		const className = plop.renderString('spectrum-{{ pascalCase name }}', { name });
-		const $example = $(`.${className}`);
-
-		if (!$example) return;
-
-		return $example.first().toString();
-	}
 
 	plop.setActionType('install', (_, config) => new Promise((resolve, reject) => {
 		const install = spawn('yarn', ['install'], {
@@ -141,10 +118,6 @@ export default async (plop) => {
 		],
 		actions: (data) => {
 			data.name = plop.renderString('{{ sentenceCase folderName }}', data);
-			data.description = `The ${data.name} component is...`;
-
-			const metadataPath = plop.renderString(`${srcPath}/{{ folderName }}/metadata`, data);
-			data.example = getExistingMarkupExample(metadataPath, data.name, plop);
 
 			return [
 				{
@@ -158,7 +131,7 @@ export default async (plop) => {
 					type: 'install',
 					root: rootFolder,
 				},
-				(data, config, plop) => plop.renderString(`Successfully updated {{ folderName }}. To preview your component, run \`yarn dev\` and navigate to the {{ folderName }} story.`, data),
+				(data, _, plop) => plop.renderString(`Successfully updated {{ folderName }}. To preview your component, run \`yarn dev\` and navigate to the {{ folderName }} story.`, data),
 			];
 		},
 	});

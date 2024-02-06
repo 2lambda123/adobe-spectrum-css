@@ -10,7 +10,20 @@
 		"tools": ["{projectRoot}/postcss.config.js"]
 	},
 	"targets": {
+		"clean": {
+			"inputs": ["{projectRoot}/dist", { "externalDependencies": ["rimraf"] }],
+			"outputs": [],
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": [
+					"rimraf {projectRoot}/dist",
+					"test -d {projectRoot}/dist && echo \"Error: dist directory could not be removed\" && exit 1 || exit 0"
+				],
+				"parallel": false
+			}
+		},
 		"build": {
+			"cache": false,
 			"dependsOn": ["clean", "style-dictionary"],
 			"inputs": ["core", "tools", { "externalDependencies": ["postcss"] }],
 			"executor": "nx:run-commands",
@@ -29,19 +42,6 @@
 				"{projectRoot}/dist/css/express",
 				"{projectRoot}/dist/css/spectrum"
 			]
-		},
-		"clean": {
-			"cache": true,
-			"inputs": ["{projectRoot}/dist", { "externalDependencies": ["rimraf"] }],
-			"outputs": [],
-			"executor": "nx:run-commands",
-			"options": {
-				"commands": [
-					"rimraf {projectRoot}/dist",
-					"test -d {projectRoot}/dist && echo \"Error: dist directory could not be removed\" && exit 1 || exit 0"
-				],
-				"parallel": false
-			}
 		},
 		"style-dictionary": {
 			"dependsOn": ["clean"],

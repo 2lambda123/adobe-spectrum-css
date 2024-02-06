@@ -25,7 +25,10 @@ module.exports = () => {
 				if (seen[decl.prop]) {
 					decl.warn(
 						result,
-						`Dropping duplicate variable ${decl.prop}`
+						`Dropping duplicate variable ${decl.prop}`, {
+							word: decl.prop,
+							index: decl.source.index
+						}
 					);
 					seen[decl.prop].remove();
 				}

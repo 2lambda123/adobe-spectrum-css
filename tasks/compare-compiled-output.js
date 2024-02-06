@@ -480,6 +480,7 @@ let {
 	_: components,
 	output = join(pathing.root, ".diff-output"),
 	cache = true,
+	// @todo allow to run against local main or published versions
 } = yargs(hideBin(process.argv)).argv;
 
 main(components, output, { skipCache: !cache }).then((code) => {

@@ -18,6 +18,7 @@
 
 test -d "tools/generator" && rm -rf tools/generator
 test -d "tools/preview" && rm -rf tools/preview
+test -d "tools/bundle-builder" && rm -rf tools/bundle-builder
 
 # Legacy tokens packages
 test -d "components/vars" && rm -rf components/vars
@@ -27,6 +28,7 @@ test -d "components/tokens" && rm -rf components/tokens
 # Remove deprecated files
 for folder in components/*; do
     test -d components/$folder/.npmignore && rm -rf components/$folder/.npmignore
+    test -d components/$folder/gulpfile.js && rm -rf components/$folder/gulpfile.js
 done
 
 # Migrated icons assets
@@ -41,5 +43,6 @@ test -d "components/icon/medium" && rm -rf components/icon/medium
 # test -d "plugins/postcss-droproot" && rm -rf plugins/postcss-droproot
 # test -d "plugins/postcss-dropunusedvars" && rm -rf plugins/postcss-dropunusedvars
 test -d "plugins/postcss-remapvars" && rm -rf plugins/postcss-remapvars
+test -d "plugins/postcss-custom-properties-passthrough" && rm -rf plugins/postcss-custom-properties-passthrough
 # test -d "plugins/postcss-transformselectors" && rm -rf plugins/postcss-transformselectors
 # test -d "plugins/postcss-varfallback" && rm -rf plugins/postcss-varfallback

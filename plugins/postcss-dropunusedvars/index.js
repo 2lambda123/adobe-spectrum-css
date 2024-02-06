@@ -64,7 +64,7 @@ module.exports = ({ fix = true }) => {
 				// Note if it seems like this variable is unused
 				if (!usedAnywhere.includes(varName)) {
 					if (!fix)
-						decl.warn(result, `⚠️ ${varName} unused variable definition`, {
+						decl.warn(result, `${varName} unused variable definition`, {
 							word: varName,
 							index: decl.sourceIndex,
 						});
@@ -92,7 +92,7 @@ module.exports = ({ fix = true }) => {
 
 					if (fix) decl.remove();
 					else {
-						decl.warn(result, `⚠️ ${varName} unused variable definition`, {
+						decl.warn(result, `${varName} unused variable definition`, {
 							word: varName,
 							index: decl.sourceIndex,
 						});

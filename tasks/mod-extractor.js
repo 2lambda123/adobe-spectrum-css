@@ -109,10 +109,10 @@ async function main(inputs) {
 		// Write the results to a markdown file in the metadata folder
 		promises.push(
 			writeFile(`${destPath}/mods.md`, finalResult, { encoding: "utf-8" }).then(() => {
-				console.log(`${`✓`.green} ${"metadata/mods.md".yellow} written`);
+				console.log(`${"✓".green}  ${"metadata/mods.md".yellow} written`);
 			}).catch((err) => {
 				if (!err) return;
-				console.log(`${`✗`.red} ${"metadata/mods.md".yellow} not written`);
+				console.log(`${"✗".red}  ${"metadata/mods.md".yellow} not written`);
 				return Promise.reject(err);
 			})
 		);
@@ -130,10 +130,10 @@ async function main(inputs) {
 		// Write the JSON output to the dist folder
 		promises.push(
 			writeFile(`${destPath}/mods.json`, finalResult, { encoding: "utf-8" }).then(() => {
-				console.log(`${`✓`.green} ${"dist/mods.json".yellow} written`);
+				console.log(`${"✓".green}  ${"dist/mods.json".yellow} written`);
 			}).catch((err) => {
 				if (!err) return;
-				console.log(`${`✗`.red} ${"dist/mods.json".yellow} not written`);
+				console.log(`${"✗".red}  ${"dist/mods.json".yellow} not written`);
 				return Promise.reject(err);
 			})
 		);
