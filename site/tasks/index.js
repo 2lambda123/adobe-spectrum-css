@@ -10,7 +10,10 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { dev, buildDocs } = require("./tasks");
+const gulp = require("gulp");
 
-exports.dev = dev;
-exports.build = buildDocs;
+const { build } = require("./builder");
+const { watch } = require("./server");
+
+exports.buildDocs = build;
+exports.dev = gulp.series(build, watch);

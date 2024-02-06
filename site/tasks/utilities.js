@@ -12,7 +12,19 @@ governing permissions and limitations under the License.
 
 const fsp = require("fs").promises;
 const path = require("path");
+
 const depSolver = require("dependency-solver");
+
+const dirs = {
+	root: path.join(__dirname, "../.."),
+	components: path.join(__dirname, "../../components"),
+	site: path.join(__dirname, ".."),
+	publish: path.join(__dirname, "../../dist"),
+};
+
+function getPackageFromPath(filePath) {
+	return filePath.match(`${dirs.components}\/(.*?)\/`)[1];
+}
 
 /**
  * Given a package path, get its dependencies
@@ -35,7 +47,6 @@ async function getDependencies(package) {
 			...Object.keys(devDependencies),
 		])].filter((dep) => (
 			dep.indexOf("@spectrum-css") === 0 &&
-			dep !== "@spectrum-css/bundle-builder" &&
 			dep !== "@spectrum-css/component-builder" &&
 			dep !== "@spectrum-css/component-builder-simple"
 		))
@@ -108,7 +119,7 @@ async function getFolderDependencyOrder(packagesDir) {
 	return solution;
 }
 
-exports.getDependencies = getDependencies;
-exports.solveDependencies = solveDependencies;
+exports.dirs = dirs;
+exports.getPackageFromPath = getPackageFromPath;
 exports.getFolderDependencyOrder = getFolderDependencyOrder;
 exports.getPackageDependencyOrder = getPackageDependencyOrder;
