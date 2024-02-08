@@ -22,9 +22,18 @@ Adobe maintains separate JavaScript libraries written with [web components](http
 
 ## Using Spectrum CSS
 
-The preferred method of using Spectrum CSS relies on custom properties to swap out variables for different themes and colorstops. This has the lowest bundle size and the simplest usage, but is incompatible with < IE 11.
+The preferred method of using Spectrum CSS relies on custom properties to swap out variables for different themes and colorstops. This has the lowest bundle size and the simplest usage, but is incompatible with IE 11 and below.
 
-To use Spectrum CSS with IE 11, see the [legacy usage documentation](README-legacy.md).
+### Browser support
+
+The current list of browsers officially supported by Spectrum CSS can be found in the `browserslist` section of the project's [package.json file](https://github.com/adobe/spectrum-css/blob/main/package.json).
+This setting is used by the build tools when the source files are built.
+
+- last 2 Edge versions
+- last 2 Chrome versions
+- last 2 Firefox versions
+- last 2 Safari versions
+- last 2 iOS versions
 
 ### Installing components
 
