@@ -9,7 +9,8 @@ const componentPkgs = readdirSync(componentsPath, {
 	.map((dirent) => dirent.name);
 module.exports = {
 	stories: [
-		"../components/*/stories/*.stories.@(js|jsx|ts|tsx)",
+		"../components/*/stories/*.stories.js",
+		"./deprecated/*/*.stories.js",
 	],
 	rootDir: "../",
 	staticDirs: ["../assets"],
