@@ -3,7 +3,9 @@
 	"name": "splitbutton",
 	"tags": ["component"],
 	"targets": {
-		"build": {},
+		"build": {
+			"defaultConfiguration": "legacy"
+		},
 		"clean": {},
 		"compare": {},
 		"lint": {},

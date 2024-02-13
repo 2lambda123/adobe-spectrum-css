@@ -183,53 +183,18 @@ function copyPackages() {
 
 const buildDocs = gulp.parallel(docs.build, vars.copyVars, copyPackages);
 
-function buildIfTopLevel() {
-	let builtTasks = gulp.parallel(buildCombined, buildStandalone, buildDocs);
-
-	if (process.cwd() === dirs.topLevel) {
-		// Run a build for all packages first
-		return gulp.series(subrunner.buildComponents, builtTasks);
-	}
-
-	// They're already built, just include the output
-	return builtTasks;
-}
-
-let build = gulp.series(buildIfTopLevel(), vars.copyVars);
-
-let buildLite = gulp.series(function buildComponentsLite() {
-	return subrunner.runTaskOnAllComponents("buildLite");
+let build = gulp.series(function buildComponentsLite() {
+	return subrunner.runTaskOnAllComponents("build");
 }, buildDocs);
-
-let buildMedium = gulp.series(function buildComponentsLite() {
-	return subrunner.runTaskOnAllComponents("buildMedium");
-}, buildDocs);
-
-let buildHeavy = gulp.series(function buildComponentsLite() {
-	return subrunner.runTaskOnAllComponents("buildHeavy");
-}, buildDocs);
-
-let devTask;
-if (process.cwd() === dirs.topLevel) {
-	// Build all packages if at the top level
-	devTask = gulp.series(buildLite, dev.watch);
-} else {
-	// Otherwise, just start watching
-	devTask = gulp.series(buildDocs, dev.watch);
-}
-
-exports.devHeavy = gulp.series(buildHeavy, dev.watch);
 
 exports.buildUniqueVars = vars.buildUnique;
 
 exports.buildComponents = subrunner.buildComponents;
 exports.buildCombined = buildCombined;
 exports.buildStandalone = buildStandalone;
-exports.buildLite = buildLite;
 exports.buildDocs = buildDocs;
 exports.buildDepenenciesOfCommons = buildDepenenciesOfCommons;
 exports.copyPackages = copyPackages;
-exports.dev = devTask;
-exports.build = build;
+exports.dev = gulp.series(build, dev.watch);
 exports.watch = dev.watch;
-exports.default = buildMedium;
+exports.default = exports.build = build;

@@ -167,12 +167,12 @@ function watch() {
 
 	watchWithinPackages(
 		`${dirs.components}/*/{index,skin}.css`,
-		"buildMedium",
+		"build",
 		"*.css"
 	);
 	watchWithinPackages(
 		`${dirs.components}/*/themes/{spectrum,express}.css`,
-		"buildMedium",
+		"build",
 		"*.css"
 	);
 

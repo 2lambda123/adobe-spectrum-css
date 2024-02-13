@@ -54,11 +54,19 @@
 			"executor": "nx:run-commands",
 			"options": {
 				"commands": [
-					"gulp --gulpfile {projectRoot}/gulpfile.js",
+					"node ./tools/component-builder-simple/index.js {projectRoot}",
 					"node ./tasks/mod-extractor.js {projectRoot}"
 				],
 				"forwardAllArgs": true,
 				"parallel": false
+			},
+			"configurations": {
+				"legacy": {
+					"commands": [
+						"node ./tools/component-builder/index.js {projectRoot}",
+						"node ./tasks/mod-extractor.js {projectRoot}"
+					]
+				}
 			}
 		},
 		"compare": {
