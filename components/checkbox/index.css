@@ -16,6 +16,8 @@ governing permissions and limitations under the License.
  * .spectrum-Checkbox-box::after is the focus indicator
  */
 
+@import "@spectrum-css/downstate/index.css";
+
 /* Component tokens by t-shirt size */
 .spectrum-Checkbox {
   /* Color */
@@ -372,6 +374,11 @@ governing permissions and limitations under the License.
     }
   }
 }
+
+.spectrum-Checkbox:active:not(.is-readOnly, :disabled, .is-disabled) .spectrum-Checkbox-box {
+  @extend %spectrum-DownState--min-perspective;
+}
+
 /* stylelint-enable max-nesting-depth */
 
 .spectrum-Checkbox-label {
@@ -571,7 +578,7 @@ governing permissions and limitations under the License.
       outline-style: auto;
       outline-offset: var(--highcontrast-checkbox-focus-indicator-gap, var(--mod-checkbox-focus-indicator-gap, var(--spectrum-checkbox-focus-indicator-gap)));
       /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
-      outline-width: var(--mod-focus-indicator-thickness, var(--spectrum-focus-indicator-thickness)); 
+      outline-width: var(--mod-focus-indicator-thickness, var(--spectrum-focus-indicator-thickness));
 
       &::after {
         box-shadow:

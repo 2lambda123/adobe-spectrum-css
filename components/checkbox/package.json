@@ -18,6 +18,9 @@
     "@spectrum-css/icon": ">=4",
     "@spectrum-css/tokens": ">=13"
   },
+  "devDependencies": {
+    "@spectrum-css/downstate": "^1.0.0"
+  },
   "publishConfig": {
     "access": "public"
   }

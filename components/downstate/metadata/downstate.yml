@@ -1,35 +1,23 @@
 name: Down state
 SpectrumSiteSlug: https://spectrum.adobe.com/page/down-state/
 description: |
-  Down state is a Spectrum 2 feature that creates the illusion of components being pressed-in when active. To implement down state:
+  Down state is a Spectrum 2 (S2) feature that creates the illusion of components being pressed-in when active. There are two different ways to implement down state depending on the component.
+
+  If the component is interactable at it's root level:
     - Add the `.spectrum-DownState` class to the root of the element that receives interactions.
+      - Components with a width of 24px or less require the addition of the `.spectrum-DownState--min-perpsective` class next to the `.spectrum-DownState` class.
     - Develop an implementation to determine the width and height of the component. Assign this to the `--spectrum-downstate-width` and `--spectrum-downstate-height` custom properties in a `style` attribute on the HTML element.
+
+  If the component has an interactable element nested within it, this will require CSS changes:
+    - Use the `%spectrum-DownState` or `%spectrum-DownState--min-perspective` placeholder on the interactable element when the root of the component is in an `:active` state.
+      - Components with a width of 24px or less require the `%spectrum-DownState--min-perspective` placeholder instead.
+    - Note that this functionality is included in S2 components that require down state in this project. This can be seen in the [checkbox component](/checkbox.html).
 examples:
   - id: downstate
-    name: Down state - default
+    name: Down state - utility class
     markup: |
       <div class="spectrum-Examples">
         <button class="spectrum-DownState spectrum-Button spectrum-Button--fill spectrum-Button--accent spectrum-Button--sizeM" style="--spectrum-downstate-width: 72px; --spectrum-downstate-height: 32px;">
           <span class="spectrum-Button-label">Edit</span>
         </button>
-      </div>
-  - id: downstate-min
-    name: Down state - minimum perspective
-    description: |
-      Components with a width of 24px or less require the addition of the `.spectrum-DownState--min-perpsective` class next to the `.spectrum-DownState` class.
-      * Note that in this example, the element that will be interacted with is nested in a component. In this case, the "root" is the element that is interacted with, not the parent component.
-    markup: |
-      <div class="spectrum-Examples">
-        <label class="spectrum-Checkbox spectrum-Checkbox--sizeM">
-          <input type="checkbox" class="spectrum-Checkbox-input" id="checkbox-0">
-          <span class="spectrum-Checkbox-box spectrum-DownState spectrum-DownState--min-perspective" style="--spectrum-downstate-width: 14px; --spectrum-downstate-height: 14px;">
-            <svg class="spectrum-Icon spectrum-UIIcon-Checkmark100 spectrum-Checkbox-checkmark" focusable="false" aria-hidden="true">
-              <use xlink:href="#spectrum-css-icon-Checkmark100" />
-            </svg>
-            <svg class="spectrum-Icon spectrum-UIIcon-Dash100 spectrum-Checkbox-partialCheckmark" focusable="false" aria-hidden="true">
-              <use xlink:href="#spectrum-css-icon-Dash100" />
-            </svg>
-          </span>
-          <span class="spectrum-Checkbox-label">Checkbox</span>
-        </label>
       </div>
