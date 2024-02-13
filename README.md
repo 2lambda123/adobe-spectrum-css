@@ -348,6 +348,7 @@ This project includes several small scripts to help with common tasks.
 - `yarn lint`: Provides helpful updates and warnings for a component's package.json file. This helps keep all components in alignment.
   - Use `yarn lint --fix` to automatically fix any issues that are found.
   - To run on a single component, use `yarn linter accordion` (where `accordion` is the name of the component or components you want to lint).
+- `yarn validate`: Checks the documentation yaml files for errors and warnings; ensures that assets are validated against the provided schema in `schemas/documentation.schema.json`.
 
 ### CLI
 
