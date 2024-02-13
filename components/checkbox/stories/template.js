@@ -1,7 +1,7 @@
 import { html } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-import { styleMap } from "lit/directives/style-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { styleMap } from "lit/directives/style-map.js";
 import { when } from "lit/directives/when.js";
 
 import { useArgs } from "@storybook/client-api";
@@ -26,6 +26,7 @@ export const Template = ({
 	ariaLabelledby,
 	customStyles = {},
 	customClasses = [],
+	customDownstateClasses = [],
 	...globals
 }) => {
 	const [_, updateArgs] = useArgs();
@@ -72,7 +73,10 @@ export const Template = ({
 		>
 			<input
 				type="checkbox"
-				class="${rootClass}-input"
+				class=${classMap({
+					[`${rootClass}-input`]: true,
+					...customDownstateClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
+				})}
 				aria-labelledby=${ifDefined(ariaLabelledby)}
 				?checked=${isChecked}
 				?disabled=${isDisabled || isReadOnly}
@@ -84,7 +88,12 @@ export const Template = ({
 				}}
 				id=${ifDefined(id ? `${id}-input` : undefined)}
 			/>
-			<span class="${rootClass}-box">
+			<span
+				class=${classMap({
+					[`${rootClass}-box`]: true,
+					// ...customDownstateClasses.reduce((a, c) => ({ ...a, [c]: true }), {}),
+				})}
+			>
 				${Icon({
 					...globals,
 					size,
