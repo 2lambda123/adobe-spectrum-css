@@ -1,16 +1,17 @@
 {
-	"$schema": "../../node_modules/nx/schemas/project-schema.json",
-	"name": "rating",
-	"tags": ["component"],
-	"targets": {
-		"build": {},
-		"clean": {},
-		"compare": {},
-		"lint": {},
-		"validate": {},
-
-		"test": {
-			"defaultConfiguration": "scope"
-		}
-	}
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "rating",
+  "tags": [
+    "component"
+  ],
+  "targets": {
+    "build": {},
+    "clean": {},
+    "compare": {},
+    "lint": {},
+    "validate": {},
+    "test": {
+      "defaultConfiguration": "scope"
+    }
+  }
 }
