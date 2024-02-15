@@ -1,6 +1,11 @@
+import { html } from "lit";
+import { Template } from "./template";
+
 export const argTypes = {
   items: { table: { disable: true }},
   selectorStyle: { table: { disable: true }},
+  customStyles: { table: { disable: true }},
+  overflow: { table: { disable: true }},
   size: {
     name: "Size",
     type: { name: "string", required: true },
@@ -40,102 +45,45 @@ export const argTypes = {
     control: "boolean",
     if: { arg: 'isQuiet', truthy: true },
   },
-};
-
-const items = [
-  {
-    id: "tab-1",
-    label: "Tab 1",
-    isSelected: true
+  labelWithIcons: {
+    name: "Label with Icons",
+    type: { name: "boolean" },
+    table: {
+      type: { summary: "boolean" },
+      category: "Component",
+    },
+    control: "boolean",
+    if: { arg: 'overflow', truthy: false },
   },
-  {
-    id: "tab-2",
-    label: "Tab 2",
-  },
-  {
-    id: "tab-3",
-    label: "Tab 3",
+  iconOnly: {
+    name: "Icon only",
+    type: { name: "boolean" },
+    table: {
+      type: { summary: "boolean" },
+      category: "Component",
+    },
+    control: "boolean",
+    if: { arg: 'overflow', truthy: false },
   }
-];
-
-const itemsWithIcons = [
-  {
-    id: "tab-1",
-    label: "Tab 1",
-    icon: "Folder",
-    isSelected: true
-  },
-  {
-    id: "tab-2",
-    label: "Tab 2",
-    icon: "Image"
-  },
-  {
-    id: "tab-3",
-    label: "Tab 3",
-    icon: "Document"
-  }
-]
-
-const itemsIconOnly = [
-  {
-    id: "tab-1",
-    icon: "Folder",
-    isSelected: true
-  },
-  {
-    id: "tab-2",
-    icon: "Image"
-  },
-  {
-    id: "tab-3",
-    icon: "Document"
-  }
-]
-
-/* Set default args and export for other stories */
-export const horizontalProps = {
-  selectorStyle: {
-    "width": "35px",
-  },
-  items: items
 };
 
-export const horizontalWithIconsProps = {
-  selectorStyle: {
-    "width": "60px",
-  },
-  items: itemsWithIcons
-};
+export const TabsGroup = ({
+  ...args
+  }) => {
 
-export const horizontalIconOnlyProps = {
-  selectorStyle: {
-    "width": "20px",
-  },
-  items: itemsIconOnly
-};
-
-/* Set default args and export for other stories */
-export const verticalProps = {
-  selectorStyle: {
-    "height": "46px",
-    "top": "0"
-  },
-  items: items
-};
-
-export const verticalWithIconsProps = {
-  selectorStyle: {
-    "height": "46px",
-    "top": "0"
-  }, 
-  items: itemsWithIcons
-};
-
-export const verticalIconOnlyProps = {
-  selectorStyle: {
-    "height": "46px",
-    "top": "0"
-  }, 
-  items: itemsIconOnly
-};
+    return html`
+        <div style="display: flex; flex-direction: ${args.orientation === "horizontal" ? "column" : "row"}; gap: 2rem;">
+          ${Template({
+            ...args
+          })}
+          ${Template({
+            ...args,
+            labelWithIcons: true
+          })}
+          ${Template({
+            ...args,
+            iconOnly: true
+            })}
+        </div>
+      `
+  };
