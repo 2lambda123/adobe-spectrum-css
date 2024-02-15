@@ -1275,7 +1275,10 @@ governing permissions and limitations under the License.
 /*** Text Area ***/
 .spectrum-Textfield--multiline {
   --spectrum-textfield-input-line-height: normal;
-  .spectrum-Textfield-input {
+
+	.spectrum-Textfield-input {
+		resize: both;
+		block-size: unset;
 		min-inline-size: var(
 			--mod-text-area-min-inline-size,
 			var(--spectrum-text-area-min-inline-size)
@@ -1284,22 +1287,23 @@ governing permissions and limitations under the License.
 			--mod-text-area-min-block-size,
 			var(--spectrum-text-area-min-block-size)
 		);
-		resize: inherit;
 	}
 
+	/* CSS to support text area grow behavior */
 	&.spectrum-Textfield--grows {
 		.spectrum-Textfield-input {
+			resize: none;
 			grid-row: 1 / auto;
 		}
 	}
 
 	&.spectrum-Textfield--quiet {
 		.spectrum-Textfield-input {
-
 			min-block-size: var(
 				--mod-text-area-min-block-size-quiet,
 				var(--spectrum-text-area-min-block-size-quiet)
 			);
+
 			/* Treat all quiet inputs and text areas the same */
 			resize: none;
 			overflow-y: hidden;
