@@ -47,7 +47,7 @@
     "postcss-values-parser": "^6.0.2",
     "postcss-varsonly": "^2.0.0",
     "pug": "^3.0.1",
-    "replace-ext": "^1.0.0",
+    "replace-ext": "^2.0.0",
     "through2": "^3.0.1"
   },
   "peerDependencies": {
