@@ -63,8 +63,8 @@
   ],
   "devDependencies": {
     "@adobe/focus-ring-polyfill": "^0.1.5",
-    "@commitlint/cli": "^18.6.1",
-    "@commitlint/config-conventional": "^18.6.2",
+    "@commitlint/cli": "^19.2.0",
+    "@commitlint/config-conventional": "^19.1.0",
     "@nx/devkit": "^18.0.6",
     "@spectrum-css/expressvars": "^3.0.9",
     "@spectrum-css/vars": "^9.0.8",
